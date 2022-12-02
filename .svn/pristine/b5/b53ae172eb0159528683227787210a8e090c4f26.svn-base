@@ -1,0 +1,289 @@
+<template>
+	<el-button size="small" type="primary" width="200px" icon="Document" plain @click="saveHandler(ruleFormRef)">
+		{{ $t("menu_save") }}
+	</el-button>
+	<div class="all-height flex-column">
+		<div class="flex-column" style="flex: 1; overflow: auto">
+			<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="formData1" :rules="rules">
+				<el-divider content-position="left">{{ $t("columnSampleInformation") }}</el-divider>
+				<el-row class="main-align-items-center">
+					<el-col :span="8">
+						<el-form-item :label="$t('columnappointmentdesc47') + ':'" title1="数量" prop="COUNT">
+							<el-input-number :min="1" v-model="formData1.COUNT" controls-position="right"></el-input-number>
+						</el-form-item>
+					</el-col>
+				</el-row>
+				<el-divider></el-divider>
+				<el-row class="main-align-items-center">
+					<el-col :span="24">
+						<el-form-item :label="$t('SearchText') + ':'" title1="搜索" prop="search">
+							<el-input type="text" title1="搜索" v-model="formData1.search"></el-input>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</el-form>
+			<div class="flex-column" style="flex: 1">
+				<el-table 
+					:data="itemTableList"
+					ref="itemviw"
+					style="width: 100%; margin-bottom: 20px"
+					@selection-change="handleSelectionChange"
+					@toggleRowSelection="toggleRow"					
+					row-key="id"
+                    border 
+                    lazy
+                    resizable=true
+					@select="rowSelect"
+					default-expand-all
+                    :tree-props="{ children: 'children' , hasChildren: 'hasChildren' }"
+				>
+					<el-table-column type="selection" width="60" />
+					<el-table-column prop="TESTDESC" resizable=true show-overflow-tooltip=true :label="$t('testiteminfotestitemstitle')" title="检测项目类别" width="300" />
+					<el-table-column prop="TESTCODE" sortable=true @sort-by="clumnclick" :label="$t('testiteminfotestcodetitle')" v-if=false title="测试编码" width="100" />
+					<el-table-column prop="TESTID" label="主键" v-if=false width="100" />
+					<el-table-column prop="PRICE" :label="$t('panelcolumntotallowest_price_hkd')" title="最低价格" width="100" />
+					<el-table-column prop="TESTSTANDARD" :label="$t('testiteminfoteststandardpanel')" title="测试标准" width="200" />
+					<el-table-column
+						prop="RASPROFILEPRICES"
+						:label="$t('panelcolumntotalTest_plan_costs_hkd')"
+						title="测试计划费用"
+						width="140"
+					/>
+					<el-table-column prop="testitemcode" :label="$t('testiteminfotestcodetitle')" title="测试编码" width="140" />
+					<el-table-column prop="exchangerate" label="汇率" v-show=false title="汇率" width="140" />
+					<el-table-column
+						prop="contractprice_view"
+						:label="$t('itemtitlecontractcontractprice')"
+						title="协议价格(view)"
+						width="140"
+					/>
+					<el-table-column
+						prop="contractprice"
+						:label="$t('itemtitlecontractcontractprice')"
+						v-if=false
+						title="协议价格(外币)"
+						width="140"
+					/>
+					<el-table-column prop="whethertemplate" :label="$t('tabtitlemdmcorecodeinfos')" title="是否有模板" width="140" />
+					<el-table-column prop="discountrate" :label="$t('columnappointmentdiscount')" title="折扣率" width="140" />
+					<el-table-column prop="testitemdesc" :label="$t('menubasereferenceName')" title="参考名称" width="150" />
+					<el-table-column prop="PACKMARK" :label="$t('menubaseSeparable')" title="可拆分" width="150" />
+					<el-table-column prop="REMARK" :label="$t('panelcolumnRemark')" title="备注" width="160" />
+					<el-table-column prop="TESTANOTHERNAME" :label="$t('panelcolumnitemmark')" title="项目标记" width="140" />
+					<el-table-column prop="NETPRICE" label="NETPRICE" title="NETPRICE" width="140" />
+					<el-table-column prop="CORPDESC" label="检验单位" title="检验单位" v-if=false width="140" />
+					<el-table-column prop="TESTFLAG" label="TESTFLAG" title="TESTFLAG" v-if=false width="140" />
+					<el-table-column prop="checked" label="DGCFD_1" title="DGCFD_1" v-if=false width="140" />
+					<el-table-column
+						prop="contractdiscount"
+						:label="$t('i18ncrmcontractdiscount')"
+						title="协议价格百分比"
+						v-if=false
+						width="140"
+					/>
+				</el-table>
+			</div>
+		</div>
+	</div>
+</template>
+
+<script setup>
+import { h, ref, reactive, onMounted, registerRuntimeCompiler } from "vue";
+import { useI18n } from "vue-i18n";
+import ZDialog from "/src/components/ZDialog.vue";
+import { getdropSownSelection } from "/src/utils/util.js";
+import qs from "qs";
+import http from "@/api/index.js";
+
+const i18n = useI18n();
+
+// 父组件传入的参数
+const props = defineProps({
+	condobj: Object
+});
+const formData1 = reactive({
+	COUNT: 0,
+	search: ""
+});
+
+const itemviw = ref();
+const multipleSelection = ref([]);
+
+
+
+const clumnclick = (row, index) => {
+	console.log("222222222222222222");
+	console.log(index);
+	console.log(row);
+};
+
+const toggleRow = (selection, row) => {
+	console.log("xxxxxxxxxxx");
+	console.log(selection);
+	console.log(row);
+};
+
+const rowSelect = (selection, row) => {
+	console.log("cccccccccc");
+	console.log(selection);
+	// selectTreeData(v_selectList);
+	// itemviw.value.toggleRowSelection(v_selectList[0], undefined); //行变为选中状态
+	// selectTreeData(v_selectList);
+	// if (row.children) {
+	// 	//只对有子节点的行响应
+	// 	if (!row.isChecked) {
+	// 		//由行数据中的元素isChecked判断当前是否被选中
+	// 		//multipleTableRef.value.toggleRowSelection(row, undefined);
+	// 		row.isChecked = true; //当前行isChecked标志元素切换为false
+	// 	} else {
+	// 		//multipleTableRef.value.clearSelection();
+	// 		row.isChecked = false;
+	// 	}
+	// 	console.log(row);
+	// 	// console.log(this.multipleSelection, row);
+	// } else {
+	// 	if (!row.isChecked) {
+	// 		//由行数据中的元素isChecked判断当前是否被选中
+	// 		//multipleTableRef.value.toggleRowSelection(row, undefined);
+	// 		row.isChecked = true; //当前行isChecked标志元素切换为false
+	// 	}
+	// }
+};
+
+const selectAll = selection => {
+	console.log("aaaaaaaa");
+	console.log(selection);
+	// selection 是选中的数据集合
+	this.$refs.multipleTable.data.map(items => {
+		//使用$ref获取注册的子组件信息，用data获取所有行，并用map函数遍历行
+		if (items.children) {
+			if (!items.isChecked) {
+				//若遍历出来的行未选中
+				//this.$refs.multipleTable.toggleRowSelection(items, true); //行变为选中状态
+				items.isChecked = true; //更新标志参数
+				items.children.map(item => {
+					//遍历子节点并改变状态与标志参数
+					//this.$refs.multipleTable.toggleRowSelection(item, true);
+					item.isChecked = true;
+				});
+			} else {
+				//选中状态同理
+				//this.$refs.multipleTable.toggleRowSelection(items, false);
+				items.isChecked = false;
+				items.children.map(item => {
+					//this.$refs.multipleTable.toggleRowSelection(item, false);
+					item.isChecked = false;
+				});
+			}
+		} else {
+			if (!items.isChecked) items.isChecked = true;
+			else items.isChecked = false;
+		}
+	});
+};
+
+let v_itemviewData = {}; //获取检测项目最初的值
+const handleSelectionChange = row => {
+	console.log("rrrrrrrrrrrrr");
+    console.log(row);
+};
+
+let nowTableList = ref({});
+let itemTableList = reactive([]);
+//检测项查询
+const itemSelect = async () => {
+	let cond = { corpno: "01320588" };
+
+	let jsonString = { cond: cond, reservnum: "08110320221028001" };
+	let params = {
+		jsonString: JSON.stringify(jsonString)
+	};
+	const res = await http.post("/mylims/order/appointment!selectAppointmentTestItem.action", qs.stringify(params));
+
+	if (res) {
+		v_itemviewData = res;
+		console.log(res);
+		//itemTableList.push(res[0]);
+		console.log("xxxxxxxxxxxxxx");
+		
+        processingTreeData();
+	}
+};
+
+const selectTreeData = (selectList) => {
+    if(selectList != null && selectList.length > 0){
+		console.log(itemviw.value);
+		for(let i=0;i<selectList.length;i++){
+			if(selectList[i].checked){
+				// this.$refs.multipleTable.toggleRowSelection(selectList[i], true);
+				itemviw.value.toggleRowSelection(selectList[i], undefined);
+			}
+			
+
+		}
+
+	}
+};
+
+//页面初始化渲染完成执行
+onMounted(() => {
+	itemSelect();
+	
+});
+
+let v_selectList = [];
+
+const processingTreeData = () => {
+    console.log("itemTableListxxxxxxxxxxxxxx", v_itemviewData);
+	if (itemTableList.length < 1 && v_itemviewData.length > 0) {
+        console.log("vvvvvvvvvvvvvvv");
+		nowTableList = v_itemviewData[0];
+        nowTableList.children = forTreeData(nowTableList.children);	
+		selectTreeData(v_selectList);	
+        itemTableList.push(nowTableList);
+
+
+	} else {
+	}
+};
+
+const forTreeData = listdata => {
+	if (listdata.length > 0) {
+		for (let i = 0; i < listdata.length; i++) {
+            if(listdata[i].checked){
+                listdata[i].isChecked= true;
+				v_selectList.push(listdata[i]);
+            }
+			if (listdata[i].expanded) {
+				if (listdata[i].children && listdata[i].children.length > 0) {
+					listdata[i].children = forTreeData(listdata[i].children);
+				}
+			} else {
+				if (listdata[i].children && listdata[i].children.length > 0) {//还有值说明可以下拉
+					listdata[i].hasChildren = true;//下拉显示
+                    delete listdata[i].children;
+				}
+			}
+		}
+	}
+    return listdata;
+};
+
+//请求成功后执行的函数，相当于axios的then
+const handleSuccess = response => {
+	if (response.success) {
+		props.condobj.uploadnewDialogShow = false;
+		props.condobj.objlist.success = true;
+	}
+};
+</script>
+
+<style lang="scss">
+.el-divider--horizontal {
+	display: block;
+	height: 3px;
+	width: 100%;
+	margin: 14px 0;
+	border-top: 1px#c7cbd5 var(--el-border-style);
+}
+</style>

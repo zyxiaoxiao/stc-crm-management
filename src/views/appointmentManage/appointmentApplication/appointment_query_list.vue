@@ -262,7 +262,8 @@ const atableList = reactive({
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
 			prop: "operation",
-			type: "operation"
+			type: "operation",
+			width: "130"
 		},
 		{
 			title: "委托检测公司（个人）",
@@ -639,7 +640,8 @@ const htableList = reactive({
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
 			prop: "operation",
-			type: "operation"
+			type: "operation",
+			width: "130"
 		},
 		{
 			title: "委托检测公司（个人）",
@@ -1025,7 +1027,8 @@ const dtableList = reactive({
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
 			prop: "operation",
-			type: "operation"
+			type: "operation",
+			width: "130"
 		},
 		{
 			title: "委托检测公司（个人）",
@@ -1410,7 +1413,8 @@ const utableList = reactive({
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
 			prop: "operation",
-			type: "operation"
+			type: "operation",
+			width: "130"
 		},
 		{
 			title: "委托检测公司（个人）",
@@ -1795,7 +1799,8 @@ const discard_tableList = reactive({
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
 			prop: "operation",
-			type: "operation"
+			type: "operation",
+			width: "130"
 		},
 		{
 			title: "委托检测公司（个人）",

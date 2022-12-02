@@ -282,12 +282,14 @@ const ctableList = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
+			width: "130",
 			fixed: "right"
 		}
 	],
 	// 表格数据
 	tableData: []
 });
+
 
 //页面初始化渲染完成执行
 onMounted(() => {
