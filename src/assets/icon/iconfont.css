@@ -1,0 +1,143 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3116119 */
+  src: url('iconfont.woff2?t=1667892266781') format('woff2'),
+       url('iconfont.woff?t=1667892266781') format('woff'),
+       url('iconfont.ttf?t=1667892266781') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.layui-icon-extend-contentright:before {
+  content: "\e67a";
+}
+
+.layui-icon-extend-shurukuanglashen:before {
+  content: "\e607";
+}
+
+.layui-icon-extend-dialogquanping:before {
+  content: "\eb1a";
+}
+
+.layui-icon-extend-chaxun:before {
+  content: "\e603";
+}
+
+.layui-icon-extend-xiazai:before {
+  content: "\e856";
+}
+
+.layui-icon-extend-xitongshezhi:before {
+  content: "\e601";
+}
+
+.layui-icon-extend-tuichu:before {
+  content: "\e6b2";
+}
+
+.layui-icon-extend-upArrow:before {
+  content: "\e9f7";
+}
+
+.layui-icon-extend-rightArrow:before {
+  content: "\e9f8";
+}
+
+.layui-icon-extend-zhengque:before {
+  content: "\e666";
+}
+
+.layui-icon-extend-cuowu:before {
+  content: "\e619";
+}
+
+.layui-icon-extend-kehuqunzu:before {
+  content: "\e673";
+}
+
+.layui-icon-extend-xiaozhang:before {
+  content: "\e650";
+}
+
+.layui-icon-extend-shenqingguanli:before {
+  content: "\e60c";
+}
+
+.layui-icon-extend-kehubiaoqian:before {
+  content: "\e630";
+}
+
+.layui-icon-extend-baojiadan:before {
+  content: "\e695";
+}
+
+.layui-icon-extend-quanpingsuoxiao:before {
+  content: "\e62a";
+}
+
+.layui-icon-extend-quanpingxianshi:before {
+  content: "\e62b";
+}
+
+.layui-icon-extend-zhongyingwen:before {
+  content: "\e606";
+}
+
+.layui-icon-extend-dingwei:before {
+  content: "\e64a";
+}
+
+.layui-icon-extend-chart:before {
+  content: "\e600";
+}
+
+.layui-icon-extend-yonghu:before {
+  content: "\e63d";
+}
+
+.layui-icon-extend-baobiao:before {
+  content: "\e609";
+}
+
+.layui-icon-extend-list:before {
+  content: "\e701";
+}
+
+.layui-icon-extend-caidanzuo:before {
+  content: "\e6c3";
+}
+
+.layui-icon-extend-caidanyou:before {
+  content: "\e6c4";
+}
+
+.layui-icon-extend-newform:before {
+  content: "\e68a";
+}
+
+.layui-icon-extend-newform2:before {
+  content: "\e68c";
+}
+
+.layui-icon-extend-approved:before {
+  content: "\e605";
+}
+
+.layui-icon-extend-Pending:before {
+  content: "\e638";
+}
+
+.layui-icon-extend-approved3:before {
+  content: "\e9f5";
+}
+
+.layui-icon-extend-edit:before {
+  content: "\e649";
+}
+

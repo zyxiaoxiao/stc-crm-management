@@ -1,0 +1,85 @@
+.el-form-item__label {
+	display: flex !important;
+	align-items: center !important;
+	height: inherit !important;
+	line-height: inherit !important;
+	text-align: right;
+}
+
+.el-dialog {
+	
+	--el-dialog-title-font-size: var(--el-font-size-base);
+    --el-dialog-content-font-size: var(--el-font-size-base);
+}
+
+.el-dialog__header {
+	margin-right: 0px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
+	border-bottom: 1.5px var(--el-border-color) var(--el-border-style);
+}
+
+.el-dialog__body {
+	padding-top: 0px;
+	word-break: break-word;
+	padding-left: 0px;
+	padding-right: 0px;
+	padding-bottom: 0px;
+	flex: 1;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.el-tabs--border-card > .el-tabs__content {
+  padding: 0px;
+}
+
+.el-tabs__header{
+	margin: 0;
+}
+
+
+.el-form-item--large {
+    --font-size: 16px;
+}
+.el-input--large {
+    font-size: 16px;
+}
+
+.el-divider--horizontal {
+	height: 3px;
+	margin: 14px 0;
+  }
+
+.el-divider__text {
+	font-size: $font-size-base;
+}
+
+.el-tabs {
+	--el-tabs-header-height: var(--zy-tabs-header-height);
+}
+.el-tabs__content{
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.el-table-v2 {
+	font-size: $font-size-base;
+}
+
+.el-tree {
+     display: inline-block;
+}
+.el-tree__empty-block {
+	width: 200px;
+}
+
+.el-input-number .el-input__inner {
+    text-align: left;  
+}
+
+

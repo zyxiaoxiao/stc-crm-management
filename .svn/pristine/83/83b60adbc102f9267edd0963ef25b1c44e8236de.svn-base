@@ -1,0 +1,92 @@
+.all-height {
+	height: 100%;
+}
+
+//  card 卡片样式
+.main-card {
+	box-sizing: border-box;
+	overflow-x: hidden;
+	background-color: var(--el-fill-color-blank);
+	border: 1px solid var(--el-border-color-light);
+	border-radius: 4px;
+	box-shadow: var(--el-box-shadow-light);
+}
+
+.main-card-tabs {
+	overflow: auto;
+	padding: 0px 10px 5px 10px;
+}
+
+.main-tab-pane-content {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.main-pagination-block {
+	margin-top: 5px;
+
+}
+
+.flex-column {
+	display: flex;
+	flex-direction: column;
+}
+
+.flex-row {
+	display: flex;
+	flex-direction: row;
+}
+
+.flex-1 {
+	flex: 1;
+}
+
+.main-dialog {
+	display: flex;
+	flex-direction: column;
+	margin: 0px !important;
+	left: 2.5%;
+	top: 50px;
+	
+}
+
+.main-dialog-header {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.main-dialog-icon :hover {
+	color: #409EFC;
+}
+
+.main-dialog-icon {
+	color: #606266;
+	font-size: 16px;
+	cursor: pointer;
+}
+
+.full-width-input {
+	width: 100% !important;
+}
+
+.main-align-items-center {
+	align-items: center;
+}
+
+.dialogContent-class {
+	overflow: auto;
+	padding-left: 10px;
+	padding-right: 10px;
+	flex: 1;
+}
+
+.main-table-header-ri-button{
+	font-size: 14px; 
+	padding: 0px 6px;
+}
+
+.font-size-base{
+	font-size: $font-size-base;
+}

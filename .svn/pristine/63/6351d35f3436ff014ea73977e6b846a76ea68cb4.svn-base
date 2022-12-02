@@ -1,0 +1,15 @@
+
+D:\HBuilderProjects\stc-crm-management\node_modules\element-plus\dist\index.css
+.el-menu-item:hover {
+	/* zzy */
+	/* background-color: var(--el-menu-hover-bg-color) */
+}
+.el-sub-menu__title:hover {
+	/* zzy */
+	/* background-color: var(--el-menu-hover-bg-color) */
+}
+
+.el-sub-menu__title:hover {
+	/* zzy */
+	/* background-color: var(--el-menu-hover-bg-color) */
+}

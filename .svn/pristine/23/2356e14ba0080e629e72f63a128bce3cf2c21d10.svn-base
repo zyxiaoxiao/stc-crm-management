@@ -1,0 +1,204 @@
+<template>
+	<el-auto-resizer>
+		<template #default="{ height, width }">
+			<el-table-v2
+				ref="tableV2Ref"
+				:expand-column-key="expandColumnKey"
+				:default-expanded-row-keys="defaultExpandedRowKeys"
+				:columns="columns"
+				:data="treeData"
+				:width="width"
+				:height="height"
+				:fixed="true"
+				:row-class="rowClass"
+				:header-height="32"
+				:row-height="32"
+			/>
+		</template>
+	</el-auto-resizer>
+</template>
+
+<script lang="jsx" setup>
+import { ref, reactive, unref, onMounted } from "vue";
+import qs from "qs";
+import http from "@/api/index.js";
+import { ElCheckbox } from "element-plus";
+
+const tableV2Ref = ref();
+const expandedRowKeys = ref([]);
+const expandColumnKey = "TESTDESC";
+const defaultExpandedRowKeys = ["-1", "DGCFD_1", "DGCFD_CN_Chemicals", "DGCFD_CN_Chemicals_6589", "DGCFD_6589_Default"];
+const treeData = reactive([]);
+
+const SelectionCell = ({ name, value, intermediate = false, onChange }) => {
+	return <ElCheckbox label={name} modelValue={value} indeterminate={intermediate} onChange={onChange} />;
+};
+
+const columns = reactive([
+	{
+		width: 600,
+		title: "检测项目类别",
+		key: "TESTDESC",
+		dataKey: "TESTDESC",
+		checked: false,
+		intermediate: false,
+		cellRenderer: props => {
+			const { cellData, rowData, column } = props;
+			//不存在这个元素就加上
+			if (!rowData.intermediate) {
+				rowData.intermediate = false;
+			}
+			const onChange = value => {
+				rowData.intermediate = false;
+				rowData.checked = value;
+				rowClass(props);
+				cellCheckboxTriggerEvent(treeData, rowData, value);
+			};
+
+			return <SelectionCell name={cellData} value={rowData.checked} intermediate={rowData.intermediate} onChange={onChange} />;
+		},
+		headerCellRenderer: props => {
+			const { column } = props;
+			const onChange = value => {
+				column.checked = value;
+				if (treeData.length) {
+					headerCellRecursionChildren(treeData, value);
+				}
+			};
+			return (
+				<>
+					<SelectionCell value={column.checked} intermediate={column.intermediate} onChange={onChange} />
+					<span style=" margin-left: 10px;">{column.title}</span>
+				</>
+			);
+		}
+	},
+	{ width: 150, title: "测试编码", key: "TESTCODE", dataKey: "TESTCODE", hidden: true },
+	{ width: 150, title: "主键", key: "TESTID", dataKey: "TESTID", hidden: true },
+	{ width: 150, title: "最低价格", key: "PRICE", dataKey: "PRICE" },
+	{ width: 400, title: "测试标准", key: "TESTSTANDARD", dataKey: "TESTSTANDARD" },
+	{ width: 150, title: "测试计划费用", key: "RASPROFILEPRICES", dataKey: "RASPROFILEPRICES" },
+	{ width: 150, title: "测试编码", key: "testitemcode", dataKey: "testitemcode" },
+	{ width: 150, title: "汇率", key: "exchangerate", dataKey: "exchangerate", hidden: true },
+	{ width: 150, title: "协议价格", key: "contractprice_view", dataKey: "contractprice_view" },
+	{ width: 150, title: "协议价格(外币)", key: "contractprice", dataKey: "contractprice", hidden: true },
+	{ width: 150, title: "是否有模板", key: "whethertemplate", dataKey: "whethertemplate" },
+	{ width: 150, title: "折扣率", key: "discountrate", dataKey: "discountrate" },
+	{ width: 150, title: "参考名称", key: "testitemdesc", dataKey: "testitemdesc", hidden: true },
+	{ width: 150, title: "可拆分", key: "PACKMARK", dataKey: "PACKMARK" },
+	{ width: 150, title: "备注", key: "REMARK", dataKey: "REMARK" },
+	{ width: 150, title: "项目标记", key: "TESTANOTHERNAME", dataKey: "TESTANOTHERNAME" },
+	{ width: 150, title: "NETPRICE", key: "NETPRICE", dataKey: "NETPRICE" },
+	{ width: 150, title: "检验单位", key: "CORPDESC", dataKey: "CORPDESC", hidden: true },
+	{ width: 150, title: "TESTFLAG", key: "TESTFLAG", dataKey: "TESTFLAG", hidden: true },
+	{ width: 150, title: "协议价格百分比", key: "contractdiscount", dataKey: "contractdiscount", hidden: true }
+]);
+
+//检测项查询
+const itemSelect = async () => {
+	let cond = { corpno: "01320588" };
+	let jsonString = { cond: cond, reservnum: "08110320221028001" };
+	let params = {
+		jsonString: JSON.stringify(jsonString)
+	};
+	const res = await http.post("/mylims/order/appointment!selectAppointmentTestItem.action", qs.stringify(params));
+	treeData.push(res[0]);
+};
+
+const rowClass = props => {
+	const { rowData } = props;
+	if (rowData.checked) {
+		return "bg-red-100";
+	}
+	return "";
+};
+
+// 全选或全取消的递归树形结构数据
+const headerCellRecursionChildren = (data, value) => {
+	data[0].checked = value;
+	cellRecursionChildren(data[0].children, value);
+};
+
+//树形结构 Checkbox 的触发事件
+const cellCheckboxTriggerEvent = (data, row, value) => {
+	row.checked = value;
+	//判断当前节点是否有子节点 Children,递归Children
+	if (row.children && row.children.length) {
+		cellRecursionChildren(row.children, value);
+	}
+	//判断当前节点是否有父节点，有就往上递归
+	cellUpwardRecursion(data, row, value);
+};
+
+//判断当前节点是否有子节点 Children,递归Children
+const cellRecursionChildren = (rowChildren, value) => {
+	rowChildren.map(row => {
+		row.checked = value;
+		//判断当前节点是否有子节点 Children,递归Children
+		if (row.children && row.children.length) {
+			cellRecursionChildren(row.children, value);
+		}
+	});
+};
+
+//判断当前节点是否有父节点，有就往上递归
+// id = -1 为 根节点
+const cellUpwardRecursion = (data, row, value) => {
+	if (row.id == "-1") {
+		if (row.checked) {
+			columns[0].intermediate = false;
+			columns[0].checked = true;
+		} else if (row.intermediate) {
+			columns[0].intermediate = true;
+		} else {
+			columns[0].checked = false;
+			columns[0].intermediate = false;
+		}
+	} else {
+		//父节点id
+		let parentId = row.PARENTID;
+		//父节点行数据
+		let rowData = [];
+		rowData = getCurrentNodeRowData(data, parentId);
+		cellUpwardRecursion(data, rowData, value);
+	}
+};
+
+//通过id获取当前的节点数据,树形结构数据 往下递归
+const getCurrentNodeRowData = (data, id) => {
+	let rowData = [];
+	for (let row of data) {
+		if (row.id == id) {
+			rowData = row;
+			//every,some遍历数组，every只要有一项不满足条件都返回false some有一项满足都会返回true
+			let allSelected = rowData.children.every(row => row.checked);
+			let containsChecked = rowData.children.some(row => row.checked);
+			let childNodeIntermediate = rowData.children.some(row => row.intermediate);
+			//子节点没有全选时，或者子节点的intermediate为true时，父节点显示 indeterminate 状态
+			rowData.intermediate = (containsChecked && !allSelected) || childNodeIntermediate;
+			//子节点全选时，勾选上
+			rowData.checked = allSelected;
+			return rowData;
+		} else if (row.children && row.children.length) {
+			//判断当前节点是否有子节点 Children,递归Children
+			rowData = getCurrentNodeRowData(row.children, id);
+			if (rowData.length > 0 || rowData.id) {
+				return rowData;
+			}
+		}
+	}
+	return rowData;
+};
+
+onMounted(() => {
+	itemSelect();
+});
+</script>
+
+<style scoped lang="scss"></style>
+
+<style lang="scss">
+.bg-red-100 {
+	color: #409eff;
+}
+</style>

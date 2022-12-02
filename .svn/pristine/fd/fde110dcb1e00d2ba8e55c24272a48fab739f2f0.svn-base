@@ -1,0 +1,8 @@
+/* 全局 css 变量 */
+$primary-color: var(--el-color-primary);
+/* 全局 字体 变量*/
+$font-size-base: var(--el-font-size-base);
+
+$tabs-header-height: var(--zy-tabs-header-height);
+
+$tabs-box-el-dropdown-top: var(--zy-tabs-box-el-dropdown-top);

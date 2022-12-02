@@ -1,0 +1,105 @@
+import { Layout } from "/src/routers/constant";
+
+// 客户管理模块 (多级路由全部设置为二级路由，为了缓存页面)
+const customerManageRouter = [
+	{
+		path: "/customerManage",
+		component: Layout,
+		redirect: "/customerManage/customerApplication/newCustomer",
+		meta: {
+			title: "menubaseCustomermanagement" //客户管理
+		},
+		children: [
+			{
+				path: "/customerManage/customerApplication/newCustomer",
+				name: "newCustomer",
+				component: () => import("@/views/customerManage/customerApplication/newCustomer.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseCustomercreateapply", //"客户创建申请"
+					key: "newCustomer"
+				}
+			},
+			{
+				path: "/customerManage/customerApplication/companyInfo_list_bg",
+				name: "companyInfo_list_bg",
+				component: () => import("@/views/customerManage/customerApplication/companyInfo_list_bg.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseCustomerchangeapply", //"客户变更申请"
+					key: "companyInfo_list_bg"
+				}
+			},
+			{
+				path: "/customerManage/customerAudit/companyInfo_auditlist_create",
+				name: "companyInfo_auditlist_create",
+				component: () => import("@/views/customerManage/customerAudit/companyInfo_auditlist_create.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseCustomercreateaudit", //"客户创建审核"
+					key: "companyInfo_auditlist_create"
+				}
+			},
+			{
+				path: "/customerManage/customerAudit/companyInfo_auditlist_bg",
+				name: "companyInfo_auditlist_bg",
+				component: () => import("@/views/customerManage/customerAudit/companyInfo_auditlist_bg.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseCustomerchangeaudit", //"客户变更审核"
+					key: "companyInfo_auditlist_bg"
+				}
+			},
+			{
+				path: "/customerManage/customerManagement/myCustomers",
+				name: "myCustomers",
+				component: () => import("@/views/customerManage/customerManagement/myCustomers.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseMyCustomer", //我的客户
+					key: "myCustomers"
+				}
+			},
+			{
+				path: "/customerManage/customerManagement/customer_list_public",
+				name: "customer_list_public",
+				component: () => import("@/views/customerManage/customerManagement/customer_list_public.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasePublicCustomer", //公共客户
+					key: "customer_list_public"
+				}
+			},
+			{
+				path: "/customerManage/customerManagement/track_list",
+				name: "track_list",
+				component: () => import("@/views/customerManage/customerManagement/track_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseTrackrecord", //追踪记录
+					key: "track_list"
+				}
+			},
+			{
+				path: "/customerManage/customerManagement/companyInfo_list_company",
+				name: "companyInfo_list_company",
+				component: () => import("@/views/customerManage/customerManagement/companyInfo_list_company.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseCorporateclient", //部门客户
+					key: "companyInfo_list_company"
+				}
+			}
+		]
+	}
+];
+
+export default customerManageRouter;
