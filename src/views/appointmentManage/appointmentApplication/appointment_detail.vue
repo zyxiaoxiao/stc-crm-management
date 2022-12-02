@@ -1741,7 +1741,6 @@ let cDiscount = async (url, params) => {
 		}
 		//折扣会修改主表的折扣保存完后在掉查询
 		if (reservnumto) {
-
 			testSelect(reservnumto);
 			form_test(reservnumto);
 			//传参后会自动调用接口刷新
@@ -1754,12 +1753,12 @@ let cDiscount = async (url, params) => {
 
 //保存检测预览信息
 const calculateDiscount = async () => {
-	if(formData1.desc25 == true){
-	   formData1.desc25 = "on";
+	if (formData1.desc25 == true) {
+		formData1.desc25 = "on";
 	}
-	if(formData1.desc26 == true){
-        formData1.desc26 = "on";
-    }
+	if (formData1.desc26 == true) {
+		formData1.desc26 = "on";
+	}
 	let jsonString = {
 		appointmentInfo: formData1
 	};
@@ -1768,7 +1767,7 @@ const calculateDiscount = async () => {
 	};
 	//保存检测预览信息
 	const res = await http.post("/mylims/order/appointment!saveAppointmentTestSelectInfo.action", qs.stringify(params));
-	if (res) {	
+	if (res) {
 		let desc46 = formData1.desc46; //服务类型
 		let desc53 = formData1.desc53; //币种
 		if (!desc46 || !desc53) {
@@ -1791,7 +1790,7 @@ const calculateDiscount = async () => {
 				"cond.reservnum": reservnumto
 			};
 			cDiscount(url, params);
-		}else{
+		} else {
 			testSelect(reservnumto);
 		}
 	}
@@ -2030,15 +2029,14 @@ const itemViewCellClick = (row, column, cell, event) => {
 	console.log("vvvvvvvvvvvvv");
 	console.log(column);
 	console.log(cell);
-	if (row.FENBAO == "Y" || workflowflag == '3' || v_readonly == "true") {
+	if (row.FENBAO == "Y" || workflowflag == "3" || v_readonly == "true") {
 		//分包单审核状态和只读都不可以修改
 		row.isEdit[column.property] = false;
 	}
 	//协议价不可以编辑折扣率
-	if(column.property == 'DISCOUNTRATE' && row.iscontractprice=='Y' ){
-        row.isEdit[column.property] = false;
+	if (column.property == "DISCOUNTRATE" && row.iscontractprice == "Y") {
+		row.isEdit[column.property] = false;
 	}
-	
 };
 let getValue = async () => {
 	let jsonString = {};

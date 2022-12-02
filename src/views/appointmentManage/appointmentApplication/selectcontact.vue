@@ -29,7 +29,7 @@ let params = {};
 
 let vdata = {};
 //选择完数据后给父页面传值
-const selectCustomer = list => {	
+const selectCustomer = list => {
 	if (list != null && list.length == 1) {
 		vdata = list[0]; //客户id
 		props.condobj.objlist = vdata; //传参
@@ -42,16 +42,16 @@ const selectCustomer = list => {
 	}
 };
 if (props.condobj != null) {
-		let corpno = props.condobj.cond.corpno;
-		if (corpno) {
-			params["cond.corpno"] = corpno;
-		} else {
-			ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("Message_DataErrorPleaseContactITPersonnel")
-			});
-		}
+	let corpno = props.condobj.cond.corpno;
+	if (corpno) {
+		params["cond.corpno"] = corpno;
+	} else {
+		ElMessage({
+			type: i18n.t("Message_OperationTip"),
+			message: i18n.t("Message_DataErrorPleaseContactITPersonnel")
+		});
 	}
+}
 //表格对象
 const ctableList = reactive({
 	//设置 为单选
@@ -249,7 +249,7 @@ const ctableList = reactive({
 onMounted(() => {
 	//selectEnterpriseInfos.value.getTableList();
 	//页面传入的值判断还需要添加的参数
-	
+
 	zTable1.value.getTableList();
 });
 </script>

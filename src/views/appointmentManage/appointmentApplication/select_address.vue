@@ -290,7 +290,6 @@ const ctableList = reactive({
 	tableData: []
 });
 
-
 //页面初始化渲染完成执行
 onMounted(() => {
 	//selectEnterpriseInfos.value.getTableList();

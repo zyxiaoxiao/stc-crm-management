@@ -11,18 +11,18 @@
 				<div style="margin-top: 10px"></div>
 				<zTable ref="selectoutboxInfosQuery" :tableList="outboxtableList" @link-detailbg="outboxlinkDetail">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" class="button_show" @click="sendOutbox(scope.selectList)" type="primary" icon="Message" plain>{{
-							$t("menu_sendemails")
-						}}</el-button>
 						<el-button
 							size="small"
 							class="button_show"
+							@click="sendOutbox(scope.selectList)"
 							type="primary"
-							icon="Document"
+							icon="Message"
 							plain
-							@click="newOutboxInfo()"
-							>{{ $t("SRM_new") }}</el-button
+							>{{ $t("menu_sendemails") }}</el-button
 						>
+						<el-button size="small" class="button_show" type="primary" icon="Document" plain @click="newOutboxInfo()">{{
+							$t("SRM_new")
+						}}</el-button>
 						<el-button
 							size="small"
 							class="button_show"
@@ -222,13 +222,13 @@ const outboxlinkDetail = (column, row) => {
 //新增发件信息
 const newOutboxInfo = () => {
 	for (let key in formData1) {
-			//formData1置空
-			if (key == "sendtype") {
-				formData1[key] = "1";
-			} else {
-				formData1[key] = "";
-			}
+		//formData1置空
+		if (key == "sendtype") {
+			formData1[key] = "1";
+		} else {
+			formData1[key] = "";
 		}
+	}
 	ftableList.tableData = [];
 	tableTabsValue.value = "message"; //切换到邮件编辑信息
 };

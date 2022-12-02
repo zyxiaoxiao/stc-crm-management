@@ -51,13 +51,7 @@
 			<el-row :gutter="15" class="main-align-items-center">
 				<el-col :span="8">
 					<el-form-item title1="市区" :label="$t('i18nCustomerapplicationCustomerCreateInformationCityCenter')">
-						<el-select
-							v-model="formData.city"
-							class="full-width-input"
-							clearable
-							filterable
-							@visible-change="cityVisibleChange"
-						>
+						<el-select v-model="formData.city" class="full-width-input" clearable filterable @visible-change="cityVisibleChange">
 							<el-option v-for="item in city" :key="item.value" :label="item.label" :value="item.value"> </el-option>
 						</el-select>
 					</el-form-item>
@@ -136,7 +130,7 @@ const formData = reactive({
 	recorderdesc: "",
 	recordertime: "",
 	id: v_id,
-	corpid:""
+	corpid: ""
 });
 //校验
 const rules = reactive({
@@ -234,7 +228,7 @@ const getFormData = async () => {
 		jsonString: JSON.stringify(jsonString)
 	};
 	const res = await http.post("/crm/address/address!selectAddressInfoById.action", qs.stringify(params));
-    for (let key in res.addressInfo[0]) {
+	for (let key in res.addressInfo[0]) {
 		//判定 addressInfo 的key 是否存在 formData 的key
 		if (Object.keys(formData).includes(key)) {
 			formData[key] = res.addressInfo[0][key];

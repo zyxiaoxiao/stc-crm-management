@@ -322,5 +322,3 @@ const tableList = reactive({
 	flex-direction: column;
 }
 </style>
-
-

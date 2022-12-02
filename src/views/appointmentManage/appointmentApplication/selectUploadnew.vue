@@ -59,20 +59,24 @@ const handleExceed = files => {
 
 //上传
 const submitUpload = () => {
-    if(props.condobj.cond.businessobjectid){
-        upload.value.submit();
-    }else{
-        ElMessage({
+	if (props.condobj.cond.businessobjectid) {
+		upload.value.submit();
+	} else {
+		ElMessage({
 			type: i18n.t("Message_OperationTip"),
 			message: i18n.t("Search_Empty")
 		});
-    }
-    
+	}
 };
 
 //发送请求前执行的函数，在这里可以做一些条件判断，配置参数等
 const handleBeforeUpload = file => {
-	upload_data.jsonString = "{uploadFile:{businesscode:'"+props.condobj.cond.businesscode+"', businessobjectid:'" + props.condobj.cond.businessobjectid + "'}}";
+	upload_data.jsonString =
+		"{uploadFile:{businesscode:'" +
+		props.condobj.cond.businesscode +
+		"', businessobjectid:'" +
+		props.condobj.cond.businessobjectid +
+		"'}}";
 	return true;
 };
 

@@ -73,7 +73,7 @@ const ctableList = reactive({
 		{
 			type: "selection",
 			width: "40"
-		},		
+		},
 		{
 			title: "报告中文抬头",
 			label: "itemtitlereportzh",
@@ -109,7 +109,7 @@ const ctableList = reactive({
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "创建人编码",
 			label: "columnCreatehumancoding",
 			prop: "recordercode",
@@ -144,7 +144,6 @@ const ctableList = reactive({
 	tableData: []
 });
 
-
 //页面初始化渲染完成执行
 onMounted(() => {
 	//selectEnterpriseInfos.value.getTableList();
@@ -153,4 +152,3 @@ onMounted(() => {
 	zTable1.value.getTableList();
 });
 </script>
-

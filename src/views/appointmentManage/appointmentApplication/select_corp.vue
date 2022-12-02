@@ -9,7 +9,6 @@
 			</template>
 		</zTable>
 	</div>
-    
 </template>
 
 <script setup>
@@ -45,7 +44,7 @@ if (props.condobj && props.condobj.cond) {
 	let reservnum = props.condobj.cond.reservnum;
 	if (reservnum) {
 		params["cond.reservnum"] = reservnum;
-	} 
+	}
 }
 
 //选择完数据后给父页面传值
@@ -71,7 +70,7 @@ let tableColumns = [
 		type: "selection",
 		width: "40"
 	},
-    {
+	{
 		title: "编码",
 		label: "",
 		prop: "origrec",
@@ -156,7 +155,7 @@ let tableColumns = [
 const corpAccounttableList = reactive({
 	//设置 为单选
 	isRadio: true,
-    isPaging: false, //是否显示分页
+	isPaging: false, //是否显示分页
 	//请求属性设置
 	httpAttribute: {
 		url: "/core/corpaccount/corpaccount!selectCorpaccountInfoByCondRight.action",
@@ -177,5 +176,3 @@ const corpAccounttableList = reactive({
 	flex-direction: column;
 }
 </style>
-
-

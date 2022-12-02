@@ -9,10 +9,10 @@
 			</template>
 		</zTable>
 	</div>
-    <div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
-				<appointmentReadonly :condobj="condobj"></appointmentReadonly>
-			</ZDialog>
+	<div v-dialogStretching>
+		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
+			<appointmentReadonly :condobj="condobj"></appointmentReadonly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -41,14 +41,14 @@ if (props.condobj && props.condobj.cond) {
 	let v_desc53 = props.condobj.cond.desc53;
 	if (v_desc53) {
 		params["cond.desc53"] = v_desc53;
-	} 
+	}
 }
 const dialogShow_appointmentReadonly = ref(false);
 
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	if (column == "reservnum" && row.reservnum) {
-        //选择委托单位
+		//选择委托单位
 		condobj.cond = {
 			readonly: "true",
 			reservnum: row.reservnum
@@ -335,5 +335,3 @@ const dispersedquotetableList = reactive({
 	flex-direction: column;
 }
 </style>
-
-

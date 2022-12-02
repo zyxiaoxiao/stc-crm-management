@@ -157,7 +157,7 @@ const confirmClick = selectList => {
 			const res = await http.post("/mylims/order/appointment!saveAppointmentTestItem.action", qs.stringify(params));
 			if (res) {
 				//关闭窗口
-				props.condobj.newItemApplintmentDialogShow = false;				
+				props.condobj.newItemApplintmentDialogShow = false;
 			}
 		};
 		saveitem(sList);
