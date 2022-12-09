@@ -54,6 +54,7 @@ export default {
 	editContact: "编辑联系人",
 	enterKeywordsForFiltering: "输入关键字进行过滤",
 
+	message_originalquotationquantity: "原始报价数量必须大于零",
 	menucontractagreementpriceauditquery: "协议价格审核查询",
 	buttoncommonconsign: "委托",
 	tabtitlecorenewsreleasecancelfreeze: "取消注销",

@@ -54,6 +54,7 @@ export default {
 	editContact: "Edit Contact",
 	enterKeywordsForFiltering: "Enter keywords for filtering",
 
+	message_originalquotationquantity: "The original quotation quantity must be greater than zero",
 	crm_country221: "SENEGAL",
 	itemtitlebase_useraddress: "address",
 	i18ncrmcontractContactID: "ContactID",

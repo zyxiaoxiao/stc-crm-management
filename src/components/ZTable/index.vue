@@ -59,15 +59,15 @@
 			:header-cell-style="{ background: '#f8f8f9', color: '#606266', fontWeight: 700 }"
 			class="flex-1"
 			:style="{ marginTop: props.tableList.tableToolbar.whole ? '0px' : '10px', minHeight: '150px' }"
-			:data="tableList.tableData"
+			:data="props.tableList.tableData"
+			:row-key="listId"
+			:cell-class-name="cellClassName"
 			@current-change="currentChange"
 			@selection-change="selectionChange"
 			@select="select"
 			@row-click="rowClick"
 			@cell-click="cellClick"
-			:row-key="listId"
-			:cell-class-name="cellClassName"
-			table-layout="auto"
+			@header-dragend="headerDragend"
 		>
 			<template v-for="(item, index) in props.tableList.tableColumns" :key="item.type + item.prop + index">
 				<!-- selection || index -->
@@ -90,6 +90,7 @@
 					:fixed="item.fixed"
 					class-name="columnDrop"
 				>
+					<!-- 数据行 -->
 					<template #default="scope">
 						<el-tooltip class="box-item" effect="dark" :content="workflowStatusText(scope.row[item.prop])" placement="right">
 							<span @click="workflowStatus(item.prop, scope.row)">
@@ -125,10 +126,10 @@
 					:prop="item.prop"
 					:width="item.width"
 					:fixed="item.fixed"
-					class-name="columnDrop"
 				>
+					<!-- 表头 -->
 					<template #header>
-						<div style="white-space: nowrap" @click="tableSor(item.prop)">
+						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
 							<span class="caret-wrapper">
 								<i class="sort-caret ascending"></i>
@@ -136,10 +137,11 @@
 							</span>
 						</div>
 						<!-- 表单组件 -->
-						<div v-show="tablePropSearchShow">
+						<div v-if="tablePropSearchShow">
 							<el-input v-model="tablePropSearch[item.prop]" size="small" />
 						</div>
 					</template>
+					<!-- 数据行 -->
 					<template #default="scope">
 						<span>
 							<el-link @click="linkDetailbg(item.prop, scope.row)" type="primary">{{ scope.row[item.prop] }} </el-link>
@@ -149,12 +151,14 @@
 
 				<!-- operation -->
 				<el-table-column v-else-if="item.type == 'operation'" :prop="item.prop" :width="item.width" :fixed="item.fixed">
+					<!-- 表头 -->
 					<template #header>
 						<div class="flx-center">
 							<label style="color: #409eff">{{ item.label ? $t(item.label) : item.title }}</label>
 							<!-- <el-button type="primary">{{ item.label ? $t(item.label) : item.title }}</el-button> -->
 						</div>
 					</template>
+					<!-- 数据行 -->
 					<template #default="scope">
 						<!-- <el-scrollbar>
 							<div class="flex-row" :style="{ height: operationColumnHeight + `px` }">
@@ -174,10 +178,10 @@
 					:prop="item.prop"
 					:width="item.width"
 					:fixed="item.fixed"
-					class-name="columnDrop"
 				>
+					<!-- 表头 -->
 					<template #header>
-						<div style="white-space: nowrap" @click="tableSor(item.prop)">
+						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
 							<span class="caret-wrapper">
 								<i class="sort-caret ascending"></i>
@@ -185,7 +189,7 @@
 							</span>
 						</div>
 						<!-- 表单组件 -->
-						<div v-show="tablePropSearchShow">
+						<div v-if="tablePropSearchShow">
 							<el-select v-if="item.type == 'Select'" v-model="tablePropSearch[item.prop]" size="small">
 								<template v-for="item1 in item.typeData" :key="item">
 									<el-option
@@ -215,16 +219,44 @@
 								format="YYYY-MM-DD hh:mm:ss"
 								size="small"
 							/>
-							<el-input-number
-								v-else-if="item.type == 'Number'"
-								controls-position="right"
-								:min="0"
-								v-model="tablePropSearch[item.prop]"
-								size="small"
-							/>
+							<template v-else-if="item.type == 'Number'">
+								<el-input-number
+									v-if="isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:min="item.min"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:min="item.min"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+								/>
+							</template>
 							<el-input v-else v-model="tablePropSearch[item.prop]" size="small" />
 						</div>
 					</template>
+					<!-- 数据行 -->
 					<template #default="scope">
 						<slot name="Custom" :row="scope.row" :column="item.prop"></slot>
 					</template>
@@ -236,10 +268,10 @@
 					show-overflow-tooltip
 					:prop="item.prop"
 					:width="item.width"
-					class-name="columnDrop"
 				>
+					<!-- 表头 -->
 					<template #header>
-						<div style="white-space: nowrap" @click="tableSor(item.prop)">
+						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
 							<el-icon v-if="props.tableList.edit && item.edit"><Edit /> </el-icon>
 							<span class="caret-wrapper">
@@ -248,7 +280,7 @@
 							</span>
 						</div>
 						<!-- 表单组件 -->
-						<div v-show="tablePropSearchShow">
+						<div v-if="tablePropSearchShow">
 							<el-select v-if="item.type == 'Select'" v-model="tablePropSearch[item.prop]" size="small">
 								<template v-for="item1 in item.typeData" :key="item">
 									<el-option
@@ -278,18 +310,46 @@
 								format="YYYY-MM-DD hh:mm:ss"
 								size="small"
 							/>
-							<el-input-number
-								v-else-if="item.type == 'Number'"
-								controls-position="right"
-								:min="0"
-								v-model="tablePropSearch[item.prop]"
-								size="small"
-							/>
+							<template v-else-if="item.type == 'Number'">
+								<el-input-number
+									v-if="isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:min="item.min"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:min="item.min"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									size="small"
+									v-model="tablePropSearch[item.prop]"
+								/>
+							</template>
 							<el-input v-else v-model="tablePropSearch[item.prop]" size="small" />
 						</div>
 					</template>
+					<!-- 数据行 -->
 					<template v-if="props.tableList.edit && item.edit" #default="scope">
-						<span v-show="!scope.row.editShow[item.prop]">
+						<span v-if="!scope.row.editShow[item.prop]">
 							<template v-if="item.type == 'Select'">{{
 								item.label != "i18nCustomerapplicationCustomerCreateInformationArea" &&
 								item.label != "i18nCustomerapplicationCustomerCreateInformationProvince" &&
@@ -301,7 +361,7 @@
 							<template v-else>{{ scope.row[item.prop] }}</template>
 						</span>
 						<!-- 表单组件 -->
-						<div v-show="scope.row.editShow[item.prop]">
+						<div v-if="scope.row.editShow[item.prop]">
 							<el-select
 								v-if="item.type == 'Select'"
 								v-model="scope.row[item.prop]"
@@ -337,13 +397,40 @@
 								value-format="YYYY-MM-DD hh:mm:ss"
 								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 							/>
-							<el-input-number
-								v-else-if="item.type == 'Number'"
-								controls-position="right"
-								:min="0"
-								v-model="scope.row[item.prop]"
-								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-							/>
+							<template v-else-if="item.type == 'Number'">
+								<el-input-number
+									v-if="isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									v-model="scope.row[item.prop]"
+									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
+									:min="item.min"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									v-model="scope.row[item.prop]"
+									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
+									:min="item.min"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									v-model="scope.row[item.prop]"
+									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
+									:precision="item.precision"
+								/>
+								<el-input-number
+									v-else-if="!isNumber(item?.min) && !isNumber(item?.precision)"
+									controls-position="right"
+									style="width: 100%"
+									v-model="scope.row[item.prop]"
+									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
+								/>
+							</template>
 							<el-input
 								v-else
 								v-model="scope.row[item.prop]"
@@ -392,6 +479,7 @@ import http from "@/api/index.js";
 import { useI18n } from "vue-i18n";
 import { GlobalStore } from "@/store/globalStore.js";
 import Sortable from "sortablejs";
+import moment from "moment";
 
 const i18n = useI18n();
 const globalStore = GlobalStore();
@@ -432,6 +520,8 @@ const isSelected = ref(false);
 const selectList = ref([]);
 //选中原始的数据源
 const selectRowArr = ref([]);
+//单选数据
+const SingleChoiceRow = ref({});
 
 //可编辑时，表单组件ref数组
 const formComponentRef = {};
@@ -540,7 +630,7 @@ if (props.tableList.tableToolbar) {
 
 //判断 是否单选 是否隐藏全选
 let RadioDisplay = ref("block");
-if (props.tableList.isRadio) {
+if (props?.tableList?.isRadio) {
 	RadioDisplay = "none";
 }
 
@@ -553,8 +643,12 @@ let listId = "id";
 // 获取表头字段
 let tableHanderArr = ["submitcorp", "auditflag", "workflowid"];
 
+//获取列类型为 Number、Date 字段名
+let typeFieldName = {};
+
 //获取表头可编辑字段
 let tableHanderEditArr = [];
+
 props?.tableList?.tableColumns?.forEach(item => {
 	//获取id
 	if (item.type == "id") {
@@ -564,8 +658,16 @@ props?.tableList?.tableColumns?.forEach(item => {
 	if (item.type != "workflowStatus" && item.type != "selection" && item.type != "index" && item.type != "operation") {
 		tableHanderArr.push(item.prop);
 	}
+	//可编辑的列
 	if (item.edit) {
 		tableHanderEditArr.push(item.prop);
+	}
+
+	if (item.type == "Number") {
+		typeFieldName[item.prop] = "Number";
+	}
+	if (item.type == "Date") {
+		typeFieldName[item.prop] = "Date";
 	}
 });
 
@@ -590,6 +692,31 @@ params.jsonString = computed(() => {
 	}
 	return JSON.stringify(jsonString);
 });
+
+//判断是否是数字,是就返回true
+const isNumber = val => {
+	return !isNaN(parseFloat(val)) && isFinite(val);
+};
+//把字符串类型转数字类型，
+const stringToNumber = val => {
+	return Number(val);
+};
+
+//对数据源进行格式处理，数字，日期
+const dataFormatProcessing = tableData => {
+	if (typeFieldName && Object.keys(typeFieldName).length > 0) {
+		for (let rowData of tableData) {
+			for (let key in typeFieldName) {
+				if (typeFieldName[key] == "Number") {
+					rowData[key] = isNumber(rowData[key]) ? stringToNumber(rowData[key]) : null;
+				}
+				if (typeFieldName[key] == "Date") {
+					rowData[key] = moment(new Date(rowData[key])).format("YYYY-MM-DD");
+				}
+			}
+		}
+	}
+};
 
 //获取数据源
 const getTableList = async () => {
@@ -634,9 +761,10 @@ const reuseTableList = async () => {
 
 //对数据源进行处理
 const handleTableData = res => {
+	let tableData = [];
 	if (props.tableList.httpAttribute.root) {
 		if (res[props.tableList.httpAttribute.root]) {
-			let tableData = res[props.tableList.httpAttribute.root];
+			tableData = res[props.tableList.httpAttribute.root];
 			for (let i = 0; i < tableData.length; i++) {
 				let item = tableData[i];
 				if (item.retrieveflag == 1) {
@@ -657,21 +785,23 @@ const handleTableData = res => {
 					});
 				}
 			}
-			props.tableList.tableData = tableData;
 			params.total = res[props.tableList.httpAttribute.root + "_num"];
 		}
 	} else {
-		let tableData = [];
 		if (Array.isArray(res)) {
 			tableData = res;
 		} else {
 			tableData.push(res);
 		}
-		props.tableList.tableData = tableData;
 	}
 
-	//默认单选选中第一行
-	tableRef.value.setCurrentRow(props.tableList.tableData[0]);
+	//对数据源进行格式处理，数字，日期
+	dataFormatProcessing(tableData);
+	props.tableList.tableData = tableData;
+	if (tableData.length > 0) {
+		//默认单选选中第一行
+		tableRef.value.setCurrentRow(props.tableList.tableData[0]);
+	}
 };
 
 //下拉选择框字段显示
@@ -739,6 +869,7 @@ const currentChange = (currentRow, oldCurrentRow) => {
 	emits("currentChange", currentRow, oldCurrentRow);
 
 	if (currentRow) {
+		SingleChoiceRow.value = currentRow;
 	}
 	if (oldCurrentRow) {
 	}
@@ -829,6 +960,14 @@ const selectionChange = rowArr => {
 	});
 
 	emits("selectionChange", rowArr);
+};
+
+//拖动列宽事件
+const headerDragend = async (newWidth, oldWidth, column, event) => {
+	props.tableList.tableColumns[column.no].width = newWidth;
+	if (props?.tableList?.id) {
+		await saveColumnDrop();
+	}
 };
 
 // 如果当前表格为编辑表格，该方法为编辑后选中的数据源，一般用于保存
@@ -939,7 +1078,7 @@ const addRowData = srtrow => {
 	let row = { rowIndex: props.tableList.tableData.length, editShow: {}, editShowOriginal: {}, isOriginalChanged: {}, isEdit: {} };
 	for (let Columns of props.tableList.tableColumns) {
 		if (Columns.prop) {
-			if (srtrow && Object.keys(srtrow).length > 0 && srtrow[Columns.prop]) {
+			if (srtrow && Object.keys(srtrow).length > 0 && (srtrow[Columns.prop] || String(srtrow[Columns.prop]) == "0")) {
 				row[Columns.prop] = srtrow[Columns.prop];
 			} else {
 				row[Columns.prop] = "";
@@ -983,6 +1122,26 @@ const columnDrop = () => {
 	});
 };
 
+// 列放置 （列拖拽）
+const columnDrop1 = () => {
+	nextTick(() => {
+		const wrapper = tableRef.value.$el.querySelector(" .el-table .el-table__header thead tr ");
+		Sortable.create(wrapper, {
+			handle: ".columnDrop",
+			animation: 300,
+			delay: 0,
+			onEnd: async ({ newIndex, oldIndex }) => {
+				const oldItem = props.tableList.tableColumns[oldIndex];
+				props.tableList.tableColumns.splice(oldIndex, 1);
+				props.tableList.tableColumns.splice(newIndex, 0, oldItem);
+				if (props?.tableList?.id) {
+					await saveColumnDrop();
+				}
+			}
+		});
+	});
+};
+
 //保存列拖拽后的顺序
 const saveColumnDrop = async () => {
 	let tableColumns = JSON.stringify(props.tableList.tableColumns);
@@ -1001,6 +1160,7 @@ onMounted(() => {
 	}
 	nextTick(() => {
 		columnDrop();
+		columnDrop1();
 	});
 });
 
@@ -1017,12 +1177,16 @@ defineExpose({
 	selectListIds, // 获取选中的id
 	selectList, //获取选中的数据行
 	selectRowArr, // 获取选中的原始数据
+	SingleChoiceRow, // 单选数据
 	reuseTableList // 重新调用接口
 });
 </script>
 
 <style scoped lang="scss">
 /*隐藏表头复选框*/
+:deep(.el-table__body thead tr .el-table-column--selection .cell .el-checkbox) {
+	display: v-bind(RadioDisplay);
+}
 :deep(.el-table__header .el-table-column--selection .cell .el-checkbox) {
 	display: v-bind(RadioDisplay);
 }
