@@ -54,6 +54,11 @@ export default {
 	editContact: "编辑联系人",
 	enterKeywordsForFiltering: "输入关键字进行过滤",
 
+	serviceType100: "标准服务",
+	serviceType130: "特殊服务",
+	serviceType140: "加急服务",
+	serviceType200: "紧急服务",
+	serviceType250: "特急服务",
 	message_originalquotationquantity: "原始报价数量必须大于零",
 	menucontractagreementpriceauditquery: "协议价格审核查询",
 	buttoncommonconsign: "委托",

@@ -54,6 +54,11 @@ export default {
 	editContact: "Edit Contact",
 	enterKeywordsForFiltering: "Enter keywords for filtering",
 
+	serviceType100: "Regular Service",
+	serviceType130: "Special Service",
+	serviceType140: "Express Service",
+	serviceType200: "urgent service",
+	serviceType250: "Same Day Service",
 	message_originalquotationquantity: "The original quotation quantity must be greater than zero",
 	crm_country221: "SENEGAL",
 	itemtitlebase_useraddress: "address",

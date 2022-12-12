@@ -245,5 +245,6 @@ export default {
 		"providematerial1;providematerial2;providematerial3;providematerial4;providematerial5;providematerial6;providematerial7;providematerial8;providematerial9",
 	detectCustomerCategory: "0;1",
 	i18nCustomerapplicationFileDocumentlevel: "0;1;2",
-	itemtitlebase_userState: "0;1;2;3"
+	itemtitlebase_userState: "0;1;2;3",
+	serviceType: "100;130;140;200;250"
 };

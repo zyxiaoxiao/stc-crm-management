@@ -43,68 +43,25 @@
 				<appointmentsplitdetail :condobj="appointmentsplitdetailList"></appointmentsplitdetail>
 			</ZDialog>
 		</div>
-		<!--<div v-dialogStretching>
-			<ZDialog v-model="customerNew.dialogShow" title="" width="95%" @close="customerNewClose">
-				<companyDetailNew :condobj="customerNew"></companyDetailNew>
+		<!-- 查看报价单信息 -->
+		<div v-dialogStretching>
+			<ZDialog v-model="appointmentdetailReadonlyList.dialogShow" title="" width="95%">
+				<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
 			</ZDialog>
 		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
-				<companyDetailNewReadonly :condobj="customerNewReadonly"></companyDetailNewReadonly>
-			</ZDialog>
-		</div> -->
 	</div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import qs from "qs";
-import http from "@/api/index.js";
-
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
-
 import audit from "@/views/audit/index.vue";
-//import customerListQuery from "../customerQuery/customer_list_query.vue";
-//import companyDetailNew from "./company_detail_new.vue";
-//import companyDetailNewReadonly from "../customerReadonly/company_detail_new_readonly.vue";
 import appointmentsplitdetail from "./appointment_splitdetail.vue";
-
+import appointmentdetailReadonly from "./appointment_detail_Readonly.vue";
 import { getdropSownSelection } from "@/utils/util.js";
 
-const i18n = useI18n();
-
 const businesstypeTypeData = getdropSownSelection("CRM_businessCategory");
-
-//审核记录
-const auditList = reactive({
-	dialogShow: false,
-	codeid: "",
-	tablename: "MLS_APPOINTMENT",
-	columnid: "reservnum"
-});
-
-//拆分弹出参数
-const appointmentsplitdetailList = reactive({
-	dialogShow: false,
-	reservnum: "",
-	success: false
-});
-//拆分
-const split_handler = row => {
-	appointmentsplitdetailList.dialogShow = true;
-	appointmentsplitdetailList.reservnum = row[0].reservnum;
-	appointmentsplitdetailList.success = false;
-};
-
-//拆分回调
-const split_handlerClose = () => {
-	if (appointmentsplitdetailList.success) {
-		tabPaneName.value = "1";
-	}
-};
 
 //表格
 const zTable1 = ref();
@@ -515,22 +472,56 @@ const tableList2 = reactive({
 	tableData: []
 });
 
-//链接详细信息
-const linkDetailbg = (column, row) => {
-	customerNew.success = false;
-	customerNew.corpid = row.corpid;
-	customerNew.dialogShow = true;
-};
-
-const linkDetailbgQuery = (column, row) => {
-	customerNewReadonly.corpid = row.corpid;
-	customerNewReadonly.dialogShow = true;
-};
-
+//审核记录
+const auditList = reactive({
+	dialogShow: false,
+	codeid: "",
+	tablename: "MLS_APPOINTMENT",
+	columnid: "reservnum"
+});
 //工作流审核历史记录
 const workflowStatus = (column, row) => {
 	auditList.codeid = row[auditList.columnid];
 	auditList.dialogShow = true;
+};
+
+//拆分弹出参数
+const appointmentsplitdetailList = reactive({
+	dialogShow: false,
+	reservnum: "",
+	success: false
+});
+//拆分
+const split_handler = row => {
+	appointmentsplitdetailList.dialogShow = true;
+	appointmentsplitdetailList.reservnum = row[0].reservnum;
+	appointmentsplitdetailList.success = false;
+};
+//拆分回调
+const split_handlerClose = () => {
+	if (appointmentsplitdetailList.success) {
+		tabPaneName.value = "1";
+	}
+};
+
+// 报价详细信息弹出参数;
+const appointmentdetailReadonlyList = reactive({
+	dialogShow: false,
+	reservnum: ""
+});
+
+//链接详细信息
+const linkDetailbg = (column, row) => {
+	appointmentdetailReadonlyList.reservnum = row.reservnum;
+	appointmentdetailReadonlyList.dialogShow = true;
+};
+
+const linkDetailbgQuery = (column, row) => {
+	appointmentdetailReadonlyList.reservnum = row.reservnum;
+	if (column == "parentid") {
+		appointmentdetailReadonlyList.reservnum = row.parentid;
+	}
+	appointmentdetailReadonlyList.dialogShow = true;
 };
 
 const tabPaneName = ref("0");
