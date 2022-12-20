@@ -49,7 +49,7 @@
 			<el-upload
 				style="margin-left: 120px; margin-right: 40px"
 				ref="upload"
-				action="http://localhost:3000/apis/core/uploadnew/upload!upload.action"
+				:action="globalStore.serverUrl + '/core/uploadnew/upload!upload.action'"
 				:limit="1"
 				:on-exceed="handleExceed"
 				:beforeUpload="handleBeforeUpload"
@@ -74,6 +74,8 @@ import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
 import { getdropSownSelection } from "/src/utils/util.js";
 import { genFileId, ElMessage } from "element-plus";
+import { GlobalStore } from "/src/store/globalStore.js";
+const globalStore = GlobalStore();
 
 const i18n = useI18n();
 const ruleFormRef = ref();

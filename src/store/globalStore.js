@@ -7,7 +7,7 @@ export const GlobalStore = defineStore({
 	// state: 返回对象的函数
 	state: () => ({
 		//服务地址
-		serverUrl: "http://192.168.3.33:8086",
+		serverUrl: "http://localhost:3000/apis",
 		// token
 		token: "",
 		// userInfo

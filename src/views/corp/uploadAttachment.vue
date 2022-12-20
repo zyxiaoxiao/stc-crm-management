@@ -14,7 +14,7 @@
 			<el-upload
 				style="margin-left: 40px; margin-right: 40px; margin-top: 20px"
 				ref="upload"
-				:action="condobj.uploadUrl"
+				:action="globalStore.serverUrl + condobj.uploadUrl"
 				:limit="1"
 				:on-exceed="handleExceed"
 				:beforeUpload="handleBeforeUpload"
@@ -38,6 +38,8 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { genFileId, ElMessage } from "element-plus";
+import { GlobalStore } from "/src/store/globalStore.js";
+const globalStore = GlobalStore();
 
 const i18n = useI18n();
 

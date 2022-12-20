@@ -466,7 +466,7 @@ const uploadAttachmentList = reactive({
 });
 //上传附件
 const UploadFilled = () => {
-	uploadAttachmentList.uploadUrl = "http://localhost:3000/apis/core/uploadnew/upload!upload.action";
+	uploadAttachmentList.uploadUrl = "/core/uploadnew/upload!upload.action";
 	uploadAttachmentList.uploadParameter = {
 		jsonString: "{uploadFile:{businesscode:'CRM/accessory', businessobjectid:'" + formData.lockid + "'}}",
 		"cond.commid": formData.lockid

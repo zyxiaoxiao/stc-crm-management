@@ -14,7 +14,7 @@
 			<el-upload
 				style="margin-left: 40px; margin-right: 40px; margin-top: 20px"
 				ref="upload"
-				:action="condobj.uploadUrl"
+				:action="globalStore.serverUrl + condobj.uploadUrl"
 				:limit="1"
 				:on-exceed="handleExceed"
 				:beforeUpload="handleBeforeUpload"
@@ -22,6 +22,7 @@
 				:on-error="handleError"
 				:data="condobj.uploadParameter"
 				:auto-upload="false"
+				accept=".txt"
 			>
 				<template #trigger>
 					<el-button icon="Document" type="primary">{{ $t("UPLOAD_selectFile") }}</el-button>
@@ -69,6 +70,17 @@ const submitUpload = () => {
 
 //发送请求前执行的函数，在这里可以做一些条件判断，配置参数等
 const handleBeforeUpload = file => {
+	const fileSuffix = file.name.substring(file.name.lastIndexOf(".") + 1);
+	const whiteList = ["txt"];
+	const isLt2M = file.size / 1024 / 1024 < 50;
+	if (whiteList.indexOf(fileSuffix) === -1) {
+		ElMessage.warning(i18n.t("Statement_filetype") + `txt`);
+		return false;
+	}
+	if (!isLt2M) {
+		ElMessage.warning(i18n.t("Statement_filesize") + `50MB`);
+		return false;
+	}
 	return true;
 };
 

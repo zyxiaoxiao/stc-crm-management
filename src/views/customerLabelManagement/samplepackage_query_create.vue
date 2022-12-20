@@ -153,6 +153,7 @@
 			:close-on-click-modal="false"
 			:show-close="false"
 			:destroy-on-close="true"
+			@close="importsamplerecordsClose"
 		>
 			<template #header="{ close }">
 				<div class="main-dialog-header">
@@ -521,7 +522,7 @@ const batchAddressLabel = () => {
 };
 
 const importsamplerecordsList = reactive({
-	uploadUrl: "http://localhost:3000/apis/crm/samplepackage/samplepackage!importTxtSamplepackageInfoSubmitBeforeCheck.action",
+	uploadUrl: "/crm/samplepackage/samplepackage!importTxtSamplepackageInfoSubmitBeforeCheck.action",
 	uploadParameter: { jsonString: JSON.stringify({ uploadFile: { businesscode: "samplepackage", handletype: "1" } }) }, //参数
 	success: false,
 	dialogShow: false
@@ -529,6 +530,12 @@ const importsamplerecordsList = reactive({
 //导入领样记录
 const importsamplerecords = () => {
 	importsamplerecordsList.dialogShow = true;
+	importsamplerecordsList.success = false;
+};
+const importsamplerecordsClose = () => {
+	if (importsamplerecordsList.success) {
+		zTable1.value.getTableList();
+	}
 };
 
 //批量删除数据
