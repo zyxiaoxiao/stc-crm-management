@@ -300,6 +300,7 @@ let tableColumns = [
 
 //表格对象
 const tableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_enterprise.vue_selectEnterpriseInfos",
 	//设置 为单选
 	isRadio: true,
 	//请求属性设置

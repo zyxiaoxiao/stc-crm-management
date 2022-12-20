@@ -59,15 +59,36 @@
 						@click="submitAppointmentInfo()"
 						>{{ $t("menu_submit") }}</el-button
 					>
-					<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-						$t("menu_approve")
-					}}</el-button>
-					<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-						$t("menu_reject")
-					}}</el-button>
-					<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-						$t("menu_reject2Submitor")
-					}}</el-button>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="success"
+						icon="Check"
+						plain
+						@click="approveAppointmentInfo('0')"
+						>{{ $t("menu_approve") }}</el-button
+					>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="danger"
+						icon="Close"
+						plain
+						@click="approveAppointmentInfo('-1')"
+						>{{ $t("menu_reject") }}</el-button
+					>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="danger"
+						icon="Close"
+						plain
+						@click="approveAppointmentInfo('-2')"
+						>{{ $t("menu_reject2Submitor") }}</el-button
+					>
 					<el-button
 						size="small"
 						class="button_show"
@@ -113,6 +134,7 @@
 									class="full-width-input"
 									filterable
 									placeholder="Select"
+									@change="select_desc90"
 									:disabled="isdisabled"
 								>
 									<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
@@ -315,12 +337,12 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item :label="$t('itemtitlebase_flowcorpcode') + ':'" title1="单位编码" readonly>
-								<el-input type="text" clearable v-model="formData.desc3"></el-input>
+								<el-input type="text" clearable v-model="formData.desc3" :disabled="isdisabled"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
 							<el-form-item :label="$t('columnappointmentdiscount') + ':'" title1="单位折扣" readonly>
-								<el-input type="text" clearable v-model="formData.desc4"></el-input>
+								<el-input type="text" clearable v-model="formData.desc4" :disabled="isdisabled"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
@@ -457,18 +479,46 @@
 						plain
 						>{{ $t("menu_chooseFolder") }}</el-button
 					>
-					<el-button size="small" class="button_show" v-show="submitShow" type="success" icon="Check" plain>{{
-						$t("menu_submit")
-					}}</el-button>
-					<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-						$t("menu_approve")
-					}}</el-button>
-					<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-						$t("menu_reject")
-					}}</el-button>
-					<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-						$t("menu_reject2Submitor")
-					}}</el-button>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="submitShow"
+						type="success"
+						icon="Check"
+						plain
+						@click="submitAppointmentInfo()"
+						>{{ $t("menu_submit") }}</el-button
+					>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="success"
+						icon="Check"
+						plain
+						@click="approveAppointmentInfo('0')"
+						>{{ $t("menu_approve") }}</el-button
+					>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="danger"
+						icon="Close"
+						plain
+						@click="approveAppointmentInfo('-1')"
+						>{{ $t("menu_reject") }}</el-button
+					>
+					<el-button
+						size="small"
+						class="button_show"
+						v-show="approveShow"
+						type="danger"
+						icon="Close"
+						plain
+						@click="approveAppointmentInfo('-2')"
+						>{{ $t("menu_reject2Submitor") }}</el-button
+					>
 				</div>
 				<div class="flex-column" style="flex: 1; overflow: auto">
 					<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="formData1" :rules="rules">
@@ -494,7 +544,7 @@
 										:min="1"
 										v-model="formData1.desc47"
 										controls-position="right"
-										:disabled="r_price_a"
+										:readonly="r_desc47"
 									></el-input-number>
 								</el-form-item>
 							</el-col>
@@ -547,7 +597,7 @@
 									<el-input type="text" v-model="formData1.workflowdiscount" readonly></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="8">
+							<el-col :span="pkm_hind">
 								<el-form-item>
 									<el-checkbox title1="DoC" v-model="formData1.desc25" label="DoC" border :disabled="r_price_a" />
 									<el-checkbox title1="RED" v-model="formData1.desc26" label="RED" border :disabled="r_price_a" />
@@ -716,7 +766,8 @@
 					</el-form>
 				</div>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="vmaps" width="700px" :tableList="ptableList" @cell-click="itemViewCellClick"> </zTable>
+					<zTable ref="vmaps" width="700px" :tableList="ptableList" @cell-click="itemViewCellClick" @link-detailbg="linkDetailbg">
+					</zTable>
 				</div>
 			</el-tab-pane>
 			<el-tab-pane :label="$t('menhuAccountInformation')" name="account" class="all-height flex-column">
@@ -742,18 +793,46 @@
 							plain
 							>{{ $t("menu_delete") }}</el-button
 						>
-						<el-button size="small" class="button_show" v-show="submitShow" type="success" icon="Check" plain>{{
-							$t("menu_submit")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-							$t("menu_approve")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject2Submitor")
-						}}</el-button>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="submitShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="submitAppointmentInfo()"
+							>{{ $t("menu_submit") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="approveAppointmentInfo('0')"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-1')"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-2')"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -790,18 +869,46 @@
 							plain
 							>{{ $t("menu_delete") }}</el-button
 						>
-						<el-button size="small" class="button_show" v-show="submitShow" type="success" icon="Check" plain>{{
-							$t("menu_submit")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-							$t("menu_approve")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject2Submitor")
-						}}</el-button>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="submitShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="submitAppointmentInfo()"
+							>{{ $t("menu_submit") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="approveAppointmentInfo('0')"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-1')"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-2')"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -828,18 +935,46 @@
 							plain
 							>{{ $t("menu_delete") }}</el-button
 						>
-						<el-button size="small" class="button_show" v-show="submitShow" type="success" icon="Check" plain>{{
-							$t("menu_submit")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-							$t("menu_approve")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject2Submitor")
-						}}</el-button>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="submitShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="submitAppointmentInfo()"
+							>{{ $t("menu_submit") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="approveAppointmentInfo('0')"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-1')"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-2')"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -866,18 +1001,46 @@
 							plain
 							>{{ $t("menu_deleteupload") }}</el-button
 						>
-						<el-button size="small" class="button_show" v-show="submitShow" type="success" icon="Check" plain>{{
-							$t("menu_submit")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="success" icon="Check" plain>{{
-							$t("menu_approve")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject")
-						}}</el-button>
-						<el-button size="small" class="button_show" v-show="approveShow" type="danger" icon="Close" plain>{{
-							$t("menu_reject2Submitor")
-						}}</el-button>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="submitShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="submitAppointmentInfo()"
+							>{{ $t("menu_submit") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="success"
+							icon="Check"
+							plain
+							@click="approveAppointmentInfo('0')"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-1')"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							class="button_show"
+							v-show="approveShow"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveAppointmentInfo('-2')"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -939,6 +1102,16 @@
 				customclass="selectAdressCss"
 			>
 				<corpaccountApplintmentQuery :condobj="condobj"></corpaccountApplintmentQuery>
+			</ZDialog>
+		</div>
+		<div v-dialogStretching>
+			<ZDialog
+				v-model="condobj.selecthistoryapplicationitmeDialogShow"
+				@close="dialogclose"
+				:title="$t('itemtitleaccountaccount')"
+				width="85%"
+			>
+				<historyapplicationitme :condobj="condobj"></historyapplicationitme>
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
@@ -1071,7 +1244,7 @@ import zTable from "/src/components/ZTable/index.vue";
 import { downloadFile } from "/src/utils/fileUtil.js";
 import { GlobalStore } from "/src/store/globalStore.js";
 //弹出报错或者提示框
-import { ElMessageBox, ElMessage, ElInputNumber } from "element-plus";
+import { ElMessageBox, ElMessage, ElInputNumber, ElInput } from "element-plus";
 import resizeDetector from "element-resize-detector";
 //选择委托单
 import customerQuery from "@/views/appointmentManage/appointmentApplication/appointment_enterprise.vue";
@@ -1097,20 +1270,11 @@ import selectapplicationOrderQuery from "@/views/appointmentManage/appointmentAp
 import sendapplicationOutbox from "@/views/appointmentManage/appointmentApplication/application_outbox_ext.vue";
 //历史报价单查询
 import historyapplication from "@/views/appointmentManage/appointmentApplication/appointment_readonly.vue";
+//历史报价检测项查询
+import historyapplicationitme from "@/views/appointmentManage/appointmentApplication/appointment_his.vue";
 //newItemApplintmentQuery
 const erd = resizeDetector();
 const i18n = useI18n();
-const selectCustomers = () => {
-	input2.value = "你点击了查询";
-	ElMessage({
-		message: "你点击了查询",
-		type: "warning",
-		offset: 50,
-		showClose: true,
-		grouping: true,
-		duration: 6000
-	});
-};
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object,
@@ -1121,7 +1285,6 @@ let accountInfos = ref(); //账户信息
 let otherInfos = ref(); //其它费用
 let subpackageInfos = ref(); //分包信息
 let fileInfos = ref(); //附件信息
-let v_paycondition = ""; //预付款最大显示系数
 let v_isdefaulttax = ""; //税费会加上PKM专属的下标
 let v_defaulttax = ""; //税点
 let workflowflag = ""; //判断当前工作状态
@@ -1132,11 +1295,8 @@ let discount = ""; //折扣
 let pkm_run = false; //是否是PKM部门
 let businesstype = ""; //报价类型
 let v_id = ""; //报价编码
-let v_ispkm = false; //PKM显示字段
 let v_split = ""; //是否分包
-let v_invoiceformat = "0"; //PKM专用字段
 let v_readonly = ""; //报价只读
-let editcurrencyflag = "N"; //币种替换字段
 let r = getdropSownSelection("dgbj_paydeadline"); //付款方式下拉
 const options = [
 	{
@@ -1182,6 +1342,7 @@ const attestationData = [
 const plain = ref("CN");
 const costtype = getdropSownSelection("CRM_qtfy_fylx"); //付款方式下拉
 
+let pkm_hind = ref(0); //PKM显示字段
 let paytype = ref([]); //付款方付款方式
 let paytypeto = ref([]); //买家付款方式
 const globalStore = GlobalStore();
@@ -1415,6 +1576,8 @@ let initialShow = ref(true); //报价单初始价格默认显示
 //fileShow
 let isdisabled = ref(true); //默认都不可以编辑
 let r_desc95 = ref(true); //默认增值税不可编辑
+let r_desc47 = ref(false); //默认检测周期可编辑
+
 let r_price_a = ref(false); //默认服务类型、币种和检测周期可编辑
 let r_desc48 = ref(true); //默认服务费不可编辑
 
@@ -1444,6 +1607,26 @@ const addOtherPrice = () => {
 	}
 	if (Object.keys(row).length > 0) {
 		otherInfos.value.addRowData(row);
+	}
+};
+
+//选择是否分包后重置信息
+const select_desc90 = val => {
+	if (val == "Y") {
+		formData.desc91 = "";
+		formData.desc92 = "";
+		formData.desc15 = "";
+		formData.desc13 = "";
+		formData.desc79 = "";
+		formData.desc72 = "";
+		formData.desc78 = "";
+		formData.desc18 = "";
+		formData.desc75 = "";
+		formData.desc1 = "";
+		formData.desc2 = "";
+		formData.desc3 = "";
+		formData.desc4 = "";
+		formData.desc5 = "";
 	}
 };
 //下载弹出对话框
@@ -1511,7 +1694,6 @@ let locationAppointmentInfo = async top => {
 	}
 	const res = await http.post(url, qs.stringify(par));
 	if (res) {
-		console.log(res);
 		for (let key in res.appointmentInfo[0]) {
 			//判定 appointmentInfo 的key 是否存在 formData 的key
 			formData[key] = res.appointmentInfo[0][key];
@@ -1521,7 +1703,7 @@ let locationAppointmentInfo = async top => {
 	}
 };
 
-//保存报价单信息
+//提交报价单信息
 const submitAppointmentInfo = () => {
 	let data = [];
 	if (!formData.reservnum) {
@@ -1551,6 +1733,60 @@ const submitAppointmentInfo = () => {
 	});
 };
 
+//审核报价单信息
+const approveAppointmentInfo = code => {
+	if (!formData.reservnum) {
+		ElMessage.warning(i18n.t("alert_saveclient"));
+		return;
+	}
+	let str = i18n.t("audit_approve");
+	if (code == "-1" || code == "-2") {
+		str = i18n.t("audit_reject");
+	}
+	let approveValue = ref(str);
+	ElMessageBox({
+		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		message: () =>
+			h(ElInput, {
+				modelValue: approveValue.value,
+				type: "textarea",
+				autosize: { minRows: 4 },
+				"onUpdate:modelValue": val => {
+					approveValue.value = val;
+				}
+			}),
+		showCancelButton: true,
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel")
+	}).then(async () => {
+		let cond = {'opinion':approveValue.value};
+		let jsonString = {
+			reservnum:formData.reservnum,
+			'cond':cond
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		let url = "";
+		if(code == "-1"){
+			url = "/mylims/order/appointment!reject.action";
+		}else if(code == "-2"){
+			url = "/mylims/order/appointment!reject2Submitor.action";
+		}else{
+			url = "/mylims/order/appointment!approve.action";
+		}
+		const res = await http.post(url, qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			ElMessage({
+				type: "success",
+				message: i18n.t("Message_OperationSuccess")
+			});
+			props.condobj.dialogShow_appointmentNew = false;
+		}
+	});
+};
+
+
 const savenewAppointmentInfo = async () => {
 	formData.status = "Create";
 	formData.disptatus = "委托申请已保存";
@@ -1575,7 +1811,6 @@ const savenewAppointmentInfo = async () => {
 	//保存报告信息
 	const res = await http.post("/mylims/order/appointment!saveAppointmentInfo.action", qs.stringify(params));
 	if (res) {
-		console.log(res);
 		ElMessage.success(i18n.t("Message_saveSuccess"));
 		for (let key in res.appointmentInfo[0]) {
 			//判定 appointmentInfo 的key 是否存在 formData 的key
@@ -1603,7 +1838,6 @@ const downloadAppointment = v_type => {
 		let adownload = async (url, params) => {
 			const res = await http.post(url, qs.stringify(params));
 			if (res) {
-				console.log(res);
 				let outboxInfo = res.outboxInfo;
 				if (outboxInfo != null && outboxInfo.length > 0) {
 					condobj.cond = {
@@ -1802,6 +2036,11 @@ const updateItem = async editList => {
 	if (!reservnumto) {
 		reservnumto = formData.reservnum;
 	}
+	for (let item of editList) {
+		if (item.RASPROFILEPRICES == null || item.RASPROFILEPRICES == "null") {
+			item.RASPROFILEPRICES = "";
+		}
+	}
 	let jsonString = {
 		vmaps: editList
 	};
@@ -1991,6 +2230,10 @@ const deleteOtherPriceApplintment = selectList => {
 
 //删除资质文件
 const deleteUpload = (ids, selectList) => {
+	if (selectList.length < 1) {
+		ElMessage.warning(i18n.t("itemtitleloginSelecttherecordstodelete"));
+		return false;
+	}
 	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
 		confirmButtonText: i18n.t("menu_ok"),
 		cancelButtonText: i18n.t("menu_cancel"),
@@ -2026,16 +2269,50 @@ const deleteUpload = (ids, selectList) => {
 };
 
 const itemViewCellClick = (row, column, cell, event) => {
-	console.log("vvvvvvvvvvvvv");
-	console.log(column);
-	console.log(cell);
+	if(!ptableList.edit){//表单不可编辑就退回去
+        return;
+	}
 	if (row.FENBAO == "Y" || workflowflag == "3" || v_readonly == "true") {
 		//分包单审核状态和只读都不可以修改
-		row.isEdit[column.property] = false;
+		return;
 	}
 	//协议价不可以编辑折扣率
 	if (column.property == "DISCOUNTRATE" && row.iscontractprice == "Y") {
 		row.isEdit[column.property] = false;
+		return;
+	}
+	//协议价是否可修改并且是否可编辑等于N或者是否等于N
+	if (column.property == "ismodify" && (row.isedit == "N" || row.iscontractprice == "N")) {
+		row.isEdit[column.property] = false;
+		return;
+	}
+	//外币折后单价是否可修改并且是否协议价等于Y且是否可编辑等于N
+	if (column.property == "AFTER_TESTPRICE_FOREIGN" && row.iscontractprice == "Y" && row.isedit == "N") {
+		row.isEdit[column.property] = false;
+		return;
+	}
+	//外币折后单价是否可修改并且是否协议价等于Y且是否可编辑等于且是否修改协议价等于Y
+	if (column.property == "AFTER_TESTPRICE_FOREIGN" && row.iscontractprice == "Y" && row.isedit == "Y" && row.ismodify == "Y") {
+		row.isEdit[column.property] = false;
+		return;
+	}
+	//外币折后单价是否可修改并且是否修改协议价等于N且是否可编辑等于Y
+	if (column.property == "AFTER_TESTPRICE_FOREIGN" && row.isedit == "Y" && row.ismodify == "N") {
+		row.isEdit[column.property] = true;
+		return;
+	}
+	//不等于测试计划费用或者测试计划费用可编辑
+	if (column.property != "RASPROFILEPRICES" || row.canmodify == "Y") {
+		if (column.property == "AFTER_TESTPRICE_FOREIGN" && row.netprice == "Y") {
+			row.isEdit[column.property] = false;
+			return;
+		}
+		if (column.property == "DISCOUNTRATE" && row.netprice == "Y") {
+			row.isEdit[column.property] = false;
+			return;
+		}
+		row.isEdit[column.property] = true;
+		return;
 	}
 };
 let getValue = async () => {
@@ -2140,8 +2417,9 @@ const dialogShow_customerListQuery = ref(false);
 
 //表格对象检测项
 const ptableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_vmaps",
 	//表单可编辑
-	edit: true,
+	edit: false,
 	//设置 为单选
 	tableToolbar: {
 		right: false
@@ -2229,7 +2507,9 @@ const ptableList = reactive({
 			title: "折后单价(外币)",
 			label: "testiteminfoafternetPricepanel",
 			prop: "AFTER_TESTPRICE_FOREIGN",
-			type: "Input",
+			type: "Number",
+			min: 0,
+			precision: 2,
 			width: "160",
 			edit: true
 		},
@@ -2245,7 +2525,8 @@ const ptableList = reactive({
 			title: "折扣率(%)",
 			label: "columnappointmentdiscount",
 			prop: "DISCOUNTRATE",
-			type: "Input",
+			type: "Number",
+			precision: 2,
 			width: "140",
 			edit: true
 		},
@@ -2253,14 +2534,16 @@ const ptableList = reactive({
 			title: "历史报价",
 			label: "itemtitleappointmenthisprice",
 			prop: "hismessage",
-			type: "Input",
+			type: "Link",
 			width: "180"
 		},
 		{
 			title: "数量",
 			label: "tabletitlemdm_tasklistpromt_taskcount",
 			prop: "COUNT",
-			type: "Input",
+			type: "Number",
+			precision: 0,
+			min: 0,
 			width: "120",
 			edit: true
 		},
@@ -2296,7 +2579,9 @@ const ptableList = reactive({
 			title: "测试计划费用",
 			label: "columnappointmenttesthistoryrasprofileprices_hkd",
 			prop: "RASPROFILEPRICES",
-			type: "Input",
+			type: "Number",
+			min: 0,
+			precision: 2,
 			width: "140",
 			edit: true
 		},
@@ -2372,7 +2657,7 @@ const ptableList = reactive({
 			title: "测试项排序",
 			label: "columnbaseTestSequencing",
 			prop: "testsequencing",
-			type: "Input",
+			type: "Number",
 			width: "120",
 			edit: true
 		},
@@ -2497,7 +2782,7 @@ const accountTableList = reactive({
 
 //表格其它费用
 const otherTableList = reactive({
-	edit: true, //当前表格是否可编辑
+	edit: false, //当前表格是否可编辑
 	//设置 为单选
 	tableToolbar: {
 		right: false
@@ -2623,7 +2908,7 @@ const subpackageTableList = reactive({
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoByNumDis.action",
 		root: "appointmentInfos",
-		baseParams: { "cond.reservnum": "08110320220906051" }
+		baseParams: {}
 	},
 	//表格表头
 	tableColumns: [
@@ -2712,7 +2997,7 @@ const fileTableList = reactive({
 	httpAttribute: {
 		url: "/core/uploadnew/upload!selectUploadFileByCond.action",
 		root: "uploadFileList",
-		baseParams: { "cond.businessobjectid": "08110320220906051" }
+		baseParams: {}
 	},
 	//表格表头
 	tableColumns: [
@@ -2812,8 +3097,8 @@ onMounted(() => {
 			formData.desc74 = userInfo.email;
 			isdisabled.value = false;
 		} else if (workflowflag == "2") {
-			approveShow = true;
-			isbtnShow = true;
+			approveShow.value = true;
+			isbtnShow.value = true;
 			historyappShow = true;
 			isdisabled.value = true;
 		} else if (workflowflag == "3") {
@@ -2829,7 +3114,12 @@ onMounted(() => {
 		if (v_readonly == "true") {
 			isdisabled.value = true;
 		}
-
+		if (isdisabled.value) {
+			//如果全都不可编辑都就不可编辑
+			r_price_a.value = isdisabled.value;
+			r_desc95.value = isdisabled.value;
+			r_desc47.value = isdisabled.value;
+		}
 		if (v_id) {
 			formData.reservnum = v_id;
 			v_reservnum = formData.reservnum;
@@ -2877,8 +3167,6 @@ onMounted(() => {
 });
 //子页面关闭后的方法可以给父页面赋值等操作
 const dialogclose = () => {
-	console.log("xxxxxxxxxxxxxx");
-	console.log("condobj.cond..........", condobj.objlist);
 	if (condobj && condobj.cond) {
 		//选择委托单位的关闭窗口后的事件
 		if (condobj.cond.html && condobj.objlist) {
@@ -2905,6 +3193,24 @@ const dialogclose = () => {
 					formData.desc22 = obj.REPRESENTATIVE; //法定人
 					formData.enterpriseid = obj.CORPID; //客户id
 					formData.enterprisecode = obj.CORPNO; //客户编码
+					if (formData.enterprisecode) {
+						//获取当前客户的归属销售
+						let getUserValue = async corpno => {
+							let jsonString = { "cond.corpno": corpno };
+							let params = {
+								jsonString: JSON.stringify(jsonString)
+							};
+							const res = await http.post("/mylims/order/appointment!selectEnterpriseForUserInfo.action", qs.stringify(params));
+							if (res && res.maps != null && res.maps.length > 0) {
+								let maps = res.maps;
+								formData.desc81 = maps[0].userdesc; //SE姓名
+								formData.desc77 = maps[0].fax; //传真
+								formData.desc82 = maps[0].tel; //电话
+								formData.desc74 = maps[0].email; //电邮
+							}
+						};
+						getUserValue(formData.enterprisecode);
+					}
 					formData.enterprisename = obj.CORPDESC; //客户名称
 					formData.reportid = obj.CORPID; //报告id
 					formData.report_zh = obj.CORPDESC; //报告中文抬头
@@ -2912,6 +3218,7 @@ const dialogclose = () => {
 					formData.report_address_zh = obj.CORPLOCATION; //报告中文地址
 					formData.report_address_us = obj.CORPLOCATION; //报告英文地址
 					let invoiceformat = obj.INVOICEFORMAT;
+
 					//PKM专属税点运算
 					if (v_isdefaulttax.indexOf("_") > 0) {
 						if (invoiceformat != null && invoiceformat == "1") {
@@ -3037,7 +3344,6 @@ const dialogclose = () => {
 						//需要关联协议价还需从这下手
 						const res = await http.post("/mylims/order/appointment!selectTestitemByFolderno.action", qs.stringify(params));
 						if (res.vmaps && res.vmaps.length > 0) {
-							console.log(res);
 							//添加并保存检测项
 							let saveitem = async v => {
 								let jsonString = { maps: v };
@@ -3080,6 +3386,7 @@ const updateDesc95 = () => {
 	if (v_isdefaulttax.indexOf("_") > 0) {
 		//有下划线说明是PKM用户
 		formData1.desc95 = v_desc95;
+		r_desc95.value = false;
 	} else if (sv_isdefaulttax == "1") {
 		if (v_desc95flag == "1") {
 			if (v_desc95 == null || v_desc95 == "" || v_desc95 == undefined || v_desc95 == v_defaulttax) {
@@ -3165,6 +3472,13 @@ const linkDetailbg = (column, row) => {
 			reservnum: row.reservnum
 		};
 		condobj.dialogShow_appointmentReadonlyTo = true;
+	} else if (column == "hismessage" && formData.reservnum) {
+		//历史检测项历史报价
+		condobj.cond = {
+			testid: row.TESTID,
+			corpno: formData.desc13
+		};
+		condobj.selecthistoryapplicationitmeDialogShow = true;
 	}
 };
 //付款单位付款信息
@@ -3248,7 +3562,6 @@ const uploadnewDialogclose = () => {
 
 //页面跳转
 const dialogShow = data => {
-	console.log("datavvvvvvvvvvvvvvvv" + data);
 	if (data == "dialogShow_customerListQuery") {
 		dialogShow_customerListQuery.value = true;
 	} else if (data == "dialogShow_customerQuery") {
@@ -3435,7 +3748,7 @@ const dialogShow = data => {
 
 //切换tab时触发
 const tabChange = targetName => {
-	if (targetName == "info") {
+    if (targetName == "info") {
 		if (workflowflag == "1") {
 			isbtnShow.value = true;
 			saveShow.value = true;
@@ -3450,7 +3763,6 @@ const tabChange = targetName => {
 			approveShow.value = true;
 			isbtnShow.value = true;
 			historyappShow.value = true;
-			isdisabled.value = true;
 		} else if (workflowflag == "3") {
 			isbtnShow.value = true;
 			isdisabled.value = true;
@@ -3463,19 +3775,30 @@ const tabChange = targetName => {
 	} else if (targetName == "price") {
 		if (workflowflag == 1) {
 			itemShow.value = true;
+			ptableList.edit = true;//等于1说明是创建时可编辑
 		} else if (workflowflag == 2 || confirm == "true") {
 			approveShow.value = true; //审核按钮
 			isdisabled.value = true; //表单只读
 		} else if (workflowflag == 3 || v_split == 1) {
 			isdisabled.value = true;
-		} //splitShow//initialShow
-		if (v_ispkm) {
+		}
+		if (pkm_run) {
+			pkm_hind.value = 8;
 		}
 		if (v_readonly) {
 			isdisabled.value = true;
 		}
-		let status = formData.status;
 		let reservnum = formData.reservnum;
+		if (!reservnum) {			
+			setTimeout(() => {
+				ElMessage({
+				type: i18n.t("Message_OperationTip"),
+				message: i18n.t("alert_saveclient")
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
+            return false;
+		}
 		let exchangerate = formData.desc54;
 		if (!exchangerate) {
 			exchangerate = formData1.desc54;
@@ -3489,21 +3812,21 @@ const tabChange = targetName => {
 			vmaps.value.reuseTableList();
 		}
 		getrastatimeInfo(); //获取检测类型
-		getcurrencyInfo(); //获取币种
-		updateDesc95(); //增值税是否可编辑
-		if (isdisabled.value) {
-			//如果全都不可编辑都就不可编辑
-			r_price_a.value = isdisabled.value;
-			r_desc95.value = isdisabled.value;
+		if (!isdisabled.value) {
+			getcurrencyInfo(); //获取币种
+			updateDesc95(); //增值税是否可编辑
 		}
 	} else if (targetName == "account") {
 		let reservnum = formData.reservnum;
 		if (!reservnum) {
-			ElMessage({
+			setTimeout(() => {
+				ElMessage({
 				type: i18n.t("Message_OperationTip"),
 				message: i18n.t("alert_saveclient")
-			});
-			tableTabsValue.value = "info"; //切换报价单信息页面
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
+			return false;
 		} else {
 			accountTableList.httpAttribute.baseParams["cond.reservnum"] = reservnum;
 			accountInfos.value.reuseTableList();
@@ -3525,16 +3848,20 @@ const tabChange = targetName => {
 			desc53 = formData1.desc53;
 		}
 		if (!desc53) {
-			ElMessage({
+			setTimeout(() => {
+				ElMessage({
 				type: i18n.t("Message_OperationTip"),
 				message: i18n.t("message_CurrencySave")
-			});
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
 			return false;
 		}
 		if (workflowflag == 1) {
 			saveOtherShow.value = true;
 			otherShow.value = true;
 			submitShow.value = true;
+			otherTableList.edit = true;//等于1说明是创建时可编辑
 		} else if (workflowflag == 2) {
 			approveShow.value = true;
 			isdisabled.value = true;
@@ -3544,11 +3871,14 @@ const tabChange = targetName => {
 		}
 		let status = formData.status;
 		if (!status) {
-			ElMessage({
+			setTimeout(() => {
+				ElMessage({
 				type: i18n.t("Message_OperationTip"),
 				message: i18n.t("message_CurrencySave")
-			});
-			tableTabsValue.value = "info"; //切换报价单信息页面
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
+			return false;
 		}
 		if (reservnum) {
 			otherTableList.httpAttribute.baseParams["reservnum"] = reservnum;
@@ -3569,11 +3899,14 @@ const tabChange = targetName => {
 		let reservnum = formData.reservnum;
 		let desc90 = formData.desc90;
 		if (!reservnum) {
-			ElMessage({
+			setTimeout(() => {
+				ElMessage({
 				type: i18n.t("Message_OperationTip"),
 				message: i18n.t("alert_saveclient")
-			});
-			tableTabsValue.value = "info"; //切换报价单信息页面
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
+			return false;
 		}
 		if (desc90 == "N") {
 			subpackageTableList.httpAttribute.baseParams["cond.reservnum"] = reservnum;
@@ -3597,17 +3930,19 @@ const tabChange = targetName => {
 		}
 		let reservnum = formData.reservnum;
 		if (!reservnum) {
-			ElMessage({
+			setTimeout(() => {
+				ElMessage({
 				type: i18n.t("Message_OperationTip"),
 				message: i18n.t("alert_saveclient")
-			});
-			tableTabsValue.value = "info"; //切换报价单信息页面
+			    });
+			   tableTabsValue.value = "info"; //切换报价单信息页面
+		    }, 100);
+			return false;
 		} else {
 			fileTableList.httpAttribute.baseParams["cond.businessobjectid"] = reservnum;
 			fileInfos.value.reuseTableList();
 		}
 	}
-	//fileInfos
 };
 </script>
 

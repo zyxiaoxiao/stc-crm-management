@@ -68,6 +68,7 @@ import qs from "qs";
 import http from "@/api/index.js";
 import { downloadFile } from "/src/utils/fileUtil.js";
 const i18n = useI18n();
+
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
@@ -91,6 +92,7 @@ const formData1 = reactive({
 	recorderid: ""
 }); //邮件信息
 let fileList = ref(); //附件信息
+
 let getoutboxValue = async obj => {
 	let params = {
 		jsonString: JSON.stringify(obj)
@@ -103,6 +105,7 @@ let getoutboxValue = async obj => {
 		}
 	}
 };
+
 //下载资质文件
 const downloadfiles = (column, row) => {
 	downloadFile("/core/uploadnew/upload!download.action", row.filename, {

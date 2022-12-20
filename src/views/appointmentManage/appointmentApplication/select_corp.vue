@@ -153,6 +153,7 @@ let tableColumns = [
 
 //表格对象
 const corpAccounttableList = reactive({
+	id: "/appointmentManage/appointmentApplication/select_corp.vue_selectCorpAccountInfos",
 	//设置 为单选
 	isRadio: true,
 	isPaging: false, //是否显示分页

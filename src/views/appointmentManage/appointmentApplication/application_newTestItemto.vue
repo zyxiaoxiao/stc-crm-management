@@ -37,7 +37,7 @@
 					default-expand-all="true"
 					:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 				>
-					<!--<el-table-column type="selection" width="55" />-->
+				    <!--<el-table-column type="selection" width="55" />-->
 					<el-table-column
 						prop="TESTDESC"
 						resizable="true"
@@ -185,6 +185,7 @@ import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 
+
 const i18n = useI18n();
 
 // 父组件传入的参数
@@ -207,31 +208,33 @@ const toggleRow = (selection, row) => {
 
 const clicked = ref(true);
 let v_itemviewData = []; //获取检测项目最初的值
-let v_row_id = "SOS"; //递归时传递的ID给递归返回子节点数据,SOS表示以接收到不用递归了
-let v_row_children = []; //递归后传递出来的值救护包
-const rowExpand = (row, treeNode, resolve) => {
-	console.log("row.........", row);
-	console.log("treeNode.........", treeNode);
+let v_row_id = "SOS";//递归时传递的ID给递归返回子节点数据,SOS表示以接收到不用递归了
+let v_row_children =[];//递归后传递出来的值救护包
+const rowExpand = (row, treeNode, resolve)=> {
+	console.log("row.........",row);
+	console.log("treeNode.........",treeNode);
 	v_row_id = row.id;
 	forTreeChildren(v_itemviewData[0].children);
 	// let itemlist = itemTableList;
-	// v_row_id = row.id;
-	// coordinateTree(itemlist);
+	// v_row_id = row.id;	
+    // coordinateTree(itemlist);
 	// console.log(itemlist);
-	console.log(v_row_children);
-	//lazyTreeNodeMap.value[key] = data;
+	console.log(v_row_children);	
+    //lazyTreeNodeMap.value[key] = data;
 	// instance.emit("expand-change",row,true);
-	if (v_row_children != null && v_row_children.length > 0) {
-		resolve(v_row_children);
-		v_row_children = []; //还原默认值
+	if(v_row_children != null && v_row_children.length > 0){
+        resolve(v_row_children);
+		v_row_children =[];//还原默认值
 	}
-	v_row_id = "SOS"; //还原默认值
+	v_row_id = "SOS";//还原默认值
+	
 };
 
 //展开事件
-const expandChange = expanded => {
+const expandChange = (expanded) => {
 	console.log(itemTableList);
 	//console.log("expanded.........",expanded);
+
 };
 
 const selectAll = selection => {
@@ -239,6 +242,7 @@ const selectAll = selection => {
 	console.log(selection);
 	// selection 是选中的数据集合
 };
+
 
 const handleSelectionChange = row => {
 	console.log("rrrrrrrrrrrrr");
@@ -290,7 +294,7 @@ onMounted(() => {
 let v_selectList = [];
 const processingTreeData = () => {
 	if (itemTableList.length < 1 && v_itemviewData.length > 0) {
-		let list = JSON.parse(JSON.stringify(v_itemviewData));
+		let list =  JSON.parse(JSON.stringify(v_itemviewData));
 		nowTableList = list[0];
 		nowTableList.children = forTreeData(nowTableList.children);
 		itemTableList.push(nowTableList);
@@ -325,19 +329,18 @@ const forTreeData = listdata => {
 const coordinateTree = listdata => {
 	if (listdata.length > 0) {
 		for (let i = 0; i < listdata.length; i++) {
-			console.log("id.....", listdata[i].id);
+			console.log("id.....",listdata[i].id);
 			if (v_row_id != "SOS" && listdata[i].id == v_row_id) {
-				v_row_id = "SOS"; //找到求救者坐标归位
-				if (v_row_children.length > 0) {
-					//赋予保障物资
-					listdata[i].children = v_row_children;
+				v_row_id = "SOS";//找到求救者坐标归位
+				if (v_row_children.length > 0) {//赋予保障物资
+					listdata[i].children= v_row_children;
 				}
 			} else if (v_row_id != "SOS") {
 				if (listdata[i].children && listdata[i].children.length > 0) {
 					coordinateTree(listdata[i].children);
-				}
+				}				
 			}
-		}
+		}		
 	}
 };
 //取出点击下拉后的延迟加载数据
@@ -345,25 +348,27 @@ const forTreeChildren = listdata => {
 	if (listdata.length > 0) {
 		for (let i = 0; i < listdata.length; i++) {
 			if (v_row_id != "SOS" && listdata[i].id == v_row_id) {
-				v_row_id = "SOS"; //找到求救者坐标归位
+				v_row_id = "SOS";//找到求救者坐标归位
 				if (listdata[i].children && listdata[i].children.length > 0) {
-					v_row_children = JSON.parse(JSON.stringify(listdata[i].children)); //传递出去的值
-					for (let j = 0; j < v_row_children.length; j++) {
-						if (v_row_children[j].children && v_row_children[j].children.length > 0) {
-							//还有值说明可以下拉
-							v_row_children[j].hasChildren = true; //下拉显示
-							delete v_row_children[j].children; //删除集释放资源
-						}
+					v_row_children = JSON.parse(JSON.stringify(listdata[i].children));//传递出去的值
+					for(let j=0;j<v_row_children.length;j++){
+                         if(v_row_children[j].children && v_row_children[j].children.length > 0){
+                              //还有值说明可以下拉
+					          v_row_children[j].hasChildren = true; //下拉显示
+					          delete v_row_children[j].children;//删除集释放资源
+						 }
 					}
 				}
 			} else if (v_row_id != "SOS") {
 				if (listdata[i].children && listdata[i].children.length > 0) {
 					forTreeChildren(listdata[i].children);
 				}
+				
 			}
-		}
+		}		
 	}
 };
+
 </script>
 
 <style lang="scss">

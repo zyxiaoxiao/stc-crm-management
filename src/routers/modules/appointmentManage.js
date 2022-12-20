@@ -22,6 +22,39 @@ const appointmentManageRouter = [
 				}
 			},
 			{
+				path: "/appointmentManage/appointmentApplication/appointment_customer_list_query",
+				name: "appointment_customer_list_query",
+				component: () => import("@/views/appointmentManage/appointmentApplication/appointment_customer_list_query.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasequotationaudit", //报价审核
+					key: "appointment_customer_list_query"
+				}
+			},
+			{
+				path: "/appointmentManage/appointmentApplication/appointment_query_template",
+				name: "appointment_query_template",
+				component: () => import("@/views/appointmentManage/appointmentApplication/appointment_query_template.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasequotationtemplate", //报价模板
+					key: "appointment_query_template"
+				}
+			},
+			{
+				path: "/appointmentManage/appointmentApplication/confirm_list_query",
+				name: "confirm_list_query",
+				component: () => import("@/views/appointmentManage/appointmentApplication/confirm_list_query.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasequotationconfirm", //报价确认
+					key: "confirm_list_query"
+				}
+			},
+			{
 				path: "/appointmentManage/appointmentApplication/appointment_splitquery_list",
 				name: "appointment_splitquery_list",
 				component: () => import("@/views/appointmentManage/appointmentApplication/appointment_splitquery_list.vue"),
@@ -30,6 +63,17 @@ const appointmentManageRouter = [
 					requiresAuth: true, //true需要登录才能访问
 					title: "menubaseQuotationsplit", //报价拆分
 					key: "appointment_splitquery_list"
+				}
+			},
+			{
+				path: "/appointmentManage/attained/my_commission_query_list",
+				name: "my_commission_query_list",
+				component: () => import("@/views/appointmentManage/attained/my_commission_query_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasemycommissionapplication", //提佣申请
+					key: "my_commission_query_list"
 				}
 			}
 		]

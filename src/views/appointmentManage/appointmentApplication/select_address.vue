@@ -105,6 +105,7 @@ if (props.condobj != null) {
 }
 //表格对象
 const ctableList = reactive({
+	id: "/appointmentManage/appointmentApplication/select_address.vue_zTable1",
 	//设置 为单选
 	tableToolbar: {
 		right: false

@@ -1,12 +1,13 @@
 <template>
 	<div class="all-height flex-column">
 		<div style="margin-top: 10px"></div>
-		<zTable ref="selecthistoryApplintmentInfos" :tableList="historyapptableList" @link-detailbg="linkDetailbg"> </zTable>
+		<zTable ref="selecthistoryApplintmentInfos" :tableList="historyapptableList" @link-detailbg="linkDetailbg">
+		</zTable>
 	</div>
-	<div v-dialogStretching>
-		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
-			<appointmentReadonly :condobj="condobj"></appointmentReadonly>
-		</ZDialog>
+    <div v-dialogStretching>
+			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
+				<appointmentReadonly :condobj="condobj"></appointmentReadonly>
+			</ZDialog>
 	</div>
 </template>
 
@@ -30,11 +31,11 @@ const condobj = reactive({
 //let CRM_businessCategory = getdropSownSelection("CRM_businessCategory");
 
 //默认需要传入的参数
-const params = { "cond.auditflag": "2", "cond.businesstype": "10" };
+const params = {'cond.auditflag':'2','cond.businesstype':'10'};
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	if (column == "reservnum" && row.reservnum) {
-		//选择委托单位
+        //选择委托单位
 		condobj.cond = {
 			readonly: "true",
 			reservnum: row.reservnum
@@ -42,6 +43,8 @@ const linkDetailbg = (column, row) => {
 		condobj.dialogShow_appointmentReadonly = true;
 	}
 };
+
+
 
 //表格表头
 let tableColumns = [
@@ -56,7 +59,7 @@ let tableColumns = [
 		type: "Link",
 		width: "160"
 	},
-	{
+    {
 		title: "申请单号",
 		label: "columntolockapplynum",
 		prop: "desc71",
@@ -84,42 +87,42 @@ let tableColumns = [
 		type: "Input",
 		width: "120"
 	},
-	{
+    {
 		title: "折扣率(%)",
 		label: "columnappointmentdiscount",
 		prop: "discountrate",
 		type: "Input",
 		width: "140"
 	},
-	{
+    {
 		title: "检测项目原价",
 		label: "appointmenttotaltestitemprice_hkd",
 		prop: "desc35",
 		type: "Input",
 		width: "140"
 	},
-	{
+    {
 		title: "检测项目折后",
 		label: "appointmentcrmformtdHK",
 		prop: "desc36",
 		type: "Input",
 		width: "140"
 	},
-	{
+    {
 		title: "总价",
 		label: "appointmentTotalprice_hkd",
 		prop: "desc52",
 		type: "Input",
 		width: "140"
 	},
-	{
+    {
 		title: "币种",
 		label: "columnappointmentdesc53",
 		prop: "desc53",
 		type: "Input",
 		width: "140"
 	},
-	{
+    {
 		title: "外币价格",
 		label: "columnbaseforeignCuurPeice",
 		prop: "desc34",
@@ -160,7 +163,7 @@ let tableColumns = [
 		prop: "recordercode",
 		type: "Input",
 		width: "140"
-	},
+	},    
 	{
 		title: "创建时间",
 		label: "corpinfopanelqycjsjtitle",
@@ -332,15 +335,15 @@ const historyapptableList = reactive({
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	//页面传入的值判断还需要添加的参数
-	if (props.condobj && props.condobj.cond) {
-		let code = { "cond.auditflag": "2", "cond.businesstype": "10" };
-		let enterprisecode = props.condobj.cond.enterprisecode;
-		if (enterprisecode) {
-			historyapptableList.httpAttribute.baseParams["cond.enterprisecode"] = enterprisecode;
-			selecthistoryApplintmentInfos.value.reuseTableList();
-		}
-	}
+    //页面传入的值判断还需要添加的参数
+if (props.condobj && props.condobj.cond) {
+    let code = {'cond.auditflag':'2','cond.businesstype':'10'};
+	let enterprisecode = props.condobj.cond.enterprisecode;
+	if (enterprisecode) {
+		historyapptableList.httpAttribute.baseParams["cond.enterprisecode"] = enterprisecode;
+		selecthistoryApplintmentInfos.value.reuseTableList();
+	} 
+}
 });
 </script>
 
@@ -351,3 +354,5 @@ onMounted(() => {
 	flex-direction: column;
 }
 </style>
+
+

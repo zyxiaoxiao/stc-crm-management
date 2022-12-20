@@ -23,11 +23,13 @@
 							icon="Delete"
 							plain
 							:disabled="!scope.isSelected"
-							@click="batchDelete(scope.ids)"
+							@click="batchDelete(scope.selectList)"
 							>{{ $t("SRM_delete") }}</el-button
 						>
-						<el-button size="small" type="success" icon="Check" plain>{{ $t("SRM_submit") }}</el-button>
-						<el-button size="small" type="primary" icon="Document" plain @click="dialogShow('dialogShow_customerListQuery')">{{
+						<el-button size="small" type="success" icon="Check" plain @click="submitAppointmentInfos(scope.selectList)">{{
+							$t("SRM_submit")
+						}}</el-button>
+						<el-button size="small" type="primary" icon="Document" plain @click="copy_handler(scope.selectList)">{{
 							$t("SRM_copy")
 						}}</el-button>
 					</template>
@@ -48,17 +50,21 @@
 				<zTable
 					ref="grid_appointmentInfosQuery"
 					:tableList="htableList"
-					@link-detailbg="linkDetailbg"
+					@link-detailbg="linkDetailquery"
 					@workflow-status="workflowStatus"
 				>
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="warning" icon="Back" plain>{{ $t("SRM_back") }}</el-button>
+						<el-button size="small" type="warning" icon="Back" plain @click="back_handler(scope.selectList)">{{
+							$t("SRM_back")
+						}}</el-button>
 
-						<el-button size="small" type="primary" icon="Document" plain @click="dialogShow('dialogShow_customerListQuery')">{{
+						<el-button size="small" type="primary" icon="Document" plain @click="copy_handler(scope.selectList)">{{
 							$t("SRM_copy")
 						}}</el-button>
 
-						<el-button size="small" type="danger" icon="WarnTriangleFilled" plain>{{ $t("menu_abandoned") }}</el-button>
+						<el-button size="small" type="danger" icon="WarnTriangleFilled" plain @click="abandoned_handler(scope.selectList)">{{
+							$t("menu_abandoned")
+						}}</el-button>
 					</template>
 					<!-- 表格操作 -->
 					<template #operation="scope">
@@ -77,11 +83,11 @@
 				<zTable
 					ref="grid_appointmentInfosDeptQuery"
 					:tableList="dtableList"
-					@link-detailbg="linkDetailbg"
+					@link-detailbg="linkDetailquery"
 					@workflow-status="workflowStatus"
 				>
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Document" plain @click="dialogShow('dialogShow_customerListQuery')">{{
+						<el-button size="small" type="primary" icon="Document" plain @click="copy_handler(scope.selectList)">{{
 							$t("SRM_copy")
 						}}</el-button>
 					</template>
@@ -102,11 +108,11 @@
 				<zTable
 					ref="grid_appointmentInfosUnprocessedQuotationInquiry"
 					:tableList="utableList"
-					@link-detailbg="linkDetailbg"
+					@link-detailbg="linkDetailquery"
 					@workflow-status="workflowStatus"
 				>
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Document" plain @click="dialogShow('dialogShow_customerListQuery')">{{
+						<el-button size="small" type="primary" icon="Document" plain @click="copy_handler(scope.selectList)">{{
 							$t("SRM_copy")
 						}}</el-button>
 					</template>
@@ -126,12 +132,12 @@
 			>
 				<zTable
 					ref="grid_appointmentInfosQuery_discardflag"
-					:tableList="htableList"
-					@link-detailbg="linkDetailbg"
+					:tableList="discard_tableList"
+					@link-detailbg="linkDetailquery"
 					@workflow-status="workflowStatus"
 				>
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="success" icon="Open" plain @click="dialogShow('dialogShow_customerListQuery')">{{
+						<el-button size="small" type="success" icon="Open" plain @click="enable_handler(scope.selectList)">{{
 							$t("SRM_enable")
 						}}</el-button>
 					</template>
@@ -155,9 +161,41 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentLink" @close="appointmentLinkclose" width="85%">
-				<appointmentNew :condobj="condobj"></appointmentNew>
-			</ZDialog>
+			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+				<el-form :model="dform" style="margin: 25px 15px">
+					<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+						<el-radio-group v-model="plain">
+							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
+						<el-radio-group v-model="plain">
+							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+						</el-radio-group>
+					</el-form-item>
+					<el-form-item
+						:label="$t('menubaseCertificationType') + ':'"
+						v-if="certificationshow"
+						title1="认证类型"
+						prop="attestation"
+						label-width="140px"
+					>
+						<el-select v-model="attestation" filterable placeholder="Select">
+							<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
+						</el-select>
+					</el-form-item>
+				</el-form>
+				<template #footer>
+					<span class="dialog-footer">
+						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+						<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
+					</span>
+				</template>
+			</el-dialog>
 		</div>
 	</div>
 </template>
@@ -168,6 +206,7 @@ import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 import zTable from "/src/components/ZTable/index.vue";
+import { GlobalStore } from "/src/store/globalStore.js";
 import { ElMessageBox, ElMessage } from "element-plus";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
@@ -179,11 +218,40 @@ const grid_appointmentInfosQuery = ref();
 const grid_appointmentInfosDeptQuery = ref();
 const grid_appointmentInfosUnprocessedQuotationInquiry = ref();
 const grid_appointmentInfosQuery_discardflag = ref();
-
-let v_reservnum = ""; //报价单号
+const globalStore = GlobalStore();
 let businesstype = "10"; //报价类型
 
 const tableTabsValue = ref("infos");
+let attestation = ref("01"); //下载报价单认证类型默认值
+let certificationshow = ref(false); //认证类型默认不显示
+const plain = ref("CN"); //下载默认选中
+//认证类型下拉值
+const attestationData = [
+	{
+		value: "01",
+		label: "General"
+	},
+	{
+		value: "02",
+		label: "STC Tested Mark"
+	},
+	{
+		value: "03",
+		label: "Made in HK"
+	},
+	{
+		value: "04",
+		label: "CB Mark"
+	},
+	{
+		value: "05",
+		label: "Excellence Service"
+	},
+	{
+		value: "06",
+		label: "Safety Mark"
+	}
+];
 
 //审核记录
 const dialogShow_audit = ref(false);
@@ -193,15 +261,210 @@ const auditList = reactive({
 	tablename: "MLS_APPOINTMENT",
 	columnid: "reservnum"
 });
+//下载弹出对话框
+let dialogFormVisible = ref(false);
+
+let v_row = null;
+const editAddress = row => {
+	console.log(row);
+	v_row = row;
+	if (row.submitcorp == "031101") {
+		//HCC有特有模板
+		certificationshow.value = true;
+	}
+	dialogFormVisible.value = true;
+};
+
+//下载报价文件
+const downloadAppointment = () => {
+	if (!v_row.reservnum) {
+		//没保存报价单
+		ElMessage.warning(i18n.t("alert_saveclient"));
+		return false;
+	}
+	if (true) {
+		let serverUrl = globalStore.serverUrl;
+		if (v_row.submitcorp == "031101") {
+			window.location.href =
+				serverUrl +
+				"/mylims/order/appointment!downloadExcel.action?reservnum=" +
+				v_row.reservnum +
+				"&businesstype=" +
+				plain.value +
+				"&certificationtype=" +
+				attestation.value;
+		} else {
+			window.location.href =
+				serverUrl +
+				"/mylims/order/appointment!downloadExcel.action?reservnum=" +
+				v_row.reservnum +
+				"&businesstype=" +
+				plain.value;
+		}
+		dialogFormVisible.value = false;
+	}
+};
+
+//提交报价单信息
+const submitAppointmentInfos = selectList => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
+		return;
+	}
+	let userInfo = globalStore.userInfo;
+	for (let item of selectList) {
+		if (userInfo.usercode != item.recordercode) {
+			ElMessage.warning(i18n.t("Message_NoAuthority"));
+			return;
+		}
+	}
+	ElMessageBox.confirm(i18n.t("Message_ConfirmOrNotSubmit"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel"),
+		type: "warning",
+		draggable: true
+	}).then(async () => {
+		let jsonString = {
+			appointmentInfos: selectList
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		const res = await http.post("/mylims/order/appointment!submitAppointmentInfo.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			ElMessage({
+				type: "success",
+				message: i18n.t("Message_OperationSuccess")
+			});
+			grid_appointmentInfos.value.getTableList();
+		}
+	});
+};
+
+//复制报价单信息
+const copy_handler = async selectList => {
+	if (selectList != null && selectList.length != 1) {
+		ElMessage.warning(i18n.t("Message_copyappointment"));
+		return;
+	}
+	let num = "";
+	for (let item of selectList) {
+		num = item.reservnum;
+	}
+	if (num) {
+		let params = {
+			reservnum: num
+		};
+		const res = await http.post("/mylims/order/appointment!copyAppointmentInfo.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			getappointmentNew("1", res.reservnum);
+		}
+	}
+};
+
+//废弃报价单信息
+const abandoned_handler = async selectList => {
+	if (selectList != null && selectList.length != 1) {
+		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
+		return;
+	}
+	let userInfo = globalStore.userInfo;
+	for (let item of selectList) {
+		if (userInfo.usercode != item.recordercode) {
+			ElMessage.warning(i18n.t("Message_NoAuthority"));
+			return;
+		}
+	}
+	ElMessageBox.confirm(i18n.t("Message_AbandonedYesNo"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel"),
+		type: "warning",
+		draggable: true
+	}).then(async () => {
+		let jsonString = {
+			appointmentInfos: selectList
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		const res = await http.post("/mylims/order/appointment!updateAppointmentInfosToAbandoned.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			ElMessage({
+				type: "success",
+				message: i18n.t("Message_OperationSuccess")
+			});
+			grid_appointmentInfosQuery.value.getTableList();
+		}
+	});
+};
+
+//撤销报价单信息
+const back_handler = async selectList => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("alertChooseanappointmenttocancel"));
+		return;
+	}
+	let userInfo = globalStore.userInfo;
+	let resernums = [];
+	for (let item of selectList) {
+		if (item.auditflag == "2") {
+			ElMessage.warning(i18n.t("Message_BackAllow"));
+			return;
+		}
+		if (userInfo.usercode != item.recordercode) {
+			ElMessage.warning(i18n.t("Message_NoAuthority"));
+			return;
+		}
+		resernums.push(item.reservnum);
+	}
+	if (resernums != null && resernums.length > 0) {
+		let jsonString = {
+			appointmentInfos: selectList,
+			reservnums: resernums
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		const res = await http.post("/mylims/order/appointment!backAppointmentInfos.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			grid_appointmentInfosQuery.value.getTableList();
+		}
+	}
+};
+
+//启用报价单信息
+const enable_handler = async selectList => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
+		return;
+	}
+	let userInfo = globalStore.userInfo;
+	for (let item of selectList) {
+		if (userInfo.usercode != item.recordercode) {
+			ElMessage.warning(i18n.t("Message_NoAuthority"));
+			return;
+		}
+	}
+	let jsonString = {
+		appointmentInfos: selectList
+	};
+	let params = {
+		jsonString: JSON.stringify(jsonString)
+	};
+	const res = await http.post("/mylims/order/appointment!updateAppointmentInfosToEnable.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+	if (res) {
+		grid_appointmentInfosQuery.value.getTableList();
+	}
+};
 
 const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
+
+//发送弹出对话框
 //dialog的是否显示
-const dialogShow_customerListQuery = ref(false);
 const dialogShow_appointmentNew = ref(false);
-const dialogShow_appointmentLink = ref(false);
 
 //页面初始化渲染完成执行
 onMounted(() => {
@@ -209,23 +472,34 @@ onMounted(() => {
 });
 
 const formData1 = reactive({
-	// corpno: props.condobj.corpno ?? "",
-	// corpnoold: props.condobj.corpnoold ?? "",
-	// corpdesc: props.condobj.corpdesc ?? "",
-	// corpenglishname: props.condobj.corpenglishname ?? "",
-	// corpalias: props.condobj.corpalias ?? "",
-	// businesslicenseno: props.condobj.businesslicenseno ?? "",
-	// branchcorpdesc: props.condobj.branchcorpdesc ?? "",
-	// departmentdesc: props.condobj.departmentdesc ?? "",
-	// salesmandesc: props.condobj.salesmandesc ?? "",
-	// corpemail: props.condobj.corpemail ?? "",
-	// agentdesc: props.condobj.agentdesc ?? "",
-	// country: props.condobj.country ?? "",
-	// corplocation: props.condobj.corplocation ?? ""
+	// reservnum: props.condobj.reservnum ?? "",
+	// desc15: props.condobj.desc15 ?? "",
+	// desc13: props.condobj.desc13 ?? "",
+	// desc21: props.condobj.desc21 ?? "",
+	// sampledesc: props.condobj.sampledesc ?? "",
+	// desc49: props.condobj.desc49 ?? "",
+	// discountrate: props.condobj.discountrate ?? "",
+	// desc35: props.condobj.desc35 ?? "",
+	// desc36: props.condobj.desc36 ?? "",
+	// desc33: props.condobj.desc33 ?? "",
+	// desc53: props.condobj.desc53 ?? "",
+	// desc34: props.condobj.desc34 ?? "",
+	// desc18: props.condobj.desc18 ?? "",
+	// desc81: props.condobj.desc81 ?? "",
+	// desc82: props.condobj.desc82 ?? "",
+	// accountid: props.condobj.accountid ?? "",
+	// samplesender: props.condobj.samplesender ?? "",
+	// accounttype: props.condobj.accounttype ?? "",
+	// recordercode: props.condobj.recordercode ?? "",
+	// recorderdesc: props.condobj.recorderdesc ?? "",
+	// recordertime: props.condobj.recordertime ?? "",
+	// desc93: props.condobj.desc93 ?? "",
+	// desc71: props.condobj.desc71 ?? ""
 });
 
 //表格对象报价申请
 const atableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoByCond.action",
@@ -596,6 +870,7 @@ const atableList = reactive({
 
 //表格对象历史报价单查询
 const htableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfosQuery_discardflag",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoRightByCond.action",
@@ -982,6 +1257,7 @@ const htableList = reactive({
 
 //表格对象部门报价单查询
 const dtableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfosQuery",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoRightByCond.action",
@@ -1369,6 +1645,7 @@ const dtableList = reactive({
 
 //表格对象过期报价单查询
 const utableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfosUnprocessedQuotationInquiry",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoRightByCond.action",
@@ -1755,6 +2032,7 @@ const utableList = reactive({
 
 //表格对象废弃报价单查询
 const discard_tableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfosQuery_discardflag",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/order/appointment!selectAppointmentInfoRightByCond.action",
@@ -1762,8 +2040,7 @@ const discard_tableList = reactive({
 		baseParams: {
 			"cond.auditflag": "1,2",
 			"cond.businesstype": businesstype,
-			"cond.discardflag": "0",
-			"cond.condition": "1"
+			"cond.discardflag": "1"
 		}
 	},
 	//快捷查询
@@ -2145,26 +2422,19 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
-//当表格的当前行发生变化的时候会触发该事件
-const tableCurrentChange1 = (currentRow, oldCurrentRow) => {
-	// console.log(currentRow);
-	// console.log(oldCurrentRow);
-};
-
 //新增子页面关闭后的方法可以给父页面赋值等操作
 const appointmentNewclose = () => {
 	//选择联系人的关闭窗口后的事件
 	grid_appointmentInfos.value.getTableList();
 };
 
-//从报价单号进入的页面关闭后方法
-let appointmentLinkclose = () => {
-	//点击报价单号后关闭窗口
-	console.log("###############");
-};
 
 //批量删除数据
-const batchDelete = ids => {
+const batchDelete = selectList => {
+	if (selectList.length < 1) {
+		ElMessage.warning(i18n.t("itemtitleloginSelecttherecordstodelete"));
+		return false;
+	}
 	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
 		confirmButtonText: i18n.t("menu_ok"),
 		cancelButtonText: i18n.t("menu_cancel"),
@@ -2172,17 +2442,16 @@ const batchDelete = ids => {
 		draggable: true
 	}).then(async () => {
 		let jsonString = {
-			enterpriseInfos: []
+			appointmentInfos: []
 		};
-		ids.forEach(item => {
-			jsonString.enterpriseInfos.push({
-				corpid: item
-			});
+		console.log(selectList);
+		selectList.forEach(item => {
+			jsonString.appointmentInfos.push(item);
 		});
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
-		const res = await http.post("/mylims/enterpriseinfo/enterpriseinfo!deleteEnterpriseInfo.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		const res = await http.post("/mylims/order/appointment!deleteAppointmentInfo.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
 		if (res) {
 			ElMessage({
 				type: "success",
@@ -2193,10 +2462,7 @@ const batchDelete = ids => {
 	});
 };
 let returnValue = {};
-let getappointmentNew = async reservnums => {
-	if (!reservnums) {
-		reservnums = "";
-	}
+let getappointmentNew = async (workflowflag, reservnums) => {
 	let jsonString = {};
 	let params = {
 		jsonString: JSON.stringify(jsonString)
@@ -2207,34 +2473,36 @@ let getappointmentNew = async reservnums => {
 		//选择委托单位
 		condobj.cond = {
 			businesstype: "10",
-			workflowflag: "1",
+			workflowflag: workflowflag,
 			reservnum: reservnums,
 			defaulttax: returnValue.defaulttax,
 			isdefaulttax: returnValue.isdefaulttax
 		};
 		condobj.dialogShow_appointmentNew = true;
+		
 	}
 };
 
 //链接详细信息
 const linkDetailbg = (column, row) => {
-	console.log(column, row);
 	if (column == "reservnum" && row.reservnum) {
-		getappointmentNew(row.reservnum);
+		getappointmentNew("1", row.reservnum);
+	}
+};
+
+//链接详细信息
+const linkDetailquery = (column, row) => {
+	if (column == "reservnum" && row.reservnum) {
+		getappointmentNew("3", row.reservnum);
 	}
 };
 
 // 显示dialog
 const dialogShow = data => {
-	if (data == "dialogShow_customerListQuery") {
-		dialogShow_customerListQuery.value = true;
-	} else if (data == "dialogShow_appointmentNew") {
-		getappointmentNew();
+	if (data == "dialogShow_appointmentNew") {
+		getappointmentNew("1", "");
 		//获取部门的增值税包括PKM字段返回 （重点）：
-	} else if (data == "dialogShow_appointmentLink") {
-		console.log();
-		getappointmentNew();
-	}
+	} 
 };
 
 //切换tab时触发

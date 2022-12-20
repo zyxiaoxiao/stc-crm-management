@@ -31,6 +31,7 @@
 					:width="width"
 					:height="height"
 					:fixed="true"
+					scrollbar-always-on
 					:row-class="rowClass"
 					:header-height="headerHeight"
 					:row-height="roweight"

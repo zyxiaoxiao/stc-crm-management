@@ -1,7 +1,7 @@
 <template>
 	<div class="all-height flex-column">
 		<div style="margin-top: 10px"></div>
-		<zTable ref="selectapplicationOrderQuery" :tableList="foldertableList">
+		<zTable ref="selectapplicationOrderQuery" :tableList="foldertableList" >
 			<template #tableHeaderLleft="scope">
 				<el-button size="small" type="primary" icon="Finished" @click="selectFolderApplintment(scope.selectList)" plain>
 					{{ $t("buttoncommonconfirm") }}
@@ -43,6 +43,7 @@ const brokerage = [
 //let CRM_businessCategory = getdropSownSelection("CRM_businessCategory");
 //默认需要传入的参数
 const params = {};
+
 
 //选择完数据后给父页面传值
 const selectFolderApplintment = list => {
@@ -207,7 +208,7 @@ let tableColumns = [
 		prop: "brokerageflag",
 		type: "Input",
 		width: "140",
-		typeData: brokerage
+		typeData: brokerage,
 	},
 	{
 		title: "销售代理编号",
@@ -227,6 +228,7 @@ let tableColumns = [
 
 //表格对象
 const foldertableList = reactive({
+	id: "/appointmentManage/appointmentApplication/application_order_query_list.vue_selectapplicationOrderQuery",
 	//设置 为单选
 	isRadio: true,
 	//请求属性设置
@@ -249,3 +251,5 @@ const foldertableList = reactive({
 	flex-direction: column;
 }
 </style>
+
+

@@ -1,17 +1,23 @@
 <template>
 	<div class="all-height flex-column">
 		<div style="margin-top: 10px"></div>
-		<zTable ref="selectSubpackageApplintmentInfos" :tableList="dispersedquotetableList" @link-detailbg="linkDetailbg">
+		<zTable ref="selectTemplateApplintmentInfos" :tableList="dtableList" @link-detailbg="linkDetailbg">
 			<template #tableHeaderLleft="scope">
-				<el-button size="small" type="primary" icon="Finished" @click="selectSubpackageApplintment(scope.selectList)" plain>
+				<el-button size="small" type="primary" icon="Finished" @click="selectTemplateApplintment(scope.selectList)" plain>
 					{{ $t("buttoncommonconfirm") }}
+				</el-button>
+			</template>
+			<!-- 表格操作 -->
+			<template #operation="scope">
+				<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
+					{{ $t("menubasequotationorderdownload") }}
 				</el-button>
 			</template>
 		</zTable>
 	</div>
 	<div v-dialogStretching>
 		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
-			<appointmentReadonly :condobj="condobj"></appointmentReadonly>
+			<appointmentTemplateReadonly :condobj="condobj"></appointmentTemplateReadonly>
 		</ZDialog>
 	</div>
 </template>
@@ -22,9 +28,10 @@ import { useI18n } from "vue-i18n";
 import ZDialog from "/src/components/ZDialog.vue";
 import zTable from "/src/components/ZTable/index.vue";
 import { ElMessage } from "element-plus";
-import appointmentReadonly from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
+import { GlobalStore } from "/src/store/globalStore.js";
+import appointmentTemplateReadonly from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
 const i18n = useI18n();
-let selectSubpackageApplintmentInfos = ref();
+let selectTemplateApplintmentInfos = ref();
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
@@ -33,6 +40,7 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
+const globalStore = GlobalStore();
 //检验类型
 //let CRM_businessCategory = getdropSownSelection("CRM_businessCategory");
 //默认需要传入的参数
@@ -46,6 +54,17 @@ if (props.condobj && props.condobj.cond) {
 }
 const dialogShow_appointmentReadonly = ref(false);
 
+const editAddress = row => {
+	console.log(row);
+	if (!row.reservnum) {
+		//没保存报价单
+		ElMessage.warning(i18n.t("alert_saveclient"));
+		return false;
+	}
+	let serverUrl = globalStore.serverUrl;
+	window.location.href = serverUrl + "/mylims/order/appointment!downloadExcel.action?reservnum=" + row.reservnum;
+};
+
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	if (column == "reservnum" && row.reservnum) {
@@ -58,10 +77,14 @@ const linkDetailbg = (column, row) => {
 	}
 };
 //选择完数据后给父页面传值
-const selectSubpackageApplintment = list => {
-	if (list != null && list.length == 1) {
-		props.condobj.objlist = list[0]; //传参
-		props.condobj.deptSubpackageApplintmentDialogShow = false; //关闭窗口
+const selectTemplateApplintment = list => {
+	if (list != null && list.length > 0) {
+		let vdata = [];
+		for (let item of list) {
+            vdata.push(item.reservnum);
+		}
+		props.condobj.objlist = vdata; //传参
+		props.condobj.dialogShow_appointmentTemplate = false; //关闭窗口
 	} else {
 		ElMessage({
 			type: i18n.t("Message_OperationTip"),
@@ -72,7 +95,7 @@ const selectSubpackageApplintment = list => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	selectSubpackageApplintmentInfos.value.getTableList();
+	selectTemplateApplintmentInfos.value.getTableList();
 });
 //表格表头
 let tableColumns = [
@@ -86,6 +109,13 @@ let tableColumns = [
 		prop: "reservnum",
 		type: "Link",
 		width: "160"
+	},
+	{
+		title: "委托单预览",
+		label: "menubasequotationorderdownload",
+		prop: "operation",
+		type: "operation",
+		width: "130"
 	},
 	{
 		title: "委托检测公司（个人）",
@@ -313,13 +343,13 @@ let tableColumns = [
 ];
 
 //表格对象
-const dispersedquotetableList = reactive({
-	id: "/appointmentManage/appointmentApplication/appointment_query_dispersedquote.vue_selectSubpackageApplintmentInfos",
+const dtableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_select_template.vue_selectTemplateApplintmentInfos",
 	//设置 为单选
 	isRadio: true,
 	//请求属性设置
 	httpAttribute: {
-		url: "/mylims/order/appointment!selectAppointmentInfoByDispersedquote.action",
+		url: "/mylims/order/appointment!selectTemplateInfoByCond.action",
 		root: "appointmentInfos",
 		baseParams: params
 	},
