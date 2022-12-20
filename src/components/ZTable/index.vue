@@ -358,6 +358,9 @@
 									? $t(selectText(scope.row[item.prop], item.typeData))
 									: selectText(scope.row[item.prop], item.typeData)
 							}}</template>
+							<template v-else-if="item.type == 'Number'">
+								{{ isNumber(item?.precision) ? parseFloat(scope.row[item.prop]).toFixed(item?.precision) : scope.row[item.prop] }}
+							</template>
 							<template v-else>{{ scope.row[item.prop] }}</template>
 						</span>
 						<!-- 表单组件 -->
@@ -448,6 +451,9 @@
 									? $t(selectText(scope.row[item.prop], item.typeData))
 									: selectText(scope.row[item.prop], item.typeData)
 							}}</template>
+							<template v-else-if="item.type == 'Number'">
+								{{ isNumber(item?.precision) ? parseFloat(scope.row[item.prop]).toFixed(item?.precision) : scope.row[item.prop] }}
+							</template>
 							<template v-else>{{ scope.row[item.prop] }}</template>
 						</span>
 					</template>
@@ -529,30 +535,123 @@ const formComponentRef = {};
 // 父组件传入的参数
 const props = defineProps({
 	tableList: {
-		id: "tableid", //必传，主要用于列拖拽
-		isPaging: true, //是否显示分页
-		edit: false, //当前表格是否可编辑
-		noLoading: true, //true为 隐藏加载
-		isRadio: false, // 是否设置单选，false不设置
-		isRequest: false, //页面渲染完成，是否调请求接口，false不调
-		//表格工具栏
-		tableToolbar: {
-			whole: true, //显示全部表格工具栏
-			left: true, //显示左表格工具栏
-			right: true, //显示右全部表格工具栏
-			right_download: true, //显示右下载
-			right_filter: true, //显示右过滤
-			right_query: true, //显示右查询
-			right_empty: true //显示右清空
-		},
-		//请求属性
-		httpAttribute: {},
-		//表格表头
-		tableColumns: [],
-		//快捷查询
-		tablePropSearch: {},
-		// 表格数据
-		tableData: []
+		type: Object,
+		default: {
+			id: {
+				//必传，主要用于列拖拽
+				type: String,
+				default: "tableid"
+			},
+			isPaging: {
+				//是否显示分页
+				type: Boolean,
+				default: true
+			},
+			edit: {
+				//当前表格是否可编辑
+				type: Boolean,
+				default: false
+			},
+			noLoading: {
+				//true为 隐藏加载
+				type: Boolean,
+				default: true
+			},
+			isRadio: {
+				// 是否设置单选，false不设置
+				type: Boolean,
+				default: false
+			},
+			isRequest: {
+				//页面渲染完成，是否调请求接口，false不调
+				type: Boolean,
+				default: false
+			},
+			tableToolbar: {
+				//表格工具栏
+				type: Object,
+				default: {
+					whole: {
+						//显示全部表格工具栏
+						type: Boolean,
+						default: true
+					},
+					left: {
+						//显示左表格工具栏
+						type: Boolean,
+						default: true
+					},
+					right: {
+						//显示右全部表格工具栏
+						type: Boolean,
+						default: true
+					},
+					right_download: {
+						//显示右下载
+						type: Boolean,
+						default: true
+					},
+					right_filter: {
+						//显示右过滤
+						type: Boolean,
+						default: true
+					},
+					right_query: {
+						//显示右查询
+						type: Boolean,
+						default: true
+					},
+					right_empty: {
+						//显示右清空
+						type: Boolean,
+						default: true
+					}
+				}
+			},
+			httpAttribute: {
+				//请求属性
+				type: Object,
+				default: {
+					url: {
+						type: String,
+						default: null
+					},
+					root: {
+						type: String,
+						default: null
+					},
+					baseParams: {
+						type: Object,
+						default() {
+							return {};
+						}
+					}
+				}
+			},
+			//表格表头
+			tableColumns: {
+				type: Array,
+				default() {
+					return [];
+				}
+			},
+
+			// 表格数据
+			tableData: {
+				type: Array,
+				default() {
+					return [];
+				}
+			},
+
+			tablePropSearch: {
+				//快捷查询
+				type: Object,
+				default() {
+					return {};
+				}
+			}
+		}
 	}
 });
 
@@ -631,7 +730,7 @@ if (props.tableList.tableToolbar) {
 //判断 是否单选 是否隐藏全选
 let RadioDisplay = ref("block");
 if (props?.tableList?.isRadio) {
-	RadioDisplay = "none";
+	RadioDisplay.value = "none";
 }
 
 if (props.tableList.tablePropSearch) {
@@ -711,7 +810,7 @@ const dataFormatProcessing = tableData => {
 					rowData[key] = isNumber(rowData[key]) ? stringToNumber(rowData[key]) : null;
 				}
 				if (typeFieldName[key] == "Date") {
-					rowData[key] = moment(new Date(rowData[key])).format("YYYY-MM-DD");
+					rowData[key] = rowData[key] ? moment(new Date(rowData[key])).format("YYYY-MM-DD") : null;
 				}
 			}
 		}
@@ -801,6 +900,13 @@ const handleTableData = res => {
 	if (tableData.length > 0) {
 		//默认单选选中第一行
 		tableRef.value.setCurrentRow(props.tableList.tableData[0]);
+		//单选操作
+		if (props?.tableList?.isRadio) {
+			setTimeout(() => {
+				//如果是单选，勾选第一行
+				tableRef.value.toggleRowSelection(props.tableList.tableData[0], true);
+			}, 100);
+		}
 	}
 };
 
@@ -1046,15 +1152,6 @@ const handleCurrentChange = val => {
 
 //快捷查询
 const quickQuery = () => {
-	// let jsonString = {
-	// 	cond: {}
-	// };
-	// for (let key in tablePropSearch) {
-	// 	if (tablePropSearch[key]) {
-	// 		jsonString.cond[key] = tablePropSearch[key] + "";
-	// 	}
-	// }
-	// params.jsonString = JSON.stringify(jsonString);
 	getTableList();
 };
 

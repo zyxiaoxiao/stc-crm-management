@@ -17,7 +17,7 @@
 
 	<div class="logOut screen-full" @click="logOut">
 		<i class="iconfont layui-icon-extend-tuichu"></i>
-		<span style="margin-left: 5px">登出</span>
+		<span style="margin-left: 5px">{{ $t("header.logout") }}</span>
 	</div>
 </template>
 <script setup>

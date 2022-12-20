@@ -74,4 +74,7 @@ let dialogHeight = computed(() => bodyHeightStore.dialogHeight + "px");
 .main-dialog {
 	height: v-bind(dialogHeight);
 }
+.main-dialogHeight {
+	max-height: v-bind(dialogHeight);
+}
 </style>

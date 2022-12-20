@@ -54,6 +54,7 @@ export default {
 	editContact: "Edit Contact",
 	enterKeywordsForFiltering: "Enter keywords for filtering",
 
+	menu_print: "Print",
 	serviceType100: "Regular Service",
 	serviceType130: "Special Service",
 	serviceType140: "Express Service",

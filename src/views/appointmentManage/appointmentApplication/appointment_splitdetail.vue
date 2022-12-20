@@ -324,7 +324,6 @@ import http from "@/api/index.js";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
-import ZDialog from "/src/components/ZDialog.vue";
 
 // 父组件传入的参数
 const props = defineProps({

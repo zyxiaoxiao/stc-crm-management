@@ -54,6 +54,7 @@ export default {
 	editContact: "编辑联系人",
 	enterKeywordsForFiltering: "输入关键字进行过滤",
 
+	menu_print: "打印",
 	serviceType100: "标准服务",
 	serviceType130: "特殊服务",
 	serviceType140: "加急服务",

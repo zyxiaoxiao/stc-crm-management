@@ -4,10 +4,10 @@
 			<el-alert type="info" :title="$t('Message_OperationTip')" show-icon description="" :closable="false">
 				<template #default>
 					<div>
-						{{ $t("Statement_filesize") }} 1 MB
+						{{ $t("Statement_filesize") }} 50 MB
 						<br />
 						{{ $t("Statement_filetype") }}
-						tif,jpg,png,gif,bmp,txt,html,xml,pdf,doc,xls,ppt,docx,xlsx,pptx,zip,rar,mp3,mov,avi,mpp
+						txt
 					</div>
 				</template>
 			</el-alert>
@@ -38,7 +38,8 @@
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { genFileId, ElMessage } from "element-plus";
-
+import { GlobalStore } from "/src/store/globalStore.js";
+const globalStore = GlobalStore();
 const i18n = useI18n();
 
 // 父组件传入的参数
