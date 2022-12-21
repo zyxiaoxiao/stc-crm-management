@@ -9,9 +9,7 @@
 			>
 				<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbg">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Edit" plain @click="dialogShow('dialogShow_companyDetailNew')">{{
-							$t("menu_new")
-						}}</el-button>
+						<el-button size="small" type="primary" icon="Edit" plain @click="newCustomerLabel">{{ $t("menu_new") }}</el-button>
 						<el-button
 							size="small"
 							type="primary"
@@ -167,12 +165,12 @@
 			</template>
 			<uploadAttachment :condobj="importsamplerecordsList" />
 		</el-dialog>
-
-		<!-- <div v-dialogStretching>
-			<ZDialog v-model="importsamplerecordsList.dialogShow" width="50%">
-				<uploadAttachment :condobj="importsamplerecordsList"></uploadAttachment>
+		<!-- 新增弹出 -->
+		<div v-dialogStretching>
+			<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
+				<samplepackageworkflowdetail :condobj="newCustomerLabel"></samplepackageworkflowdetail>
 			</ZDialog>
-		</div> -->
+		</div>
 	</div>
 </template>
 
@@ -190,10 +188,9 @@ import jobNumberLabel from "./jobNumberLabel.vue";
 import barcodeLabel from "./barcodeLabel.vue";
 import addressLabel from "./delivers_print_addresslabel.vue";
 import uploadAttachment from "./uploadAttachment.vue";
+import samplepackageworkflowdetail from "./samplepackage_workflow_detail.vue";
 
 const i18n = useI18n();
-
-const customerCustomertype = getdropSownSelection("customer_customertype");
 const itemtitleauditflag = getdropSownSelection("itemtitleauditflag");
 
 //表格表头
@@ -488,6 +485,17 @@ const tableList2 = reactive({
 	// 表格数据
 	tableData: []
 });
+
+//新增弹出 参数
+const newCustomerLabelList = reactive({
+	success: false,
+	dialogShow: false,
+	spid: ""
+});
+//新增
+const newCustomerLabel = () => {
+	newCustomerLabelList.dialogShow = true;
+};
 
 //工号标签弹出 参数
 const jobNumberLabelList = reactive({

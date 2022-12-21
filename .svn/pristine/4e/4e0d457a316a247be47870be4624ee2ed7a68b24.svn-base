@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["dep:element-plus_es_locale_lang_en"],
-  "sourcesContent": ["import d from \"./node_modules/element-plus/es/locale/lang/en.mjs\";export default d;"],
-  "mappings": ";;;;;;AAAkE,IAAO,yCAAQ;",
-  "names": []
-}
