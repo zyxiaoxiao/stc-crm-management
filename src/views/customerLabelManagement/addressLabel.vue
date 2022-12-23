@@ -1,7 +1,7 @@
 <template>
 	<div class="all-height flex-column flex-1 el-card" style="padding: 10px 10px 10px 10px">
-		<div class="flex-row" style="margin-bottom: 10px">
-			<el-form-item title1="标签尺寸" :label="$t('columnsamplepackageInfoLabelSize')">
+		<div class="flex-row flx-center" style="margin-bottom: 10px">
+			<el-form-item title1="标签尺寸" :label="$t('columnsamplepackageInfoLabelSize')" style="margin-bottom: 0px">
 				<el-select v-model="LabelSize" @change="LabelSizeChange">
 					<el-option v-for="(item, index) in LabelSizeList" :key="index" :label="item.label" :value="item.value" />
 				</el-select>
@@ -20,8 +20,8 @@
 						>{{ condobj.address }}<br />
 						<p style="height: 5px"></p>
 					</span>
-					<span>{{ condobj.contactdesc }}<br /></span>
-					<span>{{ condobj.tel }}</span>
+					<span>To：{{ condobj.contactdesc }}<br /></span>
+					<span>Tel：{{ condobj.tel }}</span>
 				</p>
 			</el-card>
 			<!-- 打印的 -->
@@ -36,8 +36,8 @@
 						>{{ condobj.address }}<br />
 						<p style="height: 5px"></p>
 					</span>
-					<span>{{ condobj.contactdesc }}<br /></span>
-					<span>{{ condobj.tel }}</span>
+					<span>To：{{ condobj.contactdesc }}<br /></span>
+					<span>Tel：{{ condobj.tel }}</span>
 				</p>
 			</div>
 		</div>

@@ -16,7 +16,7 @@
 							icon="DocumentCopy"
 							plain
 							:disabled="!scope.isSelected"
-							@click="dialogShow('dialogShow_companyDetailNew')"
+							@click="copy_handler(scope.selectList)"
 							>{{ $t("menu_copy") }}</el-button
 						>
 						<el-button
@@ -69,21 +69,30 @@
 					<template #tableHeaderLleft="scope">
 						<el-button
 							size="small"
-							type="warning"
-							icon="Back"
+							type="primary"
+							icon="DocumentCopy"
 							plain
 							:disabled="!scope.isSelected"
-							@click="backHandler(scope.selectList)"
-							>{{ $t("menu_back") }}</el-button
+							@click="copy_handler(scope.selectList)"
+							>{{ $t("menu_copy") }}</el-button
 						>
+						<el-button size="small" type="primary" icon="CollectionTag" plain @click="batchAddressLabel"
+							>{{ $t("menu_havelabels") }}
+						</el-button>
+						<el-button
+							size="small"
+							type="primary"
+							icon="Ticket"
+							plain
+							:disabled="!scope.isSelected"
+							@click="barcodeLabelPrint(scope.selectList)"
+							>{{ $t("menu_clientlabel") }}
+						</el-button>
 					</template>
 					<!-- 表格操作 -->
 					<template #operation="scope">
-						<el-button type="primary" link icon="Edit" @click="editContact(scope.row)">
-							{{ $t("editContact") }}
-						</el-button>
-						<el-button type="primary" link icon="CirclePlus" @click="editContactAddress(scope.row)">
-							{{ $t("SRM_selectAddress") }}
+						<el-button type="primary" link icon="CollectionTag" @click="batchAddressLabelPrint(scope.row)">
+							{{ $t("menu_havelabels") }}
 						</el-button>
 					</template>
 				</zTable>
@@ -168,20 +177,43 @@
 		<!-- 新增弹出 -->
 		<div v-dialogStretching>
 			<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
-				<samplepackageworkflowdetail :condobj="newCustomerLabel"></samplepackageworkflowdetail>
+				<samplepackageworkflowdetail :condobj="newCustomerLabelList"></samplepackageworkflowdetail>
 			</ZDialog>
 		</div>
+		<!-- 地址 标签弹出层 -->
+		<el-dialog
+			ref="addressLabelDialog"
+			v-model="addressLabelPrintList.dialogShow"
+			width="500px"
+			class="main-dialogHeight barcodeLabelClass"
+			:fullscreen="false"
+			:close-on-click-modal="false"
+			:show-close="false"
+			:destroy-on-close="true"
+		>
+			<template #header="{ close }">
+				<div class="main-dialog-header">
+					<span>{{ $t("menu_clientlabel") }}</span>
+					<div class="flx-align-center">
+						<el-icon @click="close" class="main-dialog-icon">
+							<CloseBold />
+						</el-icon>
+					</div>
+				</div>
+			</template>
+			<addressLabelPrint :condobj="addressLabelPrintList" />
+		</el-dialog>
 	</div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, h } from "vue";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage, ElInputNumber } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
 import { getdropSownSelection } from "@/utils/util.js";
 import jobNumberLabel from "./jobNumberLabel.vue";
@@ -189,6 +221,7 @@ import barcodeLabel from "./barcodeLabel.vue";
 import addressLabel from "./delivers_print_addresslabel.vue";
 import uploadAttachment from "./uploadAttachment.vue";
 import samplepackageworkflowdetail from "./samplepackage_workflow_detail.vue";
+import addressLabelPrint from "./addressLabel.vue";
 
 const i18n = useI18n();
 const itemtitleauditflag = getdropSownSelection("itemtitleauditflag");
@@ -490,11 +523,104 @@ const tableList2 = reactive({
 const newCustomerLabelList = reactive({
 	success: false,
 	dialogShow: false,
-	spid: ""
+	spid: "",
+	workflowflag: "3",
+	errormsg: "N"
 });
 //新增
 const newCustomerLabel = () => {
+	newCustomerLabelList.spid = "";
+	newCustomerLabelList.workflowflag = "1";
+	//HKDCSD想在 审核或审核完成后 改变客户标签的客户信息（要求创建人必需是CSD，并且修改人也必须是CSD）
+	//客户标签在创建时如果是CSD创建的会在errormsg该字段中增加一个字母‘Y’
+	newCustomerLabelList.errormsg = "N";
+	newCustomerLabelList.success = false;
 	newCustomerLabelList.dialogShow = true;
+};
+// 新增 弹出 回调
+const newCustomerLabelClose = () => {
+	if (newCustomerLabelList.success) {
+		zTable1.value.getTableList();
+	}
+};
+
+//复制
+const copy_handler = row => {
+	let copynum = ref(1);
+	ElMessageBox({
+		title: i18n.t("SRM_copynew"),
+		message: () =>
+			h("div", { class: "flx-center" }, [
+				i18n.t("Message_copydatasnum") + `：`,
+				h(ElInputNumber, {
+					modelValue: copynum.value,
+					min: 1,
+					precision: 0,
+					"onUpdate:modelValue": val => {
+						copynum.value = val;
+					}
+				})
+			]),
+		showCancelButton: true,
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel")
+	}).then(async () => {
+		let params = {
+			jsonString: JSON.stringify({ samplepackageInfos: row }),
+			"cond.copynum": copynum.value
+		};
+		const res = await http.post("/crm/samplepackage/samplepackage!copySamplepackages.action", qs.stringify(params));
+		if (res) {
+			ElMessage.success(i18n.t("Message_copySuccess"));
+			tabPaneName.value = "0";
+			zTable1.value.getTableList();
+		}
+	});
+};
+//批量删除数据
+const batchDelete = ids => {
+	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel"),
+		type: "warning",
+		draggable: true
+	}).then(async () => {
+		let jsonString = {
+			samplepackageInfos: []
+		};
+		ids.forEach(item => {
+			jsonString.samplepackageInfos.push({
+				spid: item
+			});
+		});
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		const res = await http.post("/crm/samplepackage/samplepackage!deleteSamplepackageInfos.action", qs.stringify(params));
+		if (res) {
+			ElMessage.success(i18n.t("Message_deleteSuccess"));
+			zTable1.value.getTableList();
+		}
+	});
+};
+
+//提交
+const Submit = row => {
+	ElMessageBox.confirm(i18n.t("Message_ConfirmOrNotSubmit"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel"),
+		type: "warning",
+		draggable: true
+	}).then(async () => {
+		let params = {
+			jsonString: JSON.stringify({ samplepackageInfos: row })
+		};
+		const res = await http.post("/crm/samplepackage/samplepackage!submitSamplepackageInfos.action", qs.stringify(params));
+		if (res) {
+			ElMessage.success(i18n.t("Message_OperationSuccess"));
+			zTable1.value.getTableList();
+		}
+	});
 };
 
 //工号标签弹出 参数
@@ -546,75 +672,52 @@ const importsamplerecordsClose = () => {
 	}
 };
 
-//批量删除数据
-const batchDelete = ids => {
-	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			enterpriseInfos: []
-		};
-		ids.forEach(item => {
-			jsonString.enterpriseInfos.push({
-				corpid: item
-			});
-		});
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		const res = await http.post("/mylims/enterpriseinfo/enterpriseinfo!deleteEnterpriseInfo.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
-		if (res) {
-			ElMessage.success(i18n.t("Message_deleteSuccess"));
-			zTable1.value.getTableList();
-		}
-	});
-};
-
 //链接详细信息
 const linkDetailbg = (column, row) => {
-	customerNew.success = false;
-	customerNew.corpid = row.corpid;
-	customerNew.dialogShow = true;
+	newCustomerLabelList.spid = row.spid;
+	newCustomerLabelList.workflowflag = "1";
+	newCustomerLabelList.errormsg = row.errormsg;
+	newCustomerLabelList.success = false;
+	newCustomerLabelList.dialogShow = true;
 };
 
 const linkDetailbgQuery = (column, row) => {
-	customerNewReadonly.corpid = row.corpid;
-	customerNewReadonly.dialogShow = true;
+	newCustomerLabelList.spid = row.spid;
+	newCustomerLabelList.workflowflag = "3";
+	newCustomerLabelList.errormsg = row.errormsg;
+	newCustomerLabelList.success = false;
+	newCustomerLabelList.dialogShow = true;
 };
 
-//提交
-const Submit = row => {
-	ElMessageBox.confirm(i18n.t("Message_ConfirmOrNotSubmit"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			enterpriseInfos: row
-		};
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		const res = await http.post("/mylims/enterpriseinfo/enterpriseinfo!submit.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("Message_OperationSuccess"));
-			await zTable1.value.getTableList();
-			await zTable2.value.getTableList();
-		}
-	});
+// 地址标签参数
+const addressLabelPrintList = reactive({
+	dialogShow: false,
+	corpdesc: "",
+	contactdesc: "",
+	tel: "",
+	address: ""
+});
+
+//打印地址标签
+const batchAddressLabelPrint = row => {
+	addressLabelPrintList.corpdesc = row.customername;
+	addressLabelPrintList.contactdesc = row.contactdesc;
+	addressLabelPrintList.tel = row.phone;
+	addressLabelPrintList.address = row.address;
+	addressLabelPrintList.dialogShow = true;
 };
 
 const tabPaneName = ref("0");
 const tabPaneSet = new Set();
 const tabChange = TabPaneName => {
 	switch (TabPaneName) {
+		case "0":
+			// 客户创建信息查询
+			zTable1.value.getTableList();
+			break;
 		case "1":
 			// 客户创建信息查询
-			if (!tabPaneSet.has("1")) zTable2.value.getTableList();
+			zTable2.value.getTableList();
 			break;
 	}
 	tabPaneSet.add(TabPaneName);

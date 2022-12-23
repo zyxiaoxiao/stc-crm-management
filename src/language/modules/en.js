@@ -410,7 +410,6 @@ export default {
 	elementitemvaluemdmproppropertyspropertytype6: "Hyperlink",
 	i18ninnerboardjsptime: "Time",
 	buttonmailinboxreply: "Reply",
-	i18nCustomerapplicationCustomerCreateInformationArea: "Area",
 	i18ncrmcontractpaymentmethodcredit: "Credit Payment",
 	columnModelspecificationUnit: "Model/specificationUnit",
 	newsclassifationzdgf: "System Standard",
@@ -1524,7 +1523,6 @@ export default {
 	formcomsunwayworldmdmpropvalueobjectPropertysInfopropertyleni18n: "propertyleni18n:",
 	menhuAccountDetails: "Account details",
 	exception唯一性校验规则名称不能为空: "Uniqueness validate rules'name can not be empty",
-	i18nCustomerapplicationCustomerCreateInformationArea: "Area",
 	itemtitlebase_userusersex0: "Female",
 	itemtitlebase_flowrecorderdesc: "recorderdesc",
 	columnappointment_desc19: "Entrust Unit Code",
@@ -5789,5 +5787,9 @@ export default {
 	logoText: "STC CRM SYSTEM",
 	detectCustomerCategory0: "Personal Customer",
 	detectCustomerCategory1: "Enterprise Customer",
-	mustbeanumber: "Must be a number"
+	mustbeanumber: "Must be a number",
+	crm_kdfwqylx01: "CQI",
+	crm_kdfwqylx02: "FnA",
+	crm_kdfwqylx03: "GMO",
+	crm_kdfwqylx04: "OPTS"
 };

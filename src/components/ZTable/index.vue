@@ -958,6 +958,7 @@ const select = async (selection, row) => {
 		// 主要用于将当前勾选的表格状态清除
 		if (selection.length == 0) return;
 		await tableRef.value.toggleRowSelection(row, true);
+		await tableRef.value.setCurrentRow(row);
 	}
 };
 

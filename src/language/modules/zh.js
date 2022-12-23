@@ -101,7 +101,7 @@ export default {
 	panelcolumnbrokeragebase: "佣金基数(HKD)",
 	itemtitlecommondesc11: "状态",
 	itemtitlemdm_base_specialitypropertyid: "特性ID",
-	i18nCustomerapplicationCustomerCreateInformationArea: "区域",
+
 	billinfocurrencyamountofthisaccountpanel: "本次到账外币金额",
 	menhuCommonProblem: "常见问题",
 	buttonmdmcodedeleteenclosure: "删除附件",
@@ -2282,7 +2282,7 @@ export default {
 	exception序号为0对应的主数据已经发生变更本变更申请作废: "序号为({0})对应的主数据已经发生变更，本变更申请作废！",
 	columnSelectmicrochannelaccount: "选择微信账号",
 	corpinfopanelCustomerInformationChangestitle: "客户信息变更",
-	i18nCustomerapplicationCustomerCreateInformationArea: "区域",
+
 	itemtitlebase_flowrecordercode: "修改人编码",
 	exception编码ID为0的数据为第0版本故无法回滚到上一版本: "编码ID为({0})的数据为第0版本，故无法回滚到上一版本！",
 	menubasecorp: "单位管理",
@@ -5573,5 +5573,9 @@ export default {
 	fieldcolumncustomername: "客户名称",
 	detectCustomerCategory0: "个人客户",
 	detectCustomerCategory1: "企业客户",
-	mustbeanumber: "必须是数字"
+	mustbeanumber: "必须是数字",
+	crm_kdfwqylx01: "CQI",
+	crm_kdfwqylx02: "FnA",
+	crm_kdfwqylx03: "GMO",
+	crm_kdfwqylx04: "OPTS"
 };
