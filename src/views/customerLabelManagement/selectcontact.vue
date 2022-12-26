@@ -54,7 +54,7 @@ const tableList1 = reactive({
 		},
 		{
 			title: "id",
-			label: "id",
+			label: "",
 			prop: "contactid",
 			type: "id",
 			width: "60",

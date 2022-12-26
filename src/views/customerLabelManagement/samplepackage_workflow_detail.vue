@@ -34,6 +34,26 @@
 					>
 						{{ $t("menu_submit") }}
 					</el-button>
+					<el-button
+						v-show="menu_approveShow"
+						size="small"
+						type="success"
+						icon="Check"
+						plain
+						:disabled="!formData.spid"
+						@click="auditAction('/crm/samplepackage/samplepackage!approveSamplepackageInfo.action', 'Approve !', formData)"
+						>{{ $t("menu_approve") }}</el-button
+					>
+					<el-button
+						v-show="menu_rejectShow"
+						size="small"
+						type="danger"
+						icon="Close"
+						plain
+						:disabled="!formData.spid"
+						@click="auditAction('/crm/samplepackage/samplepackage!reject.action', 'Reject !', formData)"
+						>{{ $t("menu_reject") }}</el-button
+					>
 				</div>
 				<div style="overflow: auto">
 					<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="formData" ref="ruleFormRef">
@@ -547,9 +567,9 @@
 	</div>
 </template>
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, h } from "vue";
 import { getdropSownSelection } from "/src/utils/util.js";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
@@ -643,6 +663,8 @@ if (props?.condobj?.workflowflag == "1") {
 	menu_saveShow.value = true;
 	menu_submitShow.value = true;
 } else if (props?.condobj?.workflowflag == "2") {
+	menu_approveShow.value = true;
+	menu_rejectShow.value = true;
 } else if (props?.condobj?.workflowflag == "3") {
 }
 
@@ -1552,6 +1574,41 @@ const deleteUpload = (ids, selectList) => {
 				message: i18n.t("Message_deleteSuccess")
 			});
 			zTable3.value.getTableList();
+		}
+	});
+};
+
+//审核操作
+const auditAction = (auditurl, opinion, row) => {
+	let srtOpinion = ref(opinion);
+	ElMessageBox({
+		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		message: () =>
+			h(ElInput, {
+				modelValue: srtOpinion.value,
+				type: "textarea",
+				autosize: { minRows: 4 },
+				"onUpdate:modelValue": val => {
+					srtOpinion.value = val;
+				}
+			}),
+		showCancelButton: true,
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel")
+	}).then(async () => {
+		let jsonString = {
+			samplepackageInfos: [row]
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString),
+			"cond.opinion": srtOpinion.value
+		};
+		const res = await http.post(auditurl, qs.stringify(params));
+
+		if (res) {
+			ElMessage.success(i18n.t("Message_OperationSuccess"));
+			props.condobj.success = true;
+			props.condobj.dialogShow = false;
 		}
 	});
 };
