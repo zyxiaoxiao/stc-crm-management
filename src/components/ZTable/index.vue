@@ -679,7 +679,68 @@ const getTableColumnsApi = async () => {
 		config
 	);
 	if (res?.column) {
-		props.tableList.tableColumns = JSON.parse(res?.column);
+		let backstageTableColumns = JSON.parse(res?.column); //后台的列
+		let localTableColumns = props.tableList.tableColumns; //本地的列
+		let is_local_backstage = true; //本地与后台列是否匹配
+		//本地与后台列的个数相等时，（本地与后台列的个数不对时，说明已经改动过，直接按本地列渲染）
+		if (localTableColumns.length == backstageTableColumns.length) {
+			//本地与后台的列是否匹配,不匹配时说明已经改动过，那么也按本地列渲染
+			for (let localColumn of localTableColumns) {
+				for (let backstageColumn of backstageTableColumns) {
+					if (localColumn.type == "selection" || localColumn.type == "index") {
+						if (localColumn.type == "selection" && backstageColumn.type == "selection") {
+							//匹配时，重新赋值,并默认后台保存的宽度
+							for (let key in localColumn) {
+								if (key == "width") {
+									if (!backstageColumn[key]) backstageColumn[key] = localColumn[key];
+								} else {
+									backstageColumn[key] = localColumn[key];
+								}
+							}
+							is_local_backstage = true;
+							break;
+						} else if (localColumn.type == "index" && backstageColumn.type == "index") {
+							//匹配时，重新赋值,并默认后台保存的宽度
+							for (let key in localColumn) {
+								if (key == "width") {
+									if (!backstageColumn[key]) backstageColumn[key] = localColumn[key];
+								} else {
+									backstageColumn[key] = localColumn[key];
+								}
+							}
+							is_local_backstage = true;
+							break;
+						} else {
+							is_local_backstage = false;
+						}
+					} else {
+						if (localColumn.prop == backstageColumn.prop) {
+							//匹配时，重新赋值,并默认后台保存的宽度
+							for (let key in localColumn) {
+								if (key == "width") {
+									if (!backstageColumn[key]) backstageColumn[key] = localColumn[key];
+								} else {
+									backstageColumn[key] = localColumn[key];
+								}
+							}
+							is_local_backstage = true;
+							break;
+						} else {
+							is_local_backstage = false;
+						}
+					}
+				}
+				if (is_local_backstage == false) {
+					break;
+				}
+			}
+			//本地与后台列不匹配，按本地渲染
+			if (is_local_backstage == false) {
+				return;
+			} else {
+				props.tableList.tableColumns = backstageTableColumns;
+			}
+		}
 	}
 };
 if (props?.tableList?.id) {
@@ -864,6 +925,8 @@ const handleTableData = res => {
 	if (props.tableList.httpAttribute.root) {
 		if (res[props.tableList.httpAttribute.root]) {
 			tableData = res[props.tableList.httpAttribute.root];
+			//对数据源进行格式处理，数字，日期
+			dataFormatProcessing(tableData);
 			for (let i = 0; i < tableData.length; i++) {
 				let item = tableData[i];
 				if (item.retrieveflag == 1) {
@@ -892,10 +955,9 @@ const handleTableData = res => {
 		} else {
 			tableData.push(res);
 		}
+		//对数据源进行格式处理，数字，日期
+		dataFormatProcessing(tableData);
 	}
-
-	//对数据源进行格式处理，数字，日期
-	dataFormatProcessing(tableData);
 	props.tableList.tableData = tableData;
 	if (tableData.length > 0) {
 		//默认单选选中第一行
@@ -1242,10 +1304,17 @@ const columnDrop1 = () => {
 
 //保存列拖拽后的顺序
 const saveColumnDrop = async () => {
-	let tableColumns = JSON.stringify(props.tableList.tableColumns);
+	let tableColumns = JSON.parse(JSON.stringify(props.tableList.tableColumns));
+	tableColumns.forEach(column => {
+		for (let key in column) {
+			if (key != "prop" && key != "width" && key != "type") {
+				delete column[key];
+			}
+		}
+	});
 	const res = await http.post(
 		"/core/framework/ext/column!gridmoveVue.action",
-		qs.stringify({ gridid: props?.tableList?.id, column: tableColumns }),
+		qs.stringify({ gridid: props?.tableList?.id, column: JSON.stringify(tableColumns) }),
 		config
 	);
 };

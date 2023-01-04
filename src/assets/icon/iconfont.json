@@ -6,6 +6,13 @@
   "description": "layui图标扩展",
   "glyphs": [
     {
+      "icon_id": "3216548",
+      "name": "快递",
+      "font_class": "kuaidi",
+      "unicode": "e672",
+      "unicode_decimal": 58994
+    },
+    {
       "icon_id": "128654",
       "name": "content-right",
       "font_class": "contentright",
