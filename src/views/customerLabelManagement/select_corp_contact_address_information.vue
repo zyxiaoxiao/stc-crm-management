@@ -419,6 +419,8 @@ const confirmClick = () => {
 	obj.contactid = zTable2.value.selectList[0]?.contactid;
 	obj.contactdesc = zTable2.value.selectList[0]?.contactdesc;
 	obj.tel = zTable2.value.selectList[0]?.tel;
+	obj.fax = zTable2.value.selectList[0]?.fax;
+	obj.mobile = zTable2.value.selectList[0]?.mobile;
 	obj.addrtype = zTable3.value.selectList[0]?.addrtype;
 	obj.address = zTable3.value.selectList[0]?.address;
 	props.condobj.arrayList.push(obj);

@@ -107,24 +107,24 @@ const Submit = formEl => {
 	if (!formEl) return;
 	formEl.validate(async (valid, fields) => {
 		if (valid) {
-			// let srtUrl = "/crm/samplepackage/samplepackageoutbox!insertSamplepackageoutboxInfo.action";
-			// if (formData.spoutboxid) {
-			// 	srtUrl = "/crm/samplepackage/samplepackageoutbox!updateSamplepackageoutboxInfo.action";
-			// }
-			// let jsonString = {
-			// 	samplepackageoutboxInfo: formData
-			// };
-			// let params = {
-			// 	jsonString: JSON.stringify(jsonString)
-			// };
-			// const res = await http.post(srtUrl, qs.stringify(params));
-			// if (res) {
-			// 	ElMessage.success(i18n.t("Message_saveSuccess"));
-			// 	for (let key in res.samplepackageoutboxInfo[0]) {
-			// 		formData[key] = res.samplepackageoutboxInfo[0][key];
-			// 	}
-			// 	props.condobj.success = true;
-			// }
+			let srtUrl = "/crm/samplepackage/samplepackageoutbox!insertSamplepackageoutboxInfo.action";
+			if (formData.spoutboxid) {
+				srtUrl = "/crm/samplepackage/samplepackageoutbox!updateSamplepackageoutboxInfo.action";
+			}
+			let jsonString = {
+				samplepackageoutboxInfo: formData
+			};
+			let params = {
+				jsonString: JSON.stringify(jsonString)
+			};
+			const res = await http.post(srtUrl, qs.stringify(params));
+			if (res) {
+				ElMessage.success(i18n.t("Message_saveSuccess"));
+				for (let key in res.samplepackageoutboxInfo[0]) {
+					formData[key] = res.samplepackageoutboxInfo[0][key];
+				}
+				props.condobj.success = true;
+			}
 		} else {
 			//表单校验不通过
 			ElMessage.warning(i18n.t("message_form_validation"));
