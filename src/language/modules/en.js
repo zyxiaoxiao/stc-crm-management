@@ -5791,5 +5791,20 @@ export default {
 	crm_kdfwqylx01: "CQI",
 	crm_kdfwqylx02: "FnA",
 	crm_kdfwqylx03: "GMO",
-	crm_kdfwqylx04: "OPTS"
+	crm_kdfwqylx04: "OPTS",
+	crm_kdfwlx01: "Delivery",
+	crm_kdfwlx02: "Collect",
+	crm_kdfwlx03: "Delivery&Collect",
+	crm_kdfwlx04: "Other",
+	kdfy_cm01: "BAG",
+	kdfy_cm02: "Carton",
+	kdfy_cm03: "Envelop",
+	kdfy_zl01: "LESS THAN 2KG",
+	kdfy_zl02: "2KG-5KG",
+	kdfy_zl03: "5KG-10KG",
+	kdfy_zl04: "GREATER THAN 10KG",
+	crm_xmlx01: "Sample",
+	crm_xmlx02: "Report",
+	crm_xmlx03: "Sample&Report",
+	crm_xmlx04: "Other"
 };
