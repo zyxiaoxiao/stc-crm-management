@@ -30,7 +30,7 @@
 						icon="Check"
 						plain
 						:disabled="!formData.dmid"
-						@click="auditAction('/crm/samplepackage/samplepackage!approveSamplepackageInfo.action', 'Approve !', formData)"
+						@click="auditAction('/crm/deliverys/deliverys!approveDeliverysInfo.action', 'Approve !', formData)"
 						>{{ $t("menu_approve") }}</el-button
 					>
 					<el-button
@@ -40,8 +40,18 @@
 						icon="Close"
 						plain
 						:disabled="!formData.dmid"
-						@click="auditAction('/crm/samplepackage/samplepackage!reject.action', 'Reject !', formData)"
+						@click="auditAction('/crm/deliverys/deliverys!reject.action', 'Reject !', formData)"
 						>{{ $t("menu_reject") }}</el-button
+					>
+					<el-button
+						v-show="menu_rejectShow"
+						size="small"
+						type="danger"
+						icon="Close"
+						plain
+						:disabled="!formData.dmid"
+						@click="auditAction('/crm/deliverys/deliverys!reject2Submitor.action', 'Reject !', formData)"
+						>{{ $t("menu_reject2Submitor") }}</el-button
 					>
 				</div>
 				<div style="overflow: auto">
@@ -58,8 +68,8 @@
 									<el-input v-model="formData.clientno" readonly :disabled="formDisabledList.clientno">
 										<template #append>
 											<el-button-group class="flex-row">
-												<el-button :disabled="formDisabledList.customerno" @click="selectCustomer" icon="ZoomIn" />
-												<el-button :disabled="formDisabledList.customerno" @click="delCustomer" type="primary" icon="ZoomOut" />
+												<el-button :disabled="formDisabledList.clientno" @click="selectCustomer" icon="ZoomIn" />
+												<el-button :disabled="formDisabledList.clientno" @click="delCustomer" type="primary" icon="ZoomOut" />
 											</el-button-group> </template
 									></el-input>
 								</el-form-item>
@@ -595,10 +605,6 @@ const props = defineProps({
 	}
 });
 
-//iscsd 不为 1 时 不显示部分
-if (props?.condobj?.iscsd != "1") {
-}
-
 //表单字段
 const formData = reactive({
 	dmid: props?.condobj?.dmid,
@@ -817,6 +823,26 @@ const deptChange = async val => {
 	}
 };
 
+//iscsd为1时，放开部分操作权限
+const csdOperationAuthority = () => {
+	if (props?.condobj?.iscsd == "1") {
+		formDisabledList.serviceareacode = false;
+		formDisabledList.prefinishdate = false;
+		formDisabledList.deliverystarttime = false;
+		formDisabledList.deliveryendtime = false;
+		formDisabledList.csdcollecttimes = false;
+		formDisabledList.csdcollectcode = false;
+		formDisabledList.csdcollectdesc = false;
+		formDisabledList.deptcollecttimes = false;
+		formDisabledList.deptcollectcode = false;
+		formDisabledList.deptcollectdesc = false;
+		formDisabledList.sendmethod = false;
+		formDisabledList.recvmethod = false;
+		formDisabledList.csdremark = false;
+		menu_saveShow.value = true;
+	}
+};
+
 //数据源处理
 const dataSourceProcessing = data => {
 	for (let key in data.deliverysInfo[0]) {
@@ -851,6 +877,7 @@ const getFormData = async () => {
 				formDisabledList[key] = true; //禁用
 			}
 		}
+		csdOperationAuthority();
 		dataSourceProcessing(res);
 	}
 };
@@ -1156,9 +1183,9 @@ const tableList2 = reactive({
 	id: "/expressServiceManagement/deliverys_workflow_detail.vue_zTable2",
 	//面初始化渲染完成 是否调请求
 	isRequest: true,
-	edit: props?.condobj.workflowflag == "1" ? true : false,
+	edit: props?.condobj?.workflowflag == "1" || props?.condobj?.iscsd == "1" ? true : false,
 	tableToolbar: {
-		whole: props?.condobj.workflowflag == "1" ? true : false
+		whole: props?.condobj?.workflowflag == "1" || props?.condobj?.iscsd == "1" ? true : false
 	},
 	//请求属性设置
 	httpAttribute: {
@@ -1356,7 +1383,7 @@ const auditAction = (auditurl, opinion, row) => {
 		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
 		let jsonString = {
-			samplepackageInfos: [row]
+			deliverysInfos: [row]
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString),

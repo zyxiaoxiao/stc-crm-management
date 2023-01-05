@@ -20,6 +20,17 @@ const expressServiceManagementRouter = [
 					title: "menubaseExpressServiceApplication", //"快递服务申请"
 					key: "deliverys_query_create"
 				}
+			},
+			{
+				path: "/expressServiceManagement/deliverys_query_audit",
+				name: "deliverys_query_audit",
+				component: () => import("@/views/expressServiceManagement/deliverys_query_audit.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseExpressServiceAudit", //"快递服务审核"
+					key: "deliverys_query_audit"
+				}
 			}
 		]
 	}
