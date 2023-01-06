@@ -21,7 +21,8 @@ export default {
 		logout: "退出登录",
 		large: "大型",
 		default: "默认",
-		small: "小型"
+		small: "小型",
+		menuSearch: "菜单搜索 ：支持菜单名称"
 	},
 
 	httpStatus400: "请求失败！请您稍后重试",

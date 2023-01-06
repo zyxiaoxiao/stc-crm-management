@@ -21,7 +21,8 @@ export default {
 		logout: "Logout",
 		large: "Large",
 		default: "Default",
-		small: "Small"
+		small: "Small",
+		menuSearch: "Menu search: supports menu names"
 	},
 
 	httpStatus400: "Request failed! Please try again later",
