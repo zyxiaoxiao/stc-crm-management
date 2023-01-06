@@ -6,6 +6,13 @@
   "description": "layui图标扩展",
   "glyphs": [
     {
+      "icon_id": "27536738",
+      "name": "机构协议管理",
+      "font_class": "xieyiguanli",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
       "icon_id": "3216548",
       "name": "快递",
       "font_class": "kuaidi",

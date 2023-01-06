@@ -27,6 +27,8 @@ const i18nLocale = computed(() => {
 
 let fontSize = "14px";
 let tabsHeaderHeight = "40px";
+let tabsItemHeight = "33px";
+let tabsNavNextPrevHeight = "44px";
 let tabsBoxDropdownTop = "8px";
 let menuItemHeight = "56px";
 let treeNodeContent = "33px";
@@ -38,6 +40,8 @@ const assemblySize = computed(() => {
 	if (globalStore.assemblySize == "large") {
 		fontSize = "16px";
 		tabsHeaderHeight = "40px";
+		tabsItemHeight = "33px";
+		tabsNavNextPrevHeight = "44px";
 		tabsBoxDropdownTop = "8px";
 		menuItemHeight = "56px";
 		treeNodeContent = "33px";
@@ -45,6 +49,8 @@ const assemblySize = computed(() => {
 	} else if (globalStore.assemblySize == "small") {
 		fontSize = "12px";
 		tabsHeaderHeight = "32px";
+		tabsItemHeight = "25px";
+		tabsNavNextPrevHeight = "35px";
 		tabsBoxDropdownTop = "4px";
 		menuItemHeight = "48px";
 		treeNodeContent = "26px";
@@ -52,17 +58,21 @@ const assemblySize = computed(() => {
 	} else {
 		fontSize = "14px";
 		tabsHeaderHeight = "40px";
+		tabsItemHeight = "33px";
+		tabsNavNextPrevHeight = "44px";
 		tabsBoxDropdownTop = "8px";
 		menuItemHeight = "56px";
 		treeNodeContent = "33px";
 		titleFontSize = "18px";
 	}
-	document.documentElement.style.setProperty("--el-font-size-base", fontSize);
-	document.documentElement.style.setProperty("--zy-tabs-header-height", tabsHeaderHeight);
-	document.documentElement.style.setProperty("--zy-tabs-box-el-dropdown-top", tabsBoxDropdownTop);
-	document.documentElement.style.setProperty("--el-menu-item-height", menuItemHeight);
-	document.documentElement.style.setProperty("--zy-tree-node-content", treeNodeContent);
-	document.documentElement.style.setProperty("--zy-title-font-size", titleFontSize);
+	document.documentElement.style.setProperty("--el-font-size-base", fontSize); //字体大小
+	document.documentElement.style.setProperty("--zy-tabs-header-height", tabsHeaderHeight); //tabs页签高度
+	document.documentElement.style.setProperty("--zy-tabs-item-height", tabsItemHeight); //tabs页签 每个子项的高度
+	document.documentElement.style.setProperty("--zy-tabs-nav-next-prev-height", tabsNavNextPrevHeight); //tabs页签 左右切换按钮高度
+	document.documentElement.style.setProperty("--zy-tabs-box-el-dropdown-top", tabsBoxDropdownTop); //tabs页签  最右边按钮top高度
+	document.documentElement.style.setProperty("--el-menu-item-height", menuItemHeight); //左边菜单每个子菜单的高度
+	document.documentElement.style.setProperty("--zy-tree-node-content", treeNodeContent); //树形组件的高度
+	document.documentElement.style.setProperty("--zy-title-font-size", titleFontSize); //标签字体大小
 
 	return globalStore.assemblySize;
 });
