@@ -5807,5 +5807,8 @@ export default {
 	crm_xmlx01: "Sample",
 	crm_xmlx02: "Report",
 	crm_xmlx03: "Sample&Report",
-	crm_xmlx04: "Other"
+	crm_xmlx04: "Other",
+	paymentmethod0: "Prepayments",
+	paymentmethod1: "Down Payment",
+	paymentmethod2: "Credit Payment"
 };

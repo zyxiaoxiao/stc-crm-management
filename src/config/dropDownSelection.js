@@ -247,5 +247,6 @@ export default {
 	i18nCustomerapplicationFileDocumentlevel: "0;1;2",
 	itemtitlebase_userState: "0;1;2;3",
 	serviceType: "100;130;140;200;250",
-	itemtitleauditflag: "0;1;2"
+	itemtitleauditflag: "0;1;2",
+	paymentmethod: "0;1;2"
 };

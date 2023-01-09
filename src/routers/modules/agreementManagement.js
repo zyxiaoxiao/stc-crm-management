@@ -17,7 +17,7 @@ const agreementManagementRouter = [
 				meta: {
 					keepAlive: false, //是否缓存页面
 					requiresAuth: true, //true需要登录才能访问
-					title: "menubasemccm", //"月结客户申请"
+					title: "menubasemcsh", //"月结客户申请"
 					key: "contract_application_list"
 				}
 			}

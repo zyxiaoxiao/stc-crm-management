@@ -5593,5 +5593,8 @@ export default {
 	crm_xmlx01: "Sample",
 	crm_xmlx02: "Report",
 	crm_xmlx03: "Sample&Report",
-	crm_xmlx04: "Other"
+	crm_xmlx04: "Other",
+	paymentmethod0: "预付款",
+	paymentmethod1: "预付定金",
+	paymentmethod2: "月结"
 };

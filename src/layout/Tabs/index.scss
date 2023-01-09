@@ -33,17 +33,37 @@
 			border: none;
 		}
 		.el-tabs--card > .el-tabs__header .el-tabs__item {
-			color: #73757a;
-			border: 1px solid #d8dce5;
-			margin-top: 3px;
-			margin-left: 5px;
-			margin-right: 5px;
-			height: $tabs-item-height;
-			line-height: $tabs-item-height;
-			padding-left: 10px;
-			padding-right: 12px;
-			transition: none;
-			border-radius: 2px;
+			// color: #73757a;
+			// border: 1px solid #d8dce5;
+			// margin-top: 3px;
+			// margin-left: 5px;
+			// margin-right: 5px;
+			// height: $tabs-item-height;
+			// line-height: $tabs-item-height;
+			// padding-left: 10px;
+			// padding-right: 12px;
+			// transition: none;
+			// border-radius: 2px;
+
+			//color: #409eff;
+    		//border: 1px solid #d9ecff;
+			//background-color: #ecf5ff;
+			
+			color:#909399;
+			border: 1px solid #e9e9eb;
+			background-color: #f4f4f5;
+   			margin-top: 3px;
+    		margin-left: 5px;
+    		margin-right: 5px;
+    		height: var(--zy-tabs-item-height);
+    		line-height: var(--zy-tabs-item-height);
+    		padding-left: 10px;
+    		padding-right: 12px;
+    		transition: none;
+    		border-radius: 4px;
+    		
+			
+
 		}
 		.el-tabs--card > .el-tabs__header .el-tabs__item::after {
 			content: "";
@@ -69,6 +89,9 @@
   			-webkit-transition: 0.5s ease;
   			-moz-transition: 0.5s ease;
 			
+		}
+		.el-tabs--card > .el-tabs__header .el-tabs__item .is-icon-close {
+			width: 14px;
 		}
 
 		.el-tabs--card > .el-tabs__header .el-tabs__item.is-closable:hover .is-icon-close {
