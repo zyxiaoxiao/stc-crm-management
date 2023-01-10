@@ -6,9 +6,9 @@
 				<el-icon v-else-if="subItem.icon">
 					<component :is="subItem.icon"></component>
 				</el-icon>
-				<el-icon v-else>
-					<List />
-				</el-icon>
+				<!-- <el-icon v-else> <Link /> </el-icon> -->
+
+				<i v-else style="margin-right: 10px; font-size: 18px" :class="['iconfont', 'layui-icon-extend-file-list--fill']"></i>
 				<span class="menu-i-span">{{ $t(subItem.title) }}</span>
 				<!-- <el-tooltip :content="$t(subItem.title)" placement="right">
 					<span class="menu-i-span">{{ $t(subItem.title) }}</span>

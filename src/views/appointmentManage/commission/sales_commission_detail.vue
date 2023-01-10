@@ -8,92 +8,124 @@
 			@tab-change="tabChange"
 		>
 			<el-tab-pane title1="提佣申请" :label="$t('panelcolumnbrokerageapply')" name="infos">
-				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="cformData" ref="ruleFormRef">
+				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="ruleFormRef">
 					<el-divider title1="提佣申请" content-position="left">{{ $t("panelcolumnbrokerageapply") }}</el-divider>
 					<el-row class="main-align-items-center">
-						<el-col :span="6">
+                        <el-col :span="6">
+							<el-form-item :label="$t('panelcolumnbrokerageno') + ':'" title1="提佣申请单号">
+								<el-input type="text" v-model="sformData.commissionid" readonly></el-input>
+							</el-form-item>
+						</el-col>
+                        <el-col :span="6">
 							<el-form-item :label="$t('columnbasemonth') + ':'" title1="月份">
-								<el-input type="text" v-model="cformData.brokeragemonth" readonly></el-input>
+								<el-input type="text" v-model="sformData.brokeragemonth" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item :label="$t('appointmentTotalprice_hkd') + ':'" title1="申请单总金额">
-								<el-input type="text" v-model="cformData.totalmoney" readonly></el-input>
+                        <el-col :span="6">
+							<el-form-item :label="$t('basecolumnAR_Total_Amount') + ':'" title1="呆账总金额">
+								<el-input type="text" v-model="sformData.arprice" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item :label="$t('columnwriteoff_application_listCost') + ':'" title1="成本费">
-								<el-input type="text" v-model="cformData.costnum" readonly></el-input>
+                        <el-col :span="6">
+							<el-form-item :label="$t('basecolumnTotal_Bad_Amount') + ':'" title1="坏账总金额">
+								<el-input type="text" v-model="sformData.badmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
-							<el-form-item :label="$t('panelcolumnbaddebt') + ':'" title1="坏账金额">
-								<el-input type="text" v-model="cformData.badmoney" readonly> </el-input>
+                        <el-col :span="6">
+							<el-form-item :label="$t('columnwriteoff_application_listCost') + ':'" title1="实际营业额">
+								<el-input type="text" v-model="sformData.costnum" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+                        <el-col :span="6">
 							<el-form-item :label="$t('columnbasesalesexpenses_hkd') + ':'" title1="销售开支">
-								<el-input type="text" v-model="cformData.salesexpenses" readonly></el-input>
+								<el-input type="text" v-model="sformData.salesexpenses" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item :label="$t('appointmentValueaddedtax_hkd') + ':'" title1="增值税">
-								<el-input type="text" v-model="cformData.taxmoney" readonly></el-input>
+								<el-input type="text" v-model="sformData.taxmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="6">
+                        <el-col :span="6">
 							<el-form-item :label="$t('panelcolumnbrokeragebase') + ':'" title1="佣金基数">
-								<el-input type="text" v-model="cformData.basemoney" readonly></el-input>
+								<el-input type="text" v-model="sformData.basemoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item :label="$t('panelcolumnbrokerage_hkd') + ':'" title1="佣金">
-								<el-input type="text" v-model="cformData.brokerage" readonly></el-input>
-							</el-form-item>
-						</el-col>
-						<el-col :span="6">
-							<el-form-item :label="$t('panelcolumntaskwell_hkd') + ':'" title1="任务额">
-								<el-input type="text" v-model="cformData.taskmoney" readonly></el-input>
+							<el-form-item :label="$t('columnbasesalestaskwell') + ':'" title1="任务额">
+								<el-input type="text" v-model="sformData.taskmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
 							<el-form-item :label="$t('panelcolumnstandardbonus_hkd') + ':'" title1="达标奖">
-								<el-input type="text" v-model="cformData.attainedbonus" readonly></el-input>
+								<el-input type="text" v-model="sformData.attainedbonus" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item :label="$t('panelcolumnbrokerageandattained') + ':'" title1="佣金+达标奖">
-								<el-input type="text" v-model="cformData.brokeragetotal" readonly></el-input>
+							<el-form-item :label="$t('basecolumnCombined_Achievement_Award') + ':'" title1="组合达标奖">
+								<el-input type="text" v-model="sformData.combinationaward" readonly> </el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item  title1="">					
+							<el-form-item :label="$t('basecolumnBasic_Commission') + ':'" title1="基础佣金">
+								<el-input type="text" v-model="sformData.brokerage" readonly></el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :span="24">
-							<el-form-item :label="$t('columnappointment_desc42') + ':'" title1="remark">
-								<el-input type="textarea" v-model="cformData.remark" readonly></el-input>
+						<el-col :span="6">
+							<el-form-item :label="$t('basecolumnAR_deduction_amount') + ':'" title1="本次呆账扣减">
+								<el-input type="text" v-model="sformData.total_bad_debts" readonly></el-input>
 							</el-form-item>
 						</el-col>
-					</el-row>					
+						<el-col :span="6">
+							<el-form-item :label="$t('basecolumnbad_deduction_amount') + ':'" title1="本次坏账扣减">
+								<el-input type="text" v-model="sformData.badprice" readonly></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="6">
+							<el-form-item :label="$t('panelcolumnbrokerage_hkd') + ':'" title1="佣金(HKD)">
+								<el-input type="text" v-model="sformData.brokeragetotal" readonly></el-input>
+							</el-form-item>
+						</el-col>
+                        <el-col :span="6">
+							<el-form-item :label="$t('basecolumnis_the_minimum_guaranteed') + ':'" title1="是否保底(Y/N)">
+								<el-input type="text" v-model="sformData.ismonthfloors" readonly></el-input>
+							</el-form-item>
+						</el-col>
+                        <el-col :span="6">
+							<el-form-item :label="$t('basecolumncan_i_withdraw_commission') + ':'" title1="单月是否可提佣(Y/N)">
+								<el-input type="text" v-model="sformData.ismonthreach" readonly></el-input>
+							</el-form-item>
+						</el-col>
+                        <el-col :span="6">
+							<el-form-item :label="$t('panelcolumnno_agency_commission_base') + ':'" title1="无代理佣金基数">
+								<el-input type="text" v-model="sformData.noagenttotalprice" readonly></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
 				</el-form>
-                <el-divider style="margin: 1px 0;"></el-divider>
-				<div class="flex-column" style="flex: 1; overflow: auto;height: 350px;">
-					<zTable ref="zTableCommission" width="700px" :tableList="tableListCommission" > </zTable>
-				</div>                
+				<el-divider style="margin: 1px 0"></el-divider>
+				<div class="flex-column" style="flex: 1; overflow: auto; height: 350px">
+					<zTable ref="grid_gradefolderInfos" width="700px" :tableList="tableListSales"> </zTable>
+				</div>
 			</el-tab-pane>
-			<el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="query">
+			<el-tab-pane title1="呆账查询" :label="$t('basecolumnAR_Amount_Query')" class="all-height flex-column" name="query">
+				<div class="flex-column" style="flex: 1; overflow: auto">
+					<zTable ref="grid_BaddebtsInfos" :tableList="tableListBaddebts"> </zTable>
+				</div>
+			</el-tab-pane>
+            <el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="expenditure">
 				<div class="flex-column" style="flex: 1; overflow: auto">
 					<zTable ref="grid_expenditureInfos" :tableList="tableListExpenditure" @link-detailbg="linkDetailquey"> </zTable>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane title1="内分包单查询" :label="$t('menuselectInternalSubcontractingOrderQuery')" class="all-height flex-column" name="unprocessed">
-				<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing"> </zTable>
+            <el-tab-pane title1="内分包单查询" :label="$t('menuselectInternalSubcontractingOrderQuery')" class="all-height flex-column" name="subcontracting">
+				<div class="flex-column" style="flex: 1; overflow: auto">
+					<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing" > </zTable>
+				</div>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
 </template>
-
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
@@ -102,129 +134,133 @@ import qs from "qs";
 import http from "@/api/index.js";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
-import ZDialog from "/src/components/ZDialog.vue";
 
+
+const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
 });
 
 let stype = getdropSownSelection("sales_type"); //开支类型下拉
-//提佣申请初始化信息
-const cformData = reactive({
-	brokerageid: "",
+//销售提佣申请初始化信息
+const sformData = reactive({	
+	commissionid: "",
+	brokeragemonth: "",
+	arprice: "",
+	badmoney: "",
 	totalmoney: "",
 	costnum: "",
 	salesexpenses: "",
-	refundnum: "",
 	taxmoney: "",
-	badmoney: "",
-	remark: "",
+	basemoney: "",
+	taskmoney: "",
+	attainedbonus: "",
+    combinationaward: "",
+    brokerage: "",
+    total_bad_debts: "",
+    badprice: "",
+    brokeragetotal: "",
+    
+    ismonthfloors: "",
+	ismonthreach: "",
+    noagenttotalprice: "",
+    refundnum: "",
+    cid: "",
 	recordercode: "",
 	recorderdesc: "",
 	recordtime: "",
-	brokeragemonth: "",
-
-	auditorcode: "",
-	auditordesc: "",
 	audittime: "",
-	submitcorp: "",
-	auditlevel: "",
-	retrieveflag: "",
-	retrievercode: "",
-	retrieverdesc: "",
-	retrievetime: "",
-	recordercorp: "",
-	auditlevelname: "",
-	errormsg: "",
-	submittime: "",
-	workflowid: "",
 	auditflag: "",
+	combinedid: ""
 });
 
 const tableTabsValue = ref("infos");
 
+
 //链接详细信息
 const linkDetailquey = (column, row) => {
 	if (column == "folderno" && row.folderno) {
-				
 	}
 };
 
+//查询销售佣金详细信息
 let getbrokerageInfo = async obj => {
 	let params = {
-		jsonString: JSON.stringify({brokerageInfo:obj})
+		jsonString: JSON.stringify({ commissionInfo: obj })
 	};
-	const res = await http.post("/crm/brokerage/brokerage!selectBrokerageInfoById.action", qs.stringify(params));
+	const res = await http.post(
+		"/crm/commission/commission!selectCommissionInfoById.action",
+		qs.stringify(params)
+	);
 	if (res) {
-		for (let key in res.brokerageInfo[0]) {
-			//判定 appointmentInfo 的key 是否存在 formData 的key
-			cformData[key] = res.brokerageInfo[0][key];
+		for (let key in res.commissionInfo[0]) {
+			//判定 commissionInfo 的key 是否存在 sformData 的key
+			sformData[key] = res.commissionInfo[0][key];
 		}
 	}
 };
 //切换tab时触发
 const tabChange = TabPaneName => {
-    let brokerageid = cformData.brokerageid;
+	let commissionid = sformData.commissionid;
 	if (TabPaneName == "infos") {
 		//提佣申请子页面
-        if(brokerageid){
-            getbrokerageInfo({"brokerageid":brokerageid});
-            //传参后会自动调用接口刷新
-			tableListCommission.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
-			zTableCommission.value.reuseTableList();
-        }
+		if (commissionid) {
+			getbrokerageInfo({ commissionid: commissionid });
+			//传参后会自动调用接口刷新
+			tableListSales.httpAttribute.baseParams["cond.commissionid"] = commissionid;
+			grid_gradefolderInfos.value.reuseTableList();
+		}
 	} else if (TabPaneName == "query") {
+		//呆账查询页面
+		if (commissionid) {
+			//传参后会自动调用接口刷新
+			tableListBaddebts.httpAttribute.baseParams["cond.commissionid"] = commissionid;
+			grid_BaddebtsInfos.value.reuseTableList();
+		}
+	} else if (TabPaneName == "expenditure") {
 		//销售开支查询子页面
-        if(brokerageid){
+        if(commissionid){
             //传参后会自动调用接口刷新
-			tableListExpenditure.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
-            tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = cformData.brokeragemonth;
+			tableListExpenditure.httpAttribute.baseParams["cond.commissionid"] = commissionid;
+            tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = sformData.brokeragemonth;
 			grid_expenditureInfos.value.reuseTableList();
         }
-	} else if (TabPaneName == "unprocessed") {
-		//内分包单查询子页面
-		if(brokerageid){
+	} else if (TabPaneName == "subcontracting") {
+		//内分包页面
+        if(commissionid){
             //传参后会自动调用接口刷新
-			tableListOutsourcing.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
+			tableListOutsourcing.httpAttribute.baseParams["cond.commissionid"] = commissionid;
 			grid_outsourcingInfos.value.reuseTableList();
         }
 	}
 };
 
-//页面跳转
-const dialogShow = data => {
-	if (data == "dialogShow_customerListQuery") {
-		dialogShow_customerListQuery.value = true;
-	}
 
-};
 onMounted(() => {
 	//getValue();
 	if (props.condobj) {
-		//let auditflag = props.condobj.cond.auditflag; //审核状态
-		let brokerageid = props.condobj.cond.brokerageid; //提佣编号
-		//let readOnly = props.condobj.cond.readOnly; //只读
-        if(brokerageid){
-            getbrokerageInfo({"brokerageid":brokerageid});
-            //传参后会自动调用接口刷新
-			tableListCommission.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
-			zTableCommission.value.reuseTableList();
-        }
-    }
+		let commissionid = props.condobj.cond.commissionid; //销售提佣编号
+		if (commissionid) {
+			getbrokerageInfo({ commissionid: commissionid });
+			//传参后会自动调用接口刷新
+			tableListSales.httpAttribute.baseParams["cond.commissionid"] = commissionid;
+			grid_gradefolderInfos.value.reuseTableList();
+		}
+	}
 });
 
 //表格销售提佣申请单
-const zTableCommission = ref();
-const tableListCommission = reactive({
-	id: "/appointmentManage/attained/my_commission_detail.vue_zTableCommission",
-    tableToolbar: {
+const grid_gradefolderInfos = ref();
+const tableListSales = reactive({
+	id: "/appointmentManage/commission/sales_commission_detail.vue_grid_gradefolderInfos",
+	tableToolbar: {
 		right: false
 	},
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/brokerage/brokerage!selectBrokeragefoldersInfoByCond.action",
-		root: "brokeragefoldersInfos",
+		url: "/crm/commission/commission!selectShareFoldersInfoByCond.action",
+		root: "shareFoldersInfos",
 		baseParams: {}
 	},
 	//表格表头
@@ -238,16 +274,23 @@ const tableListCommission = reactive({
 			label: "columntolockapplynum",
 			prop: "folderno",
 			type: "Input",
-			width: "140"
+			width: "160"
 		},
 		{
 			title: "报价单编号",
 			label: "crmcolumnreservnum",
 			prop: "quotationno",
 			type: "Input",
-			width: "180"
+			width: "160"
 		},
 		{
+			title: "BM编号",
+			label: "basecolumnbm_code",
+			prop: "bmcode",
+			type: "Input",
+			width: "140"
+		},
+        {
 			title: "客户号",
 			label: "fieldcolumncustomercode",
 			prop: "rasclientid",
@@ -260,20 +303,6 @@ const tableListCommission = reactive({
 			prop: "compname",
 			type: "Input",
 			width: "180"
-		},
-		{
-			title: "代理商编码",
-			label: "corpinfopanelqydlsbmtitle",
-			prop: "agentno",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "代理商名称",
-			label: "corpinfopaneldlsmctitle",
-			prop: "agentname",
-			type: "Input",
-			width: "160"
 		},
 		{
 			title: "销售开支",
@@ -311,32 +340,18 @@ const tableListCommission = reactive({
 			width: "160"
 		},
 		{
-			title: "未销账金额",
-			label: "crmcolumnnotwriteoffmoney_hkd",
-			prop: "canwriteoffsnum",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "销账确认日期",
-			label: "crmcolumnapplyacceptdateconfirms",
-			prop: "logdate",
-			type: "Input",
-			width: "140"
-		},
-		{
 			title: "部门编码",
 			label: "personaluserpanel2bmbmtitle",
 			prop: "dept",
 			type: "Input",
-			width: "120"
+			width: "140"
 		},
 		{
 			title: "成本费",
 			label: "columnwriteoff_application_listCost",
 			prop: "costnum",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "增值税额",
@@ -350,21 +365,7 @@ const tableListCommission = reactive({
 			label: "panelcolumnbaddebt",
 			prop: "badmoney",
 			type: "Input",
-			width: "160"
-		},
-		{
-			title: "INVOICE DATE",
-			label: "itemtitlecolumnINVOICE_DATE",
-			prop: "invoicedate",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "账期",
-			label: "itemtitlecolumnPaymentDays",
-			prop: "paycondition",
-			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "销账日期",
@@ -374,22 +375,8 @@ const tableListCommission = reactive({
 			width: "160"
 		},
 		{
-			title: "AR天数",
-			label: "itemtitlecolumnARDays",
-			prop: "ardays",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "AR扣减佣金率",
-			label: "itemtitleARCommissionDeductionRate",
-			prop: "deductionrate",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "基础佣金率",
-			label: "itemtitleBasicCommissionRate",
+			title: "SS佣金率",
+			label: "panelcolumnSS_Commission_Rate",
 			prop: "folderage",
 			type: "Input",
 			width: "140"
@@ -399,15 +386,154 @@ const tableListCommission = reactive({
 	tableData: []
 });
 
+//表格呆账查询
+const grid_BaddebtsInfos = ref();
+const tableListBaddebts = reactive({
+	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_BaddebtsInfos",
+	//请求属性设置
+	httpAttribute: {
+		url: "/crm/commission/commission!selectBaddebtsInfoByCond.action",
+		root: "baddebtsInfos",
+		baseParams: {}
+	},
+	//表格表头
+	tableColumns: [
+		{
+			type: "selection",
+			width: "40"
+		},
+		{
+			title: "部门名称",
+			label: "appointmentDepartment_name",
+			prop: "dept",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "月份",
+			label: "columnbasemonth",
+			prop: "years",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "客户号",
+			label: "corpinfoCustomerNumbertitle",
+			prop: "corpno",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "客户名称",
+			label: "columnCustomerName",
+			prop: "corpdesc",
+			type: "Input",
+			width: "180"
+		},
+		{
+			title: "付款方式",
+			label: "i18ncrmcontractpaymentmethod",
+			prop: "paycondition",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "申请单号",
+			label: "columntolockapplynum",
+			prop: "folderno",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "发票编号",
+			label: "itemtitleinvoiceinvoicecode",
+			prop: "invoiceno",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "发票日期",
+			label: "itemtitleinvoiceinvoicedate",
+			prop: "invoicedate",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "呆账天数",
+			label: "itemtitlecolumnARDays",
+			prop: "arday",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "增值税额",
+			label: "panelcolumnvalueaddedtaxmoney",
+			prop: "totalfolderamount",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "申请单金额",
+			label: "itemtitlefoldersvalue",
+			prop: "folderprice",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "呆账金额",
+			label: "basecolumnfolderAR_Amount",
+			prop: "arprice",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "提佣点(%)",
+			label: "itemtitlefoldersbrokerage",
+			prop: "commissionrate",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "呆账扣款率",
+			label: "basecolumnAR_Deduction_Ratio",
+			prop: "deductionrate",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "呆账扣款金额",
+			label: "basecolumnAR_deduction_amount",
+			prop: "deductionprice",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "佣金（HKD）",
+			label: "panelcolumnbrokerage_hkd",
+			prop: "brokerage",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "呆账截止日期",
+			label: "basecolumnAR_Closing_Date",
+			prop: "closing_date",
+			type: "Input",
+			width: "160"
+		}
+	],
+	// 表格数据
+	tableData: []
+});
 //表格销售开支
 const grid_expenditureInfos = ref();
 const tableListExpenditure = reactive({
-	id: "/appointmentManage/attained/my_commission_detail.vue_grid_expenditureInfos",
+	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_expenditureInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectExpenditureInfoForBrokerage.action",
 		root: "expenditureInfos",
-		baseParams: {'cond.auditflag':'2'}
+		baseParams: { "cond.auditflag": "2" }
 	},
 	//表格表头
 	tableColumns: [
@@ -493,7 +619,7 @@ const tableListExpenditure = reactive({
 			prop: "recorderdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "创建时间",
 			label: "itemtitlewlbmdesc10",
@@ -514,14 +640,14 @@ const tableListExpenditure = reactive({
 			prop: "applicantdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "申请日期",
 			label: "i18ncrmcontractApplicationDate",
 			prop: "applicanttime",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "部门编码",
 			label: "部门编码",
@@ -670,12 +796,10 @@ const tableListExpenditure = reactive({
 	// 表格数据
 	tableData: []
 });
-
-//表格销售开支
+//表格内分包
 const grid_outsourcingInfos = ref();
 const tableListOutsourcing = reactive({
-	id: "/appointmentManage/attained/my_commission_detail.vue_grid_outsourcingInfos",
-	//面初始化渲染完成 是否调请求
+	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_outsourcingInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectoutsourcingInfoByBrokerage.action",
@@ -800,8 +924,6 @@ const tableListOutsourcing = reactive({
 	// 表格数据
 	tableData: []
 });
-
-
 </script>
 
 <style lang="scss">
@@ -811,4 +933,3 @@ const tableListOutsourcing = reactive({
 	transition: 0.3s;
 }
 </style>
-

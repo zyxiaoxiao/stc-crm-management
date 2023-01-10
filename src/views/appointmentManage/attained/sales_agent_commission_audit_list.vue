@@ -3,41 +3,38 @@
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				name="cinfos"
-				:label="$t('panelcolumnnotsubmit')"
-				title1="未提交提佣"
+				name="salesinfos"
+				:label="$t('panelcolumnsalesagentcommissionaudit')"
+				title1="销售代理提佣审核"
 			>
 				<zTable
-					ref="grid_brokerageInfos"
+					ref="grid_salesagentbrokerageInfos_query"
 					:tableList="atableList"
-					@link-detailbg="linkDetailquey"
+					@link-detailbg="linkDetail"
 					@workflow-status="workflowStatus"
 				>
+                <template #tableHeaderLleft="scope">
+						<el-button size="small" type="success" icon="Check" plain @click="approveSalesAgentBrokerageInfo('0', scope.selectList)">{{
+							$t("menu_approve")
+						}}</el-button>
+						<el-button size="small" type="danger" icon="Close" plain @click="approveSalesAgentBrokerageInfo('-1', scope.selectList)">{{
+							$t("menu_reject")
+						}}</el-button>
+						<el-button size="small" type="danger" icon="Close" plain @click="approveSalesAgentBrokerageInfo('-2', scope.selectList)">{{
+							$t("menu_reject2Submitor")
+						}}</el-button>
+					</template>
 				</zTable>
 			</el-tab-pane>
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				:label="$t('panelcolumnsubmited')"
-				title1="已提交提佣"
-				name="cquery"
+				:label="$t('panelcolumnsalesagentcommissionauditquery')"
+				title1="提佣审核查询"
+				name="salesquery"
 			>
 				<zTable
-					ref="grid_brokerageInfos_submit"
+					ref="grid_salesagentbrokerageInfos_query_audit"
 					:tableList="htableList"
-					@link-detailbg="linkDetailquey"
-					@workflow-status="workflowStatus"
-				>
-				</zTable>
-			</el-tab-pane>
-			<el-tab-pane
-				class="main-tab-pane-content all-height flex-column"
-				:label="$t('menubasemy_commission_query_automatic')"
-				title1="自动提佣查询"
-				name="automatic"
-			>
-				<zTable
-					ref="grid_automaticOrderQuery"
-					:tableList="automatictableList"
 					@link-detailbg="linkDetailquey"
 					@workflow-status="workflowStatus"
 				>
@@ -50,64 +47,133 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_commissionreadOnly" width="95%">
-				<commissionreadOnly :condobj="condobj"></commissionreadOnly>
+			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageNew" @close="closeSalesAgentBrokerage" width="95%">
+				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
 			</ZDialog>
-		</div>		
+		</div>
+		<div v-dialogStretching>
+			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageReadOnly" @close="closeSalesAgentBrokerageReadOnly" width="95%">
+				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
+			</ZDialog>
+		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { h, ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import { GlobalStore } from "/src/store/globalStore.js";
+//弹出报错或者提示框
+import { ElMessage, ElMessageBox, ElInput } from "element-plus";
+import qs from "qs";
+import http from "@/api/index.js";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import commissionreadOnly from "@/views/appointmentManage/attained/my_commission_detail.vue";
+import salesagentbrokerageNew from "@/views/appointmentManage/attained/sales_agent_commission_detail.vue";
 
 const i18n = useI18n();
-const grid_brokerageInfos = ref();
-const grid_brokerageInfos_submit = ref();
-const grid_automaticOrderQuery = ref();
+const grid_salesagentbrokerageInfos_query = ref();
+const grid_salesagentbrokerageInfos_query_audit = ref();
 const globalStore = GlobalStore();
 let userInfo = globalStore.userInfo;
-const tableTabsValue = ref("cinfos");
-
+const tableTabsValue = ref("salesinfos");
 
 //审核记录
 const dialogShow_audit = ref(false);
 const auditList = reactive({
 	dialogShow_audit: false,
 	codeid: "",
-	tablename: "MLS_BROKERAGE",
-	columnid: "brokerageid"
+	tablename: "MLS_SALESAGENT_BROKERAGE",
+	columnid: "salesbrokerageid"
 });
-
 const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
 
+//审核销售代理信息
+const approveSalesAgentBrokerageInfo = (code, selectList) => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("Message_PleseSelectRecord"));
+		return;
+	}
+	let str = i18n.t("audit_approve");
+	if (code == "-1" || code == "-2") {
+		str = i18n.t("audit_reject");
+	}
+	let approveValue = ref(str);
+	ElMessageBox({
+		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		message: () =>
+			h(ElInput, {
+				modelValue: approveValue.value,
+				type: "textarea",
+				autosize: { minRows: 4 },
+				"onUpdate:modelValue": val => {
+					approveValue.value = val;
+				}
+			}),
+		showCancelButton: true,
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel")
+	}).then(async () => {
+		let cond = {
+			opinion: approveValue.value
+		};
+		let jsonString = {
+			salesagentbrokerageInfos: selectList,
+			cond: cond
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString)
+		};
+		let url = "";
+		if (code == "-1") {
+			url = "/crm/salesbrokerage/salesagentbrokerage!reject.action";
+		} else if (code == "-2") {
+			url = "/crm/salesbrokerage/salesagentbrokerage!reject2Submitor.action";
+		} else {
+			url = "/crm/salesbrokerage/salesagentbrokerage!approve.action";
+		}
+		const res = await http.post(url, qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			ElMessage({
+				type: "success",
+				message: i18n.t("Message_OperationSuccess")
+			});
+			grid_salesagentbrokerageInfos_query.value.getTableList();
+		}
+	});
+};
+
+
+//提佣页面关闭
+const closeSalesAgentBrokerage = () => {
+	grid_salesagentbrokerageInfos_query.value.getTableList();
+};
+//提佣查询页面关闭
+const closeSalesAgentBrokerageReadOnly = () => {
+	grid_salesagentbrokerageInfos_query_audit.value.getTableList();
+};
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	grid_brokerageInfos.value.getTableList();
+	grid_salesagentbrokerageInfos_query.value.getTableList();
 });
 
-const formData1 = reactive({
-});
+const formData1 = reactive({});
 
-//表格对象未提交提佣
+//表格对象审核代理提佣
 const atableList = reactive({
-	id: "/appointmentManage/attained/my_commission_query_list.vue_grid_brokerageInfos",
+	id: "/appointmentManage/attained/sales_agent_commission_audit_list.vue_grid_salesagentbrokerageInfos_query",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/brokerage/brokerage!selectBrokerageInfoByCond.action",
-		root: "brokerageInfos",
+		url: "/crm/salesbrokerage/salesagentbrokerage!selectSalesagentbrokerageInfoByCond.action",
+		root: "salesagentbrokerageInfos",
 		baseParams: {
-			'cond.auditflag':'0',
-			'cond.recordercode':userInfo.usercode
+			"cond.auditflag": "1",
+			"cond.workflow_usercode": userInfo.usercode
 		}
 	},
 	//快捷查询
@@ -128,7 +194,7 @@ const atableList = reactive({
 		{
 			title: "提佣申请单号",
 			label: "panelcolumnbrokerageno",
-			prop: "brokerageid",
+			prop: "salesbrokerageid",
 			type: "Link",
 			width: "160"
 		},
@@ -149,21 +215,6 @@ const atableList = reactive({
 			width: "160"
 		},
 		{
-			title: "销售开支",
-			label: "columnbasesalesexpenses_hkd",
-			prop: "salesexpenses",
-			type: "Number",
-			precision: 2,
-			width: "120"
-		},
-		{
-			title: "退款金额",
-			label: "columndrawbackrefundmoney",
-			prop: "refundnum",
-			type: "Input",
-			width: "140"
-		},
-		{
 			title: "增值税",
 			label: "appointmentValueaddedtax_hkd",
 			prop: "taxmoney",
@@ -180,579 +231,179 @@ const atableList = reactive({
 			width: "140"
 		},
 		{
-			title: "备注",
-			label: "panelcolumnRemark",
-			prop: "remark",
-			type: "Input",
-			width: "120"
-		},
-		{
-			title: "创建人编码",
-			label: "columnCreatehumancoding",
-			prop: "recordercode",
+			title: "代理名称",
+			label: "corpinfopanelqydlsmctitle",
+			prop: "agentdesc",
 			type: "Input",
 			width: "140"
 		},
 		{
-			title: "创建人名称",
-			label: "i18ncrmcontractCreatePersonName",
-			prop: "recorderdesc",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "创建时间",
-			label: "corpinfopanelqycjsjtitle",
-			prop: "recordtime",
-			type: "DateTime",
-			width: "160"
-		},
-		{
-			title: "提佣月份",
-			label: "brokeragemonth",
-			prop: "brokeragemonth",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提报单位",
-			label: "提报单位",
-			prop: "submitcorp",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核人编码",
-			label: "审核人编码",
-			prop: "auditorcode",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核人名称",
-			label: "审核人名称",
-			prop: "auditordesc",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核时间",
-			label: "审核时间",
-			prop: "audittime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核级别",
-			label: "审核级别",
-			prop: "auditlevel",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "是否已退回",
-			label: "是否已退回",
-			prop: "retrieveflag",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回人编码",
-			label: "退回人编码",
-			prop: "retrievercode",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回人名称",
-			label: "退回人名称",
-			prop: "retrieverdesc",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回时间",
-			label: "退回时间",
-			prop: "retrievetime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "制单人单位",
-			label: "制单人单位",
-			prop: "recordercorp",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核节点名称",
-			label: "审核节点名称",
-			prop: "auditlevelname",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "错误信息",
-			label: "错误信息",
-			prop: "errormsg",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "workflowid",
-			label: "workflowid",
-			prop: "workflowid",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提交时间",
-			label: "提交时间",
-			prop: "submittime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "状态",
-			label: "状态",
-			prop: "auditflag",
-			type: "Input",
-			width: "10",
-			isHide: true
-		}
-	],
-	// 表格数据
-	tableData: []
-});
-
-//表格对象已经提交提佣
-const htableList = reactive({
-	id: "/appointmentManage/attained/my_commission_query_list.vue_grid_brokerageInfos_submit",
-	//请求属性设置
-	httpAttribute: {
-		url: "/crm/brokerage/brokerage!selectBrokerageInfoByCond.action",
-		root: "brokerageInfos",
-		baseParams: {
-			"cond.auditflag": "1,2",
-            'cond.recordercode':userInfo.usercode
-		}
-	},
-	//快捷查询
-	tablePropSearch: formData1,
-	//表格表头
-	tableColumns: [
-		{
-			type: "selection",
-			width: "40"
-		},
-		{
-			title: "状态",
-			label: "itemtitlecommondesc11",
-			prop: "processflag",
-			type: "workflowStatus",
-			width: "60"
-		},
-		{
-			title: "提佣申请单号",
-			label: "panelcolumnbrokerageno",
-			prop: "brokerageid",
-			type: "Link",
-			width: "160"
-		},
-		{
-			title: "总金额",
-			label: "appointmentTotalprice_hkd",
-			prop: "totalmoney",
-			type: "Number",
-			precision: 2,
-			width: "130"
-		},
-		{
-			title: "成本费",
-			label: "columnwriteoff_application_listCost",
-			prop: "costnum",
-			type: "Number",
-			precision: 2,
-			width: "160"
-		},
-		{
-			title: "销售开支",
-			label: "columnbasesalesexpenses_hkd",
-			prop: "salesexpenses",
-			type: "Number",
-			precision: 2,
-			width: "120"
-		},
-		{
-			title: "退款金额",
-			label: "columndrawbackrefundmoney",
-			prop: "refundnum",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "增值税",
-			label: "appointmentValueaddedtax_hkd",
-			prop: "taxmoney",
-			type: "Number",
-			precision: 2,
-			width: "160"
-		},
-		{
-			title: "坏账金额",
-			label: "panelcolumnbaddebt",
-			prop: "badmoney",
-			type: "Number",
-			precision: 2,
-			width: "140"
-		},
-		{
-			title: "备注",
-			label: "panelcolumnRemark",
-			prop: "remark",
-			type: "Input",
-			width: "120"
-		},
-		{
-			title: "创建人编码",
-			label: "columnCreatehumancoding",
-			prop: "recordercode",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "创建人名称",
-			label: "i18ncrmcontractCreatePersonName",
-			prop: "recorderdesc",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "创建时间",
-			label: "corpinfopanelqycjsjtitle",
-			prop: "recordtime",
-			type: "DateTime",
-			width: "160"
-		},
-		{
-			title: "提佣月份",
-			label: "brokeragemonth",
-			prop: "brokeragemonth",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提报单位",
-			label: "提报单位",
-			prop: "submitcorp",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核人编码",
-			label: "审核人编码",
-			prop: "auditorcode",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核人名称",
-			label: "审核人名称",
-			prop: "auditordesc",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核时间",
-			label: "审核时间",
-			prop: "audittime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核级别",
-			label: "审核级别",
-			prop: "auditlevel",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "是否已退回",
-			label: "是否已退回",
-			prop: "retrieveflag",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回人编码",
-			label: "退回人编码",
-			prop: "retrievercode",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回人名称",
-			label: "退回人名称",
-			prop: "retrieverdesc",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "退回时间",
-			label: "退回时间",
-			prop: "retrievetime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "制单人单位",
-			label: "制单人单位",
-			prop: "recordercorp",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "审核节点名称",
-			label: "审核节点名称",
-			prop: "auditlevelname",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "错误信息",
-			label: "错误信息",
-			prop: "errormsg",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "workflowid",
-			label: "workflowid",
-			prop: "workflowid",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提交时间",
-			label: "提交时间",
-			prop: "submittime",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "状态",
-			label: "状态",
-			prop: "auditflag",
-			type: "Input",
-			width: "10",
-			isHide: true
-		}
-	],
-	// 表格数据
-	tableData: []
-});
-
-//表格对象自动提佣
-const automatictableList = reactive({
-	id: "/appointmentManage/attained/my_commission_query_list.vue_grid_automaticOrderQuery",
-	//请求属性设置
-	httpAttribute: {
-		url: "/crm/folders/folders!selectFoldersInfoByBrokerage.action",
-		root: "foldersInfos",
-		baseParams: {
-			'cond.salesmancode':userInfo.usercode,
-			'cond.automatic':'Y',
-			'cond.rightFlag':'1',
-			'cond.autobrokerageflag':'1'
-		}
-	},
-	//快捷查询
-	tablePropSearch: formData1,
-	//表格表头
-	tableColumns: [
-		{
-			type: "selection",
-			width: "40"
-		},
-		{
-			title: "申请单号",
-			label: "columntolockapplynum",
-			prop: "folderno",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "报价单编号",
-			label: "crmcolumnreservnum",
-			prop: "quotationno",
-			type: "Input",
-			width: "180"
-		},
-		{
-			title: "客户号",
-			label: "fieldcolumncustomercode",
-			prop: "rasclientid",
-			type: "Input",
-			width: "150"
-		},
-		{
-			title: "客户名称",
-			label: "panelcolumncustomername",
-			prop: "compname",
-			type: "Input",
-			width: "200"
-		},
-		{
-			title: "代理商编码",
-			label: "corpinfopaneldlsbmtitle",
-			prop: "agentno",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "代理商名称",
-			label: "corpinfopaneldlsmctitle",
-			prop: "agentname",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "到账日期",
-			label: "billinfoaccountdatepanel",
-			prop: "labduedate",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "invoice打印日期",
-			label: "columnwriteoff_invoiceprintdate",
-			prop: "realdate",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "总价",
-			label: "appointmentTotalprice_hkd",
-			prop: "totalprice",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "提佣点(%)",
-			label: "itemtitlefoldersbrokerage",
-			prop: "brokerage",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "未销账金额",
-			label: "crmcolumnnotwriteoffmoney_hkd",
-			prop: "writeoffmoney",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "销账确认日期",
-			label: "crmcolumnapplyacceptdateconfirms",
-			prop: "logdate",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "审核时间",
-			label: "itemtitlestatusaudittime",
-			prop: "audittime",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "部门编码",
-			label: "personaluserpanel2bmbmtitle",
+			title: "所属部门",
+			label: "portalcompanyregistdeptment",
 			prop: "dept",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
-			title: "退款金额",
-			label: "columncurrency1drawbackrefundmoney",
-			prop: "refundnum",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "实际完成日期",
-			label: "实际完成日期",
-			prop: "actualfinishdate",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "佣金基点",
-			label: "佣金基点",
+			title: "佣金",
+			label: "panelcolumnbrokerage_hkd",
 			prop: "brokerage",
+			type: "Number",
+			precision: 2,
+			width: "140"
+		},
+		{
+			title: "备注",
+			label: "panelcolumnRemark",
+			prop: "remark",
+			type: "Input",
+			width: "120"
+		},
+		{
+			title: "创建人编码",
+			label: "columnCreatehumancoding",
+			prop: "recordercode",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "创建人名称",
+			label: "i18ncrmcontractCreatePersonName",
+			prop: "recorderdesc",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "创建时间",
+			label: "corpinfopanelqycjsjtitle",
+			prop: "recordtime",
+			type: "DateTime",
+			width: "160"
+		},
+		{
+			title: "提佣月份",
+			label: "brokeragemonth",
+			prop: "brokeragemonth",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "成本费",
-			label: "成本费",
-			prop: "costnum",
+			title: "提报单位",
+			label: "提报单位",
+			prop: "submitcorp",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "增值税",
-			label: "增值税",
-			prop: "taxmoney",
+			title: "审核人编码",
+			label: "审核人编码",
+			prop: "auditorcode",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "坏账金额",
-			label: "坏账金额",
-			prop: "badmoney",
+			title: "审核人名称",
+			label: "审核人名称",
+			prop: "auditordesc",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "检测进度",
-			label: "检测进度",
-			prop: "checkstatus",
+			title: "审核时间",
+			label: "审核时间",
+			prop: "audittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核级别",
+			label: "审核级别",
+			prop: "auditlevel",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "是否已退回",
+			label: "是否已退回",
+			prop: "retrieveflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人编码",
+			label: "退回人编码",
+			prop: "retrievercode",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人名称",
+			label: "退回人名称",
+			prop: "retrieverdesc",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回时间",
+			label: "退回时间",
+			prop: "retrievetime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "制单人单位",
+			label: "制单人单位",
+			prop: "recordercorp",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核节点名称",
+			label: "审核节点名称",
+			prop: "auditlevelname",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "错误信息",
+			label: "错误信息",
+			prop: "errormsg",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "workflowid",
+			label: "workflowid",
+			prop: "workflowid",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "提交时间",
+			label: "提交时间",
+			prop: "submittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "状态",
+			label: "状态",
+			prop: "auditflag",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -761,6 +412,262 @@ const automatictableList = reactive({
 	// 表格数据
 	tableData: []
 });
+
+//表格对象审核代理提佣查询
+const htableList = reactive({
+	id: "/appointmentManage/attained/sales_agent_commission_audit_list.vue_grid_salesagentbrokerageInfos_query_audit",
+	//请求属性设置
+	httpAttribute: {
+		url: "/crm/salesbrokerage/salesagentbrokerage!selectSalesagentbrokerageInfoByCond.action",
+		root: "salesagentbrokerageInfos",
+		baseParams: {
+			"cond.auditflag": "1,2",
+			"cond.audit_usercode": userInfo.usercode
+		}
+	},
+	//快捷查询
+	tablePropSearch: formData1,
+	//表格表头
+	tableColumns: [
+		{
+			type: "selection",
+			width: "40"
+		},
+		{
+			title: "状态",
+			label: "itemtitlecommondesc11",
+			prop: "processflag",
+			type: "workflowStatus",
+			width: "60"
+		},
+		{
+			title: "提佣申请单号",
+			label: "panelcolumnbrokerageno",
+			prop: "salesbrokerageid",
+			type: "Link",
+			width: "160"
+		},
+		{
+			title: "总金额",
+			label: "appointmentTotalprice_hkd",
+			prop: "totalmoney",
+			type: "Number",
+			precision: 2,
+			width: "130"
+		},
+		{
+			title: "成本费",
+			label: "columnwriteoff_application_listCost",
+			prop: "costnum",
+			type: "Number",
+			precision: 2,
+			width: "160"
+		},
+		{
+			title: "增值税",
+			label: "appointmentValueaddedtax_hkd",
+			prop: "taxmoney",
+			type: "Number",
+			precision: 2,
+			width: "160"
+		},
+		{
+			title: "坏账金额",
+			label: "panelcolumnbaddebt",
+			prop: "badmoney",
+			type: "Number",
+			precision: 2,
+			width: "140"
+		},
+		{
+			title: "代理名称",
+			label: "corpinfopanelqydlsmctitle",
+			prop: "agentdesc",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "所属部门",
+			label: "portalcompanyregistdeptment",
+			prop: "dept",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "佣金",
+			label: "panelcolumnbrokerage_hkd",
+			prop: "brokerage",
+			type: "Number",
+			precision: 2,
+			width: "140"
+		},
+		{
+			title: "备注",
+			label: "panelcolumnRemark",
+			prop: "remark",
+			type: "Input",
+			width: "120"
+		},
+		{
+			title: "创建人编码",
+			label: "columnCreatehumancoding",
+			prop: "recordercode",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "创建人名称",
+			label: "i18ncrmcontractCreatePersonName",
+			prop: "recorderdesc",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "创建时间",
+			label: "corpinfopanelqycjsjtitle",
+			prop: "recordtime",
+			type: "DateTime",
+			width: "160"
+		},
+		{
+			title: "提佣月份",
+			label: "brokeragemonth",
+			prop: "brokeragemonth",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "提报单位",
+			label: "提报单位",
+			prop: "submitcorp",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核人编码",
+			label: "审核人编码",
+			prop: "auditorcode",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核人名称",
+			label: "审核人名称",
+			prop: "auditordesc",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核时间",
+			label: "审核时间",
+			prop: "audittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核级别",
+			label: "审核级别",
+			prop: "auditlevel",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "是否已退回",
+			label: "是否已退回",
+			prop: "retrieveflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人编码",
+			label: "退回人编码",
+			prop: "retrievercode",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人名称",
+			label: "退回人名称",
+			prop: "retrieverdesc",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回时间",
+			label: "退回时间",
+			prop: "retrievetime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "制单人单位",
+			label: "制单人单位",
+			prop: "recordercorp",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核节点名称",
+			label: "审核节点名称",
+			prop: "auditlevelname",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "错误信息",
+			label: "错误信息",
+			prop: "errormsg",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "workflowid",
+			label: "workflowid",
+			prop: "workflowid",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "提交时间",
+			label: "提交时间",
+			prop: "submittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "状态",
+			label: "状态",
+			prop: "auditflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		}
+	],
+	// 表格数据
+	tableData: []
+});
+
+// 显示dialogdialogShow_FormVisibleNew
+const dialogShow = data => {
+	if (data == "dialogShow_salesagentbrokerageNew") {
+		condobj.dialogShow_salesagentbrokerageNew = true;
+	}
+};
 
 //工作流审核历史记录
 const workflowStatus = (column, row) => {
@@ -768,31 +675,39 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
-
+//链接详细信息
+const linkDetail = (column, row) => {
+	if (column == "salesbrokerageid" && row.salesbrokerageid) {
+		if (row.salesbrokerageid) {
+			condobj.cond = {
+				salesbrokerageid: row.salesbrokerageid,
+				auditflag:"1"
+			};
+			condobj.dialogShow_salesagentbrokerageNew = true;
+		}
+	}
+};
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "brokerageid" && row.brokerageid) {
-		let brokerageid = row.brokerageid;
-		if (brokerageid) {
+	if (column == "salesbrokerageid" && row.salesbrokerageid) {
+		if (row.salesbrokerageid) {
 			condobj.cond = {
-				brokerageid: brokerageid
+				salesbrokerageid: row.salesbrokerageid,
+				readOnly:"1"
 			};
-			condobj.dialogShow_commissionreadOnly = true;
-		} 				
+			condobj.dialogShow_salesagentbrokerageReadOnly = true;
+		}
 	}
 };
 
 //切换tab时触发
 const tabChange = targetName => {
-	if (targetName == "cinfos") {
-		//提佣申请子页面
-		grid_brokerageInfos.value.getTableList();
-	} else if (targetName == "cquery") {
-		//提佣查询子页面
-		grid_brokerageInfos_submit.value.getTableList();
-	} else if (targetName == "automatic") {
-		//自动提佣
-		grid_automaticOrderQuery.value.getTableList();
+	if (targetName == "salesinfos") {
+		//销售代理提佣审核页面
+		grid_salesagentbrokerageInfos_query.value.getTableList();
+	} else if (targetName == "salesquery") {
+		//销售代理提佣审核查询页面
+		grid_salesagentbrokerageInfos_query_audit.value.getTableList();
 	}
 };
 </script>

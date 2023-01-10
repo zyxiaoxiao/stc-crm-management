@@ -6,6 +6,34 @@
   "description": "layui图标扩展",
   "glyphs": [
     {
+      "icon_id": "8554554",
+      "name": "file-list-3-fill",
+      "font_class": "file-list--fill",
+      "unicode": "e697",
+      "unicode_decimal": 59031
+    },
+    {
+      "icon_id": "836979",
+      "name": "综合查询",
+      "font_class": "zonghechaxun",
+      "unicode": "e6aa",
+      "unicode_decimal": 59050
+    },
+    {
+      "icon_id": "17189476",
+      "name": "发票抬头",
+      "font_class": "fapiaotaitou",
+      "unicode": "e61a",
+      "unicode_decimal": 58906
+    },
+    {
+      "icon_id": "11836214",
+      "name": "运营分析",
+      "font_class": "shujufenxi",
+      "unicode": "e61e",
+      "unicode_decimal": 58910
+    },
+    {
       "icon_id": "27536738",
       "name": "机构协议管理",
       "font_class": "xieyiguanli",

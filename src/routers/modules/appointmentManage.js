@@ -75,6 +75,61 @@ const appointmentManageRouter = [
 					title: "menubasemycommissionapplication", //提佣申请
 					key: "my_commission_query_list"
 				}
+			},
+			{
+				path: "/appointmentManage/attained/my_commission_audit_list",
+				name: "my_commission_audit_list",
+				component: () => import("@/views/appointmentManage/attained/my_commission_audit_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasemycommissionaudit", //提佣审核
+					key: "my_commission_audit_list"
+				}
+			},
+			{
+				path: "/appointmentManage/attained/sales_agent_commission_query_list",
+				name: "sales_agent_commission_query_list",
+				component: () => import("@/views/appointmentManage/attained/sales_agent_commission_query_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasesalesagentcommissionapplication", //销售代理提佣申请
+					key: "sales_agent_commission_query_list"
+				}
+			},
+			{
+				path: "/appointmentManage/attained/sales_agent_commission_audit_list",
+				name: "sales_agent_commission_audit_list",
+				component: () => import("@/views/appointmentManage/attained/sales_agent_commission_audit_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasesalesagentcommissionaudit", //销售代理提佣审核
+					key: "sales_agent_commission_audit_list"
+				}
+			},
+			{
+				path: "/appointmentManage/commission/sales_commission_query_list",
+				name: "sales_commission_query_list",
+				component: () => import("@/views/appointmentManage/commission/sales_commission_query_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "basepanelsales_commission_application", //销售提佣申请
+					key: "sales_commission_query_list"
+				}
+			},
+			{
+				path: "/appointmentManage/commission/sales_commission_audit_list",
+				name: "sales_commission_audit_list",
+				component: () => import("@/views/appointmentManage/commission/sales_commission_audit_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "basepanelsales_commission_audit", //销售提佣审核
+					key: "sales_commission_audit_list"
+				}
 			}
 		]
 	}
