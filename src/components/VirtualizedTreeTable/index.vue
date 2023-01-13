@@ -41,7 +41,7 @@
 	</div>
 </template>
 
-<script lang="jsx" setup>
+<script lang="jsx" name="virtualizedTreeTable" setup>
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import qs from "qs";
 import http from "@/api/index.js";

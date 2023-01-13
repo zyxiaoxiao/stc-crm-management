@@ -183,6 +183,7 @@
 					<template #header>
 						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
+							<el-icon v-if="props.tableList.edit && item.edit"><Edit /> </el-icon>
 							<span class="caret-wrapper">
 								<i class="sort-caret ascending"></i>
 								<i class="sort-caret descending"></i>
@@ -225,7 +226,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:min="item.min"
 									:precision="item.precision"
 								/>
@@ -234,7 +235,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:min="item.min"
 								/>
 								<el-input-number
@@ -242,7 +243,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:precision="item.precision"
 								/>
 								<el-input-number
@@ -250,7 +251,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 								/>
 							</template>
 							<el-input v-else v-model="tablePropSearch[item.prop]" size="small" />
@@ -258,7 +259,7 @@
 					</template>
 					<!-- 数据行 -->
 					<template #default="scope">
-						<slot name="Custom" :row="scope.row" :column="item.prop"></slot>
+						<slot name="Custom" :row="scope.row" :item="item" :column="item.prop"></slot>
 					</template>
 				</el-table-column>
 
@@ -316,7 +317,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:min="item.min"
 									:precision="item.precision"
 								/>
@@ -325,7 +326,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:min="item.min"
 								/>
 								<el-input-number
@@ -333,7 +334,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 									:precision="item.precision"
 								/>
 								<el-input-number
@@ -341,7 +342,7 @@
 									controls-position="right"
 									style="width: 100%"
 									size="small"
-									v-model="tablePropSearch[item.prop]"
+									v-model.number="tablePropSearch[item.prop]"
 								/>
 							</template>
 							<el-input v-else v-model="tablePropSearch[item.prop]" size="small" />
@@ -405,7 +406,7 @@
 									v-if="isNumber(item?.min) && isNumber(item?.precision)"
 									controls-position="right"
 									style="width: 100%"
-									v-model="scope.row[item.prop]"
+									v-model.number="scope.row[item.prop]"
 									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 									:min="item.min"
 									:precision="item.precision"
@@ -414,7 +415,7 @@
 									v-else-if="isNumber(item?.min) && !isNumber(item?.precision)"
 									controls-position="right"
 									style="width: 100%"
-									v-model="scope.row[item.prop]"
+									v-model.number="scope.row[item.prop]"
 									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 									:min="item.min"
 								/>
@@ -422,7 +423,7 @@
 									v-else-if="!isNumber(item?.min) && isNumber(item?.precision)"
 									controls-position="right"
 									style="width: 100%"
-									v-model="scope.row[item.prop]"
+									v-model.number="scope.row[item.prop]"
 									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 									:precision="item.precision"
 								/>
@@ -430,7 +431,7 @@
 									v-else-if="!isNumber(item?.min) && !isNumber(item?.precision)"
 									controls-position="right"
 									style="width: 100%"
-									v-model="scope.row[item.prop]"
+									v-model.number="scope.row[item.prop]"
 									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 								/>
 							</template>
@@ -1080,6 +1081,7 @@ const cellClick = (row, column, cell, event) => {
 	}
 	emits("cellClick", row, column, cell, event);
 	//表格是否可编辑、列是否可编辑，当前行的当前列是否可编辑，当前行的当前列是否隐藏
+
 	if (
 		props.tableList.edit &&
 		tableHanderEditArr.includes(column.property) &&

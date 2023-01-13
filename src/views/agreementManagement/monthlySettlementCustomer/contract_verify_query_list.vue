@@ -2,55 +2,50 @@
 	<div class="all-height flex-column main-card">
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tabPaneName" @tab-change="tabChange">
 			<el-tab-pane
-				title1="月结客户申请"
-				:label="$t('menubasemcsh')"
+				title1="月结客户审核"
+				:label="$t('menubasemcaudit')"
 				class="main-tab-pane-content all-height flex-column"
 				name="0"
 			>
 				<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbg" @workflow-status="workflowStatus">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Edit" plain @click="newDeliverysworkflowdetail">{{
-							$t("menu_new")
-						}}</el-button>
-						<el-button
-							size="small"
-							type="danger"
-							icon="Delete"
-							plain
-							:disabled="!scope.isSelected"
-							@click="batchDelete(scope.ids)"
-							>{{ $t("menu_delete") }}
-						</el-button>
 						<el-button
 							size="small"
 							type="success"
 							icon="Check"
 							plain
 							:disabled="!scope.isSelected"
-							@click="Submit(scope.selectList)"
-							>{{ $t("menu_submit") }}
-						</el-button>
-					</template>
-				</zTable>
+							@click="auditAction('/crm/contract/contract!approve.action', 'Approve !', scope.selectList)"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="danger"
+							icon="Close"
+							plain
+							:disabled="!scope.isSelected"
+							@click="auditAction('/crm/contract/contract!reject.action', 'Reject !', scope.selectList)"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="danger"
+							icon="Close"
+							plain
+							:disabled="!scope.isSelected"
+							@click="auditAction('/crm/contract/contract!reject2Submitor.action', 'Reject !', scope.selectList)"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
+					</template></zTable
+				>
 			</el-tab-pane>
 			<el-tab-pane
-				title1="月结客户申请查询"
-				:label="$t('contractdgapplyquery')"
+				title1="月结客户审核查询"
+				:label="$t('menubasemccaq')"
 				class="main-tab-pane-content all-height flex-column"
 				name="1"
 			>
 				<zTable ref="zTable2" :tableList="tableList2" @link-detailbg="linkDetailbgQuery" @workflow-status="workflowStatus">
-					<template #tableHeaderLleft="scope">
-						<el-button
-							size="small"
-							type="warning"
-							icon="Back"
-							plain
-							:disabled="!scope.isSelected"
-							@click="backHandler(scope.selectList)"
-							>{{ $t("menu_back") }}</el-button
-						>
-					</template>
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
@@ -69,13 +64,13 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, h } from "vue";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage, ElInput } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
 import { getdropSownSelection } from "@/utils/util.js";
 import contractdetail from "./contract_detail.vue";
@@ -176,12 +171,12 @@ let tableColumns1 = reactive([
 const zTable1 = ref();
 //表格对象
 const tableList1 = reactive({
-	id: "/agreementManagement/monthlySettlementCustomer/contract_application_list.vue_zTable1",
+	id: "/agreementManagement/monthlySettlementCustomer/contract_verify_query_list.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/contract/contract.action",
+		url: "/crm/contract/contract!selectContractInfoByCoryRight.action",
 		root: "contractInfos",
-		baseParams: { "cond.auditflag": "0", "cond.contracttype": "0", "cond.rightFlag": "1" }
+		baseParams: { "cond.auditflag": "1", "cond.contracttype": "0" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -192,12 +187,12 @@ const tableList1 = reactive({
 const zTable2 = ref();
 //表格对象
 const tableList2 = reactive({
-	id: "/agreementManagement/monthlySettlementCustomer/contract_application_list.vue_zTable2",
+	id: "/agreementManagement/monthlySettlementCustomer/contract_verify_query_list.vue_zTable2",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/contract/contract!selectApplicationContractInfoByCondRight.action",
+		url: "/crm/contract/contract!selectContractInfoByQueryCorpRight.action",
 		root: "contractInfos",
-		baseParams: { "cond.auditflag": "0", "cond.contracttype": "0" }
+		baseParams: { "cond.contracttype": "0" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -212,13 +207,7 @@ const contractdetailList = reactive({
 	contractid: "",
 	workflowflag: "3"
 });
-//新增
-const newDeliverysworkflowdetail = () => {
-	contractdetailList.contractid = "";
-	contractdetailList.workflowflag = "1";
-	contractdetailList.success = false;
-	contractdetailList.dialogShow = true;
-};
+
 // 新增 弹出 回调
 const contractdetailClose = () => {
 	if (contractdetailList.success) {
@@ -226,85 +215,10 @@ const contractdetailClose = () => {
 	}
 };
 
-//批量删除数据
-const batchDelete = ids => {
-	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			contractInfos: []
-		};
-		ids.forEach(item => {
-			jsonString.contractInfos.push({
-				contractid: item
-			});
-		});
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		const res = await http.post("/crm/contract/contract!deleteContractInfo.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("Message_deleteSuccess"));
-			zTable1.value.getTableList();
-		}
-	});
-};
-
-//提交
-const Submit = row => {
-	ElMessageBox.confirm(i18n.t("Message_ConfirmOrNotSubmit"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let params = {
-			jsonString: JSON.stringify({ contractInfos: row })
-		};
-		const res = await http.post("/crm/contract/contract!submit.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("Message_OperationSuccess"));
-			zTable1.value.getTableList();
-		}
-	});
-};
-
-//撤销
-const backHandler = row => {
-	for (let item of row) {
-		if (item.auditflag == "2" && item.contracttype == "0") {
-			ElMessage.warning(i18n.t("Message_BackAllow"));
-			return;
-		}
-	}
-	ElMessageBox.confirm(i18n.t("alertConfirmrevocation"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			contractInfos: row
-		};
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-
-		const res = await http.post("/crm/contract/contract!backContractsInfos.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("alertRevocationofsuccess"));
-			zTable2.value.getTableList();
-		}
-	});
-};
-
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	contractdetailList.contractid = row.contractid;
-	contractdetailList.workflowflag = "1";
+	contractdetailList.workflowflag = "2";
 	contractdetailList.success = false;
 	contractdetailList.dialogShow = true;
 };
@@ -314,6 +228,40 @@ const linkDetailbgQuery = (column, row) => {
 	contractdetailList.workflowflag = "3";
 	contractdetailList.success = false;
 	contractdetailList.dialogShow = true;
+};
+
+//审核操作
+const auditAction = (auditurl, opinion, row) => {
+	let srtOpinion = ref(opinion);
+	ElMessageBox({
+		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		message: () =>
+			h(ElInput, {
+				modelValue: srtOpinion.value,
+				type: "textarea",
+				autosize: { minRows: 4 },
+				"onUpdate:modelValue": val => {
+					srtOpinion.value = val;
+				}
+			}),
+		showCancelButton: true,
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel")
+	}).then(async () => {
+		let jsonString = {
+			contractInfos: row
+		};
+		let params = {
+			jsonString: JSON.stringify(jsonString),
+			"cond.opinion": srtOpinion.value
+		};
+		const res = await http.post(auditurl, qs.stringify(params));
+
+		if (res) {
+			ElMessage.success(i18n.t("Message_OperationSuccess"));
+			zTable1.value.getTableList();
+		}
+	});
 };
 
 //审核记录

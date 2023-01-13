@@ -62,7 +62,7 @@
 						<el-button
 							v-if="deliverysworkflowdetailList.iscsd == '1'"
 							size="small"
-							type="primary"
+							type="warning"
 							icon="Back"
 							plain
 							:disabled="!scope.isSelected"

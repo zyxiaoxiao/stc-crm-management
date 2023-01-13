@@ -2,8 +2,8 @@
 	<div class="all-height flex-column main-card">
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tabPaneName" @tab-change="tabChange">
 			<el-tab-pane
-				title1="月结客户申请"
-				:label="$t('menubasemcsh')"
+				title1="协议价格维护"
+				:label="$t('menucontractagreementpriceapply')"
 				class="main-tab-pane-content all-height flex-column"
 				name="0"
 			>
@@ -12,6 +12,15 @@
 						<el-button size="small" type="primary" icon="Edit" plain @click="newDeliverysworkflowdetail">{{
 							$t("menu_new")
 						}}</el-button>
+						<el-button
+							size="small"
+							type="primary"
+							icon="DocumentCopy"
+							plain
+							:disabled="!scope.isSelected"
+							@click="copy_handler(scope.selectList)"
+							>{{ $t("menu_copy") }}</el-button
+						>
 						<el-button
 							size="small"
 							type="danger"
@@ -34,8 +43,8 @@
 				</zTable>
 			</el-tab-pane>
 			<el-tab-pane
-				title1="月结客户申请查询"
-				:label="$t('contractdgapplyquery')"
+				title1="协议价格维护查询"
+				:label="$t('menucontractagreementpriceapplyquery')"
 				class="main-tab-pane-content all-height flex-column"
 				name="1"
 			>
@@ -49,6 +58,24 @@
 							:disabled="!scope.isSelected"
 							@click="backHandler(scope.selectList)"
 							>{{ $t("menu_back") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="primary"
+							icon="DocumentCopy"
+							plain
+							:disabled="!scope.isSelected"
+							@click="copy_handler(scope.selectList)"
+							>{{ $t("menu_copy") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="primary"
+							icon="Upload"
+							plain
+							:disabled="!scope.isSelected"
+							@click="update_handler(scope.selectList)"
+							>{{ $t("menu_update") }}</el-button
 						>
 					</template>
 				</zTable>
@@ -69,20 +96,21 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, h } from "vue";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage, ElInputNumber } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
 import { getdropSownSelection } from "@/utils/util.js";
-import contractdetail from "./contract_detail.vue";
+import contractdetail from "./agreement_price_detail.vue";
 import audit from "@/views/audit/index.vue";
 
 const i18n = useI18n();
-const dgbj_paydeadline = getdropSownSelection("dgbj_paydeadline");
+//是否
+const whetherAr = getdropSownSelection("whether");
 
 //表格表头
 let tableColumns1 = reactive([
@@ -112,18 +140,46 @@ let tableColumns1 = reactive([
 		width: "200"
 	},
 	{
-		title: "付款信用期",
-		label: "i18ncrmcontractCreditPeriodForPay",
-		prop: "paydeadline",
-		type: "Select",
-		typeData: dgbj_paydeadline,
+		title: "部门名称",
+		label: "appointmentDepartment_name",
+		prop: "dept",
+		type: "Input",
 		width: "160"
 	},
 	{
-		title: "每年期望与本公司交易额",
-		label: "i18ncrmcontractExpectTransactions",
-		prop: "yearlydeal",
+		title: "版本号",
+		label: "itemtitlecountryruleversion",
+		prop: "version",
 		type: "Input",
+		width: "160"
+	},
+	{
+		title: "总体折扣",
+		label: "itemtitlebase_userisdiscount",
+		prop: "isdiscount",
+		type: "Select",
+		typeData: whetherAr,
+		width: "160"
+	},
+	{
+		title: "折扣率",
+		label: "columnappointmentdiscount",
+		prop: "discounts",
+		type: "Input",
+		width: "160"
+	},
+	{
+		title: "开始时间",
+		label: "itemtitlelog_messagebegintime",
+		prop: "begintime",
+		type: "Date",
+		width: "160"
+	},
+	{
+		title: "结束时间",
+		label: "itemtitlelog_messageendtime",
+		prop: "endtime",
+		type: "Date",
 		width: "160"
 	},
 	{
@@ -176,12 +232,12 @@ let tableColumns1 = reactive([
 const zTable1 = ref();
 //表格对象
 const tableList1 = reactive({
-	id: "/agreementManagement/monthlySettlementCustomer/contract_application_list.vue_zTable1",
+	id: "/agreementManagement/agreementPriceManagement/agreement_price_maintenance.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/contract/contract.action",
 		root: "contractInfos",
-		baseParams: { "cond.auditflag": "0", "cond.contracttype": "0", "cond.rightFlag": "1" }
+		baseParams: { "cond.auditflag": "0", "cond.contracttype": "1", "cond.rightFlag": "1" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -192,12 +248,12 @@ const tableList1 = reactive({
 const zTable2 = ref();
 //表格对象
 const tableList2 = reactive({
-	id: "/agreementManagement/monthlySettlementCustomer/contract_application_list.vue_zTable2",
+	id: "/agreementManagement/agreementPriceManagement/agreement_price_maintenance.vue_zTable2",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/contract/contract!selectApplicationContractInfoByCondRight.action",
 		root: "contractInfos",
-		baseParams: { "cond.auditflag": "0", "cond.contracttype": "0" }
+		baseParams: { "cond.auditflag": "0", "cond.contracttype": "1" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -224,6 +280,37 @@ const contractdetailClose = () => {
 	if (contractdetailList.success) {
 		zTable1.value.getTableList();
 	}
+};
+
+//复制
+const copy_handler = row => {
+	if (row.length != 1) {
+		ElMessage.warning(i18n.t("Message_copyappointment"));
+		return;
+	}
+	if (row[0].isdiscount != "0") {
+		ElMessage.warning(i18n.t("Message_isdiscount0forcopy"));
+		return;
+	}
+	ElMessageBox.confirm(i18n.t("SRM_copynew"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("menu_ok"),
+		cancelButtonText: i18n.t("menu_cancel"),
+		type: "warning",
+		draggable: true
+	}).then(async () => {
+		const res = await http.post(
+			"/crm/contract/contract!copyContractInfos.action",
+			qs.stringify({ "cond.contractid": row[0].contractid })
+		);
+		if (res?.contractid) {
+			tabPaneName.value = "0";
+			zTable1.value.getTableList();
+			contractdetailList.contractid = res?.contractid;
+			contractdetailList.workflowflag = "1";
+			contractdetailList.success = false;
+			contractdetailList.dialogShow = true;
+		}
+	});
 };
 
 //批量删除数据
@@ -275,7 +362,7 @@ const Submit = row => {
 //撤销
 const backHandler = row => {
 	for (let item of row) {
-		if (item.auditflag == "2" && item.contracttype == "0") {
+		if (item.auditflag == "2" && item.contracttype == "1") {
 			ElMessage.warning(i18n.t("Message_BackAllow"));
 			return;
 		}
@@ -299,6 +386,25 @@ const backHandler = row => {
 			zTable2.value.getTableList();
 		}
 	});
+};
+
+const update_handler = async row => {
+	if (row.length != 1) {
+		ElMessage.warning(i18n.t("Message_copycontract"));
+		return;
+	}
+	const res = await http.post(
+		"/crm/contract/contract!copyContractInfo.action",
+		qs.stringify({ "cond.contractid": row[0].contractid })
+	);
+	if (res?.contractid) {
+		tabPaneName.value = "0";
+		zTable1.value.getTableList();
+		contractdetailList.contractid = res?.contractid;
+		contractdetailList.workflowflag = "4";
+		contractdetailList.success = false;
+		contractdetailList.dialogShow = true;
+	}
 };
 
 //链接详细信息
