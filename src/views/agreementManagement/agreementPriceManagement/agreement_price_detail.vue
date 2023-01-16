@@ -30,7 +30,7 @@
 						icon="Check"
 						plain
 						:disabled="!formData.contractid"
-						@click="auditAction('/crm/deliverys/deliverys!approveDeliverysInfo.action', 'Approve !', formData)"
+						@click="auditAction('/crm/contract/contract!approve.action', 'Approve !', formData)"
 						>{{ $t("menu_approve") }}</el-button
 					>
 					<el-button
@@ -40,7 +40,7 @@
 						icon="Close"
 						plain
 						:disabled="!formData.contractid"
-						@click="auditAction('/crm/deliverys/deliverys!reject.action', 'Reject !', formData)"
+						@click="auditAction('/crm/contract/contract!reject.action', 'Reject !', formData)"
 						>{{ $t("menu_reject") }}</el-button
 					>
 					<el-button
@@ -50,7 +50,7 @@
 						icon="Close"
 						plain
 						:disabled="!formData.contractid"
-						@click="auditAction('/crm/deliverys/deliverys!reject2Submitor.action', 'Reject !', formData)"
+						@click="auditAction('/crm/contract/contract!reject2Submitor.action', 'Reject !', formData)"
 						>{{ $t("menu_reject2Submitor") }}</el-button
 					>
 				</div>
@@ -233,23 +233,23 @@
 						>
 					</template>
 					<template #Custom="scope">
-						<span
-							v-if="!scope.row.editShow[scope.column]"
-							:style="{
-								color: scope.row[scope.column] == scope.row['testprice_fn'] ? '#529b2e' : '#606266',
-								fontWeight: scope.row[scope.column] == scope.row['testprice_fn'] ? 'bold' : 'inherit'
-							}"
-						>
-							{{ scope.row[scope.column] }}
-						</span>
 						<el-input-number
-							v-if="scope.row.editShow[scope.column]"
+							v-if="props?.condobj?.workflowflag == '1' && scope.row.editShow[scope.column]"
 							controls-position="right"
 							style="width: 100%"
 							v-model="scope.row[scope.column]"
 							:min="0"
 							:precision="2"
 						/>
+						<span
+							v-else
+							:style="{
+								color: scope?.row[scope.column] == scope.row['testprice_fn'] ? '#529b2e' : '#606266',
+								fontWeight: scope?.row[scope.column] == scope.row['testprice_fn'] ? 'bold' : 'inherit'
+							}"
+						>
+							{{ scope.row[scope.column] }}
+						</span>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -1009,7 +1009,7 @@ const auditAction = (auditurl, opinion, row) => {
 		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
 		let jsonString = {
-			deliverysInfos: [row]
+			contractInfos: [row]
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString),

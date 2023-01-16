@@ -42,6 +42,17 @@ const agreementManagementRouter = [
 					title: "menucontractagreementpriceapply", //"协议价格维护"
 					key: "agreement_price_maintenance"
 				}
+			},
+			{
+				path: "/agreementManagement/agreementPriceManagement/agreement_price_audit",
+				name: "agreement_price_audit",
+				component: () => import("@/views/agreementManagement/agreementPriceManagement/agreement_price_audit.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menucontractagreementpriceaudit", //"协议价格审核"
+					key: "agreement_price_audit"
+				}
 			}
 		]
 	}
