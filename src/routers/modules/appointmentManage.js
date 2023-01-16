@@ -1,6 +1,6 @@
 import { Layout } from "/src/routers/constant";
 
-// 客户管理模块 (多级路由全部设置为二级路由，为了缓存页面)
+// 报价管理模块 (多级路由全部设置为二级路由，为了缓存页面)
 const appointmentManageRouter = [
 	{
 		path: "/appointmentManage",
