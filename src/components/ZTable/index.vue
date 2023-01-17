@@ -364,7 +364,7 @@
 							</template>
 							<template v-else>{{ scope.row[item.prop] }}</template>
 						</span>
-						<!-- 表单组件 -->
+						<!-- 表单组件  -->
 						<div v-if="scope.row.editShow[item.prop]">
 							<el-select
 								v-if="item.type == 'Select'"
@@ -437,7 +437,7 @@
 							</template>
 							<el-input
 								v-else
-								v-model="scope.row[item.prop]"
+								v-model.trim="scope.row[item.prop]"
 								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 							/>
 						</div>
@@ -1088,9 +1088,16 @@ const cellClick = (row, column, cell, event) => {
 		row.isEdit[column.property] &&
 		!row.editShow[column.property]
 	) {
-		row.editShow[column.property] = true;
-		if (formComponentRef[row.rowIndex + column.property]) formComponentRef[row.rowIndex + column.property].focus();
+		editShowOperation(row, column);
 	}
+};
+
+// 改为可编辑时，操作
+const editShowOperation = (row, column) => {
+	row.editShow[column.property] = true;
+	nextTick(() => {
+		if (formComponentRef[row.rowIndex + column.property]) formComponentRef[row.rowIndex + column.property].focus();
+	});
 };
 
 //单元格的 className 的回调方法，也可以使用字符串为所有单元格设置一个固定的 className。
