@@ -23,7 +23,7 @@
 					icon="Check"
 					plain
 					:disabled="!formData.hedgingid"
-					@click="auditAction('/crm/contract/contract!approve.action', 'Approve !', formData)"
+					@click="auditAction('/crm/invoicehedging/invoicehedging!approve.action', 'Approve !', formData)"
 					>{{ $t("menu_approve") }}</el-button
 				>
 				<el-button
@@ -33,7 +33,7 @@
 					icon="Close"
 					plain
 					:disabled="!formData.hedgingid"
-					@click="auditAction('/crm/contract/contract!reject.action', 'Reject !', formData)"
+					@click="auditAction('/crm/invoicehedging/invoicehedging!reject.action', 'Reject !', formData)"
 					>{{ $t("menu_reject") }}</el-button
 				>
 				<el-button
@@ -43,7 +43,7 @@
 					icon="Close"
 					plain
 					:disabled="!formData.hedgingid"
-					@click="auditAction('/crm/contract/contract!reject2Submitor.action', 'Reject !', formData)"
+					@click="auditAction('/crm/invoicehedging/invoicehedging!reject2Submitor.action', 'Reject !', formData)"
 					>{{ $t("menu_reject2Submitor") }}</el-button
 				>
 			</div>

@@ -7,12 +7,12 @@
 					<component :is="subItem.icon"></component>
 				</el-icon>
 				<!-- <el-icon v-else> <Link /> </el-icon> -->
-
 				<i v-else style="margin-right: 10px; font-size: 18px" :class="['iconfont', 'layui-icon-extend-file-list--fill']"></i>
-				<span class="menu-i-span">{{ $t(subItem.title) }}</span>
-				<!-- <el-tooltip :content="$t(subItem.title)" placement="right">
-					<span class="menu-i-span">{{ $t(subItem.title) }}</span>
-				</el-tooltip> -->
+				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+					<span :ref="el => setMenuTextRef(el, subItem.path)" @mouseover="hoverMenu(subItem)" class="menu-i-span">{{
+						$t(subItem.title)
+					}}</span>
+				</el-tooltip>
 			</template>
 			<SubItem :menuList="subItem.children" />
 		</el-sub-menu>
@@ -22,19 +22,59 @@
 				<component :is="subItem.icon"></component>
 			</el-icon>
 			<template v-if="!subItem.isLink" #title>
-				<span class="menu-i-span">{{ $t(subItem.title) }}</span>
+				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+					<span :ref="el => setMenuTextRef(el, subItem.path)" @mouseover="hoverMenu(subItem)" class="menu-i-span">{{
+						$t(subItem.title)
+					}}</span>
+				</el-tooltip>
 			</template>
 			<template v-else #title>
-				<a class="menu-href menu-i-span" :href="subItem.isLink" target="_blank">{{ $t(subItem.title) }}</a>
+				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+					<a
+						:ref="el => setMenuTextRef(el, subItem.path)"
+						@mouseover="hoverMenu(subItem)"
+						class="menu-href menu-i-span"
+						:href="subItem.isLink"
+						target="_blank"
+						>{{ $t(subItem.title) }}</a
+					>
+				</el-tooltip>
 			</template>
 		</el-menu-item>
 	</template>
 </template>
 
 <script setup>
+import { ref, toRaw, nextTick, computed } from "vue";
 const props = defineProps({
 	menuList: Array
 });
+
+// 存储菜单文本dom元素
+const menuTextRef = {};
+// 赋值动态菜单文本ref到变量
+const setMenuTextRef = (el, key) => {
+	if (el) {
+		menuTextRef[key] = el;
+	}
+};
+// 存放菜单是否存在showTooltip属性标识
+const hoverMenuMap = new WeakMap();
+function hoverMenu(key) {
+	if (key?.path) {
+		// 如果当前菜单showTooltip属性已存在，退出计算
+		if (hoverMenuMap.get(key?.path)) return;
+		nextTick(() => {
+			console.log(menuTextRef[key.path]?.scrollWidth);
+			console.log(menuTextRef[key.path]?.clientWidth);
+			// 如果文本内容的整体宽度大于其可视宽度，则文本溢出
+			menuTextRef[key.path]?.scrollWidth > menuTextRef[key.path]?.clientWidth
+				? (key.showTooltip = true)
+				: (key.showTooltip = false);
+			hoverMenuMap.set(key?.path, true);
+		});
+	}
+}
 </script>
 
 <style scoped>
@@ -42,6 +82,7 @@ const props = defineProps({
 	overflow: hidden;
 	text-overflow: ellipsis;
 	margin-right: 20px;
+	outline: "none";
 }
 </style>
 

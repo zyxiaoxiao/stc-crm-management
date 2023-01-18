@@ -50,7 +50,7 @@ const globalStore = GlobalStore();
 const i18n = useI18n();
 
 let menuWidth = computed(() => {
-	return i18n.locale.value == "zh" ? "220px" : "330px";
+	return i18n.locale.value == "zh" ? "220px" : "235px";
 });
 
 // 菜单加载 loading

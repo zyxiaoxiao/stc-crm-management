@@ -16,8 +16,8 @@
 	<PasswordDialog ref="passwordRef"></PasswordDialog>
 
 	<div class="logOut screen-full" @click="logOut">
+		<span style="margin-right: 5px">{{ $t("header.logout") }}</span>
 		<i class="iconfont layui-icon-extend-tuichu"></i>
-		<span style="margin-left: 5px">{{ $t("header.logout") }}</span>
 	</div>
 </template>
 <script setup>
