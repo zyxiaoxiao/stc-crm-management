@@ -14,8 +14,8 @@ const config = {
 	//baseURL: "http://192.168.3.33:8086",
 	baseURL: "/apis", // 跨域代理
 
-	// 设置超时时间（20s）
-	timeout: 20000,
+	// 设置超时时间（60s）
+	timeout: 60000,
 	// 跨域时候允许携带凭证
 	withCredentials: true
 };
