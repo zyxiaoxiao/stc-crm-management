@@ -26,8 +26,8 @@ const i18nLocale = computed(() => {
 });
 
 let fontSize = "14px";
-let tabsHeaderHeight = "40px";
-let tabsItemHeight = "33px";
+let tabsHeaderHeight = "37px";
+let tabsItemHeight = "30px";
 let tabsNavNextPrevHeight = "44px";
 let tabsBoxDropdownTop = "8px";
 let menuItemHeight = "56px";
@@ -39,8 +39,8 @@ const assemblySize = computed(() => {
 	//全局改变字体大小
 	if (globalStore.assemblySize == "large") {
 		fontSize = "16px";
-		tabsHeaderHeight = "40px";
-		tabsItemHeight = "33px";
+		tabsHeaderHeight = "37px";
+		tabsItemHeight = "30px";
 		tabsNavNextPrevHeight = "44px";
 		tabsBoxDropdownTop = "8px";
 		menuItemHeight = "56px";
@@ -57,8 +57,8 @@ const assemblySize = computed(() => {
 		titleFontSize = "15px";
 	} else {
 		fontSize = "14px";
-		tabsHeaderHeight = "40px";
-		tabsItemHeight = "33px";
+		tabsHeaderHeight = "37px";
+		tabsItemHeight = "30px";
 		tabsNavNextPrevHeight = "44px";
 		tabsBoxDropdownTop = "8px";
 		menuItemHeight = "56px";
