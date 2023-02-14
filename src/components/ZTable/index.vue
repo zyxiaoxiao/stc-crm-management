@@ -165,9 +165,8 @@
 								<slot name="operation" :row="scope.row"></slot>
 							
 						</el-scrollbar> -->
-						<div class="flex-row">
-							<slot name="operation" :row="scope.row"></slot>
-						</div>
+
+						<slot name="operation" :row="scope.row"></slot>
 					</template>
 				</el-table-column>
 

@@ -21,8 +21,7 @@ const i18n = useI18n();
 let zTable1 = ref();
 // 父组件传入的参数
 const props = defineProps({
-	condobj: Object,
-	objlist: Object
+	condobj: Object
 });
 //默认需要传入的参数
 let params = {};
@@ -250,7 +249,7 @@ const ctableList = reactive({
 onMounted(() => {
 	//selectEnterpriseInfos.value.getTableList();
 	//页面传入的值判断还需要添加的参数
-
+	props.condobj.objlist = null;//清空数据
 	zTable1.value.getTableList();
 });
 </script>

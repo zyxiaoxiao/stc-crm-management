@@ -295,7 +295,7 @@ const ctableList = reactive({
 onMounted(() => {
 	//selectEnterpriseInfos.value.getTableList();
 	//页面传入的值判断还需要添加的参数
-
+    props.condobj.objlist = null;//清空数据
 	zTable1.value.getTableList();
 });
 </script>

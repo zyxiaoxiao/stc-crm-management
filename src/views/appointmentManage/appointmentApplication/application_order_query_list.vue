@@ -60,6 +60,7 @@ const selectFolderApplintment = list => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
+	props.condobj.objlist = null;//清空数据
 	selectapplicationOrderQuery.value.getTableList();
 });
 //表格表头

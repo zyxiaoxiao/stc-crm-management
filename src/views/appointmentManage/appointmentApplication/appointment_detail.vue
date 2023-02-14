@@ -766,7 +766,7 @@
 					</el-form>
 				</div>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="vmaps" width="700px" style="" :tableList="ptableList" @cell-click="itemViewCellClick" @link-detailbg="linkDetailbg">
+					<zTable ref="vmaps" width="700px" style="" :tableList="ptableList" @row-click="itemViewCellClick" @link-detailbg="linkDetailbg">
 					</zTable>
 				</div>
 			</el-tab-pane>

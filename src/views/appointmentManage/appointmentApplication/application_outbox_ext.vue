@@ -250,18 +250,7 @@ const historylinkDetail = (column, row) => {
 //默认需要传入的参数
 const params = {};
 let fileList = ref(); //附件信息
-//选择完数据后给父页面传值
-const selectFolderApplintment = list => {
-	if (list != null && list.length == 1) {
-		props.condobj.objlist = list[0]; //传参
-		props.condobj.deptFolderApplintmentDialogShow = false; //关闭窗口
-	} else {
-		ElMessage({
-			type: i18n.t("Message_OperationTip"),
-			message: i18n.t("Workflow_SelectRecord")
-		});
-	}
-};
+
 
 //下载资质文件
 const downloadfiles = (column, row) => {

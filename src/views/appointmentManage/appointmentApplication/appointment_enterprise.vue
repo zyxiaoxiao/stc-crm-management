@@ -89,6 +89,7 @@ const selectCustomer = list => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
+	props.condobj.objlist = null;//清空数据
 	selectEnterpriseInfos.value.getTableList();
 });
 const customer_customertype = getdropSownSelection("customer_customertype");

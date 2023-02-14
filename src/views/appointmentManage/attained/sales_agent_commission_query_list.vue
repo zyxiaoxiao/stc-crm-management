@@ -62,7 +62,7 @@
 				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
 			</ZDialog>
 		</div>
-		<div v-dialogStretching>
+		<div>
 			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
 				<el-form ref="cEform" :model="dform" style="margin: 25px 15px" :rules="rules">
 					<el-form-item :label="$t('Consign_chooseMouthTime') + ':'" style="width: 90%;" title1="请选择提佣月份" prop="commission">

@@ -1,6 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="salesinfos"
@@ -21,9 +21,15 @@
 							@click="CombinedInfosDelete(scope.selectList)"
 							>{{ $t("SRM_delete") }}</el-button
 						>
-						<el-button size="small" type="success" icon="Check" plain @click="submitCombinedInfos(scope.selectList)">{{
-							$t("SRM_submit")
-						}}</el-button>
+						<el-button
+							size="small"
+							type="success"
+							icon="Check"
+							:disabled="!scope.isSelected"
+							plain
+							@click="submitCombinedInfos(scope.selectList)"
+							>{{ $t("SRM_submit") }}</el-button
+						>
 					</template>
 					<!-- 自定义 -->
 					<template #Custom="scope">
@@ -97,7 +103,7 @@
 				<combineddetailNew :condobj="condobj"></combineddetailNew>
 			</ZDialog>
 		</div>
-		<div v-dialogStretching>
+		<div>
 			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
 				<el-form ref="cEform" :model="dform" style="margin: 25px 15px">
 					<el-form-item title1="提佣类型" :label="$t('basecolumncommission_type') + ':'" style="width: 90%" prop="commissiontype">
