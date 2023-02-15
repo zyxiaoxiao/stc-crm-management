@@ -102,7 +102,7 @@
 							:disabled="!scope.isSelected"
 							@click="billInfosConfirmDelete(scope.selectList)"
 							>{{ $t("SRM_delete") }}</el-button
-						>						
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -328,7 +328,7 @@ const releaseBillInfos = selectList => {
 };
 
 //Excel导入
-const excelUploadFilled = (num) => {
+const excelUploadFilled = num => {
 	condobj.uploadnewDialogShow = true;
 	condobj.cond.auditflag = num;
 	condobj.cond.success = false;
@@ -1556,7 +1556,6 @@ const linkDetail = (column, row) => {
 //链接详细信息
 const linkDetailquey = (column, row) => {
 	if (column == "billcode" && row.billid) {
-		console.log(row);
 		if (row.billid) {
 			condobj.cond = {
 				billid: row.billid,

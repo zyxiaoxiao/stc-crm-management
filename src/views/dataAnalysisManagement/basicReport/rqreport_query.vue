@@ -136,7 +136,6 @@ const linkDetailbg = (column, row) => {
 		row.reportargs +
 		"&sqlcount=" +
 		row.sqlcount;
-	console.log(url);
 	window.open(globalStore.serverUrl + url);
 };
 

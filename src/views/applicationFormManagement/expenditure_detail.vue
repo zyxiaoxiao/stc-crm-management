@@ -316,7 +316,6 @@ const selectFoldernoBtn = () => {
 const applicationorderqueryClose = () => {
 	let arrayList = applicationorderqueryList.arrayList;
 	if (arrayList.length > 0) {
-		console.log(arrayList);
 		formData.folderno = arrayList[0].folderno;
 		formData.salesmandesc = arrayList[0].createdbyfullname;
 		formData.salesmancode = arrayList[0].secode;

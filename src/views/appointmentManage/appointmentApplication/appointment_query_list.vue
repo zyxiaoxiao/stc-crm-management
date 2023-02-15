@@ -266,7 +266,6 @@ let dialogFormVisible = ref(false);
 
 let v_row = null;
 const editAddress = row => {
-	console.log(row);
 	v_row = row;
 	if (row.submitcorp == "031101") {
 		//HCC有特有模板
@@ -2428,7 +2427,6 @@ const appointmentNewclose = () => {
 	grid_appointmentInfos.value.getTableList();
 };
 
-
 //批量删除数据
 const batchDelete = selectList => {
 	if (selectList.length < 1) {
@@ -2444,7 +2442,6 @@ const batchDelete = selectList => {
 		let jsonString = {
 			appointmentInfos: []
 		};
-		console.log(selectList);
 		selectList.forEach(item => {
 			jsonString.appointmentInfos.push(item);
 		});
@@ -2479,7 +2476,6 @@ let getappointmentNew = async (workflowflag, reservnums) => {
 			isdefaulttax: returnValue.isdefaulttax
 		};
 		condobj.dialogShow_appointmentNew = true;
-		
 	}
 };
 
@@ -2502,7 +2498,7 @@ const dialogShow = data => {
 	if (data == "dialogShow_appointmentNew") {
 		getappointmentNew("1", "");
 		//获取部门的增值税包括PKM字段返回 （重点）：
-	} 
+	}
 };
 
 //切换tab时触发

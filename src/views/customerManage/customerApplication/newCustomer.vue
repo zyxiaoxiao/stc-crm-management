@@ -272,10 +272,7 @@ const tableList2 = reactive({
 });
 
 //当表格的当前行发生变化的时候会触发该事件
-const tableCurrentChange1 = (currentRow, oldCurrentRow) => {
-	// console.log(currentRow);
-	// console.log(oldCurrentRow);
-};
+const tableCurrentChange1 = (currentRow, oldCurrentRow) => {};
 
 //批量删除数据
 const batchDelete = ids => {

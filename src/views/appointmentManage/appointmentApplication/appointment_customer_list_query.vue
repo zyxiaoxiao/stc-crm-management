@@ -174,7 +174,6 @@ let dialogFormVisible = ref(false);
 
 let v_row = null;
 const editAddress = row => {
-	console.log(row);
 	v_row = row;
 	if (row.submitcorp == "031101") {
 		certificationshow.value = true;
@@ -1002,17 +1001,13 @@ const workflowStatus = (column, row) => {
 };
 
 //当表格的当前行发生变化的时候会触发该事件
-const tableCurrentChange1 = (currentRow, oldCurrentRow) => {
-	// console.log(currentRow);
-	// console.log(oldCurrentRow);
-};
+const tableCurrentChange1 = (currentRow, oldCurrentRow) => {};
 
 //新增子页面关闭后的方法可以给父页面赋值等操作
 const appointmentNewclose = () => {
 	//选择联系人的关闭窗口后的事件
 	grid_appointmentInfos.value.getTableList();
 };
-
 
 let returnValue = {};
 let getappointmentNow = async (workflowflag, reservnums) => {
@@ -1101,7 +1096,6 @@ const linkDetailbg = (column, row) => {
 
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	console.log(column, row);
 	if (column == "reservnum" && row.reservnum) {
 		getappointmentNow("3", row.reservnum);
 	}

@@ -55,7 +55,6 @@ if (props.condobj && props.condobj.cond) {
 const dialogShow_appointmentReadonly = ref(false);
 
 const editAddress = row => {
-	console.log(row);
 	if (!row.reservnum) {
 		//没保存报价单
 		ElMessage.warning(i18n.t("alert_saveclient"));
@@ -81,7 +80,7 @@ const selectTemplateApplintment = list => {
 	if (list != null && list.length > 0) {
 		let vdata = [];
 		for (let item of list) {
-            vdata.push(item.reservnum);
+			vdata.push(item.reservnum);
 		}
 		props.condobj.objlist = vdata; //传参
 		props.condobj.dialogShow_appointmentTemplate = false; //关闭窗口

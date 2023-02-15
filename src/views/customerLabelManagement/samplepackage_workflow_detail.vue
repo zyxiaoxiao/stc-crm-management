@@ -641,9 +641,8 @@ const menu_rejectShow = ref(false); //拒绝按钮不显示
 const isErrormsg = async () => {
 	//是否是CSD人创建的客户标签申请
 	if (props?.condobj?.errormsg == "Y") {
-		console.log("sssssssssssss");
 		const res = await http.post("/crm/deliverys/deliverys!checkCurrentUserIsCSD.action", qs.stringify({}));
-		console.log(res);
+
 		//当前登录操作人是否是CSD人员 是CSD人员那么客户信息就可编辑
 		if (res?.iscsd == "1") {
 			menu_saveShow.value = true;

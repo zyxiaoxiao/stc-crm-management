@@ -86,8 +86,6 @@ function hoverMenu(key) {
 		// 如果当前菜单showTooltip属性已存在，退出计算
 		if (hoverMenuMap.get(key?.path)) return;
 		nextTick(() => {
-			console.log(menuTextRef[key.path]?.scrollWidth);
-			console.log(menuTextRef[key.path]?.clientWidth);
 			// 如果文本内容的整体宽度大于其可视宽度，则文本溢出
 			menuTextRef[key.path]?.scrollWidth > menuTextRef[key.path]?.clientWidth
 				? (key.showTooltip = true)

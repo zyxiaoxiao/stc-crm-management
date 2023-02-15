@@ -280,7 +280,6 @@ const addCompanyname = () => {
 const customernumberlistselectClose = async () => {
 	let arrayList = customernumberlistselectList.arrayList;
 	if (arrayList.length > 0) {
-		console.log(arrayList);
 		formData.corpid = arrayList[0].corpid;
 		formData.corpno = arrayList[0].corpno;
 		formData.corpdesc = arrayList[0].corpdesc;

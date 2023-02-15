@@ -40,7 +40,6 @@ import { useI18n } from "vue-i18n";
 import { genFileId, ElMessage } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
 const globalStore = GlobalStore();
-console.log(globalStore.serverUrl);
 
 const i18n = useI18n();
 

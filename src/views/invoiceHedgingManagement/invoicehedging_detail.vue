@@ -410,7 +410,6 @@ const auditAction = (auditurl, opinion, row) => {
 	});
 };
 onMounted(() => {
-	console.log(formData);
 	if (formData.hedgingid) {
 		getFormData();
 	}

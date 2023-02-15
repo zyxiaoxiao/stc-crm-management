@@ -44,8 +44,6 @@ const router = useRouter();
 const wwa = () => {
 	let localStorageGlobalState = JSON.parse(localStorage.getItem("GlobalState"));
 	if (localStorageGlobalState.token !== globalStore.token) {
-		console.log(localStorageGlobalState.token);
-		console.log(globalStore.token);
 	}
 };
 

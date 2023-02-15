@@ -902,7 +902,6 @@ const workflowStatus = (column, row) => {
 
 //链接详细信息
 const invoicelinkDetail = (column, row) => {
-	console.log(row);
 	if (column == "INVOICENO" && row.INVOICENO) {
 		if (row.INVOICENO) {
 			condobj.cond = {

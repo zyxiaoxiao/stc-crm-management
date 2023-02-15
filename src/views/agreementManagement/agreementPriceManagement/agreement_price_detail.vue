@@ -801,7 +801,6 @@ const contractNewTestItemBtn = () => {
 //选择项目弹出  回调
 const contractNewTestItemClose = async () => {
 	let arrayList = contractNewTestItemList.arrayList;
-	console.log(arrayList);
 	if (arrayList.length > 0) {
 		let contracttestList = [];
 		arrayList.forEach(item => {

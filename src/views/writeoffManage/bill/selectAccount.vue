@@ -42,10 +42,10 @@ const selectCorpAccountApplintment = list => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
-    if (props.condobj) {
-        let v_corpcode = props.condobj.cond.corpcode; //客户编码
-		props.condobj.objlist = [];//清空数据
-        console.log(v_corpcode);
+	if (props.condobj) {
+		let v_corpcode = props.condobj.cond.corpcode; //客户编码
+		props.condobj.objlist = []; //清空数据
+
 		if (v_corpcode) {
 			//传参后会自动调用接口刷新
 			corpAccounttableList.httpAttribute.baseParams["cond.corpcode"] = v_corpcode;

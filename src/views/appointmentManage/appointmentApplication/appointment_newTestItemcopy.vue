@@ -100,8 +100,5 @@ const treeTableList = reactive({
 });
 
 //确定按钮
-const confirmClick = selectList => {
-	console.log("selectList", selectList); //选中的数据
-	console.log("virtualizedTreeTableRef", virtualizedTreeTableRef.value.selectList); //选中的数据
-};
+const confirmClick = selectList => {};
 </script>

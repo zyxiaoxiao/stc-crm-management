@@ -53,7 +53,7 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted  } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { genFileId, ElMessage } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
@@ -75,9 +75,9 @@ let dform = reactive({ exceldata: "导入失败；", excelupload: "模板详细�
 let dialogSendFormVisible = ref(false);
 
 //关闭提示窗口
-const closedialogSendFormVisible = ()=>{
-    dialogSendFormVisible.value = false;
-    props.condobj.uploadnewDialogShow = false;
+const closedialogSendFormVisible = () => {
+	dialogSendFormVisible.value = false;
+	props.condobj.uploadnewDialogShow = false;
 };
 
 //当超出限制时，执行的钩子函数，在这里就是当触发了limit后执行
@@ -108,19 +108,18 @@ const handleBeforeUpload = file => {
 onMounted(() => {
 	if (props.condobj) {
 		let auditflag = props.condobj.cond.auditflag; //到账id
-		let path = globalStore.serverUrl + '/crm/bill/bill!importExcelBillInfo.action';
+		let path = globalStore.serverUrl + "/crm/bill/bill!importExcelBillInfo.action";
 		if (auditflag && auditflag == "1") {
-			path = globalStore.serverUrl + '/crm/bill/bill!importConfirmbydeptBillInfo.action';
+			path = globalStore.serverUrl + "/crm/bill/bill!importConfirmbydeptBillInfo.action";
 			excelpath.value = path;
-		}else{
+		} else {
 			excelpath.value = path;
 		}
-		console.log(excelpath);
 	}
 });
 
 //请求成功后执行的函数，相当于axios的then
-const handleSuccess = response => {	
+const handleSuccess = response => {
 	try {
 		let error = response.errors;
 		let str = new Array();
@@ -132,16 +131,21 @@ const handleSuccess = response => {
 			let successNumbers = str[0];
 			let failureNumbers = str[1];
 			let path = str[2];
-            dform.excelurl = globalStore.serverUrl + path;
-            if( successNumbers == 0 && failureNumbers == 0 ){
-            }else{
-                dform.exceldata = i18n.t("itemtitlemdm_base_specialitysynstate0")+successNumbers+i18n.t("UPLOAD_ufail")+failureNumbers+i18n.t("UPLOAD_tiao");
-            }
-			dialogSendFormVisible.value = true;            
+			dform.excelurl = globalStore.serverUrl + path;
+			if (successNumbers == 0 && failureNumbers == 0) {
+			} else {
+				dform.exceldata =
+					i18n.t("itemtitlemdm_base_specialitysynstate0") +
+					successNumbers +
+					i18n.t("UPLOAD_ufail") +
+					failureNumbers +
+					i18n.t("UPLOAD_tiao");
+			}
+			dialogSendFormVisible.value = true;
 		}
 	} catch (e) {
-        props.condobj.uploadnewDialogShow = false;
-    }
+		props.condobj.uploadnewDialogShow = false;
+	}
 };
 //请求失败后执行的函数，相当于axios的catch
 const handleError = error => {

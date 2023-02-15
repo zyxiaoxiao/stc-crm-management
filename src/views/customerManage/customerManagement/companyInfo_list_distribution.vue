@@ -384,7 +384,6 @@ const choosebgcustomer = () => {
 //选择变更数据回调
 const companyListClose = async () => {
 	if (companyList.arrayList.length > 0) {
-		console.log(companyList.arrayList);
 		let jsonString = {
 			corpids: companyList.arrayList
 		};

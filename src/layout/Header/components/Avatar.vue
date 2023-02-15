@@ -38,8 +38,6 @@ const passwordRef = ref(null);
 
 // 打开修改密码和个人信息弹窗
 // const openDialog = (refName) => {
-// 	console.log(refName);
-// 	console.log(infoRef);
 // 	if (refName == "infoRef") {
 // 		infoRef.value?.openDialog();
 // 	} else {

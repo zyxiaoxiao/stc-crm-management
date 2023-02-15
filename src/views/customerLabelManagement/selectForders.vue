@@ -26,7 +26,6 @@ const props = defineProps({
 	condobj: Object
 });
 
-console.log(props);
 //申请单查询
 const zTable1 = ref();
 const tableList1 = reactive({

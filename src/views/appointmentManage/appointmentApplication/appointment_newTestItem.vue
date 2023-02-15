@@ -125,16 +125,12 @@ const treeTableList = reactive({
 
 //确定按钮
 const confirmClick = selectList => {
-	console.log("selectList", selectList); //选中的数据
-	console.log("virtualizedTreeTableRef", virtualizedTreeTableRef.value.selectList); //选中的数据
 	let reg = /^([1-9]\d*|[0]{1,1})$/;
 	let value = count.value;
-	console.log(value);
 	if (!reg.test(value)) {
 		ElMessage.warning(i18n.t("PleaseSelect_TheCorrectNumberPackages"));
 		return false;
 	}
-	console.log(count);
 	if (selectList.length == 0) {
 		//没选中的数据报错
 		ElMessage.warning(i18n.t("PleaseSelect_TheCorrectNumberPackages"));
@@ -158,11 +154,10 @@ const confirmClick = selectList => {
 			const res = await http.post("/mylims/order/appointment!saveAppointmentTestItem.action", qs.stringify(params));
 			if (res) {
 				//关闭窗口
-				props.condobj.newItemApplintmentDialogShow = false;				
+				props.condobj.newItemApplintmentDialogShow = false;
 			}
 		};
 		saveitem(sList);
-
 	}
 };
 

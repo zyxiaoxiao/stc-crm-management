@@ -167,7 +167,6 @@ let dialogFormVisible = ref(false);
 
 let v_row = null;
 const editAddress = row => {
-	console.log(row);
 	v_row = row;
 	if (row.submitcorp == "031101") {
 		certificationshow.value = true;
@@ -612,7 +611,7 @@ const htableList = reactive({
 		root: "appointmentInfos",
 		baseParams: {
 			"cond.confirmynflag": "(1,2)",
-            "cond.condition": "0"
+			"cond.condition": "0"
 		}
 	},
 	//快捷查询
@@ -994,8 +993,6 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
-
-
 let returnValue = {};
 let getappointmentNow = async (workflowflag, reservnums) => {
 	if (!reservnums) {
@@ -1025,7 +1022,7 @@ const passAppointmentInfo = (code, selectList) => {
 		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
 	}
-    let d = moment(new Date()).format("YYYY-MM-DD");
+	let d = moment(new Date()).format("YYYY-MM-DD");
 	let approveValue = ref(d);
 	ElMessageBox({
 		title: i18n.t("Message_PleaeEnterAuditOpinion"),
@@ -1033,7 +1030,7 @@ const passAppointmentInfo = (code, selectList) => {
 			h(ElDatePicker, {
 				modelValue: approveValue.value,
 				type: "date",
-                valueFormat:"YYYY-MM-DD",
+				valueFormat: "YYYY-MM-DD",
 				autosize: { minRows: 4 },
 				"onUpdate:modelValue": val => {
 					approveValue.value = val;
@@ -1044,21 +1041,21 @@ const passAppointmentInfo = (code, selectList) => {
 		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
 		let cond = {
-			"date_confirm": approveValue.value
+			date_confirm: approveValue.value
 		};
 		let jsonString = {
 			appointmentInfos: selectList,
-            cond: cond			
+			cond: cond
 		};
 		let params = {
-			jsonString: JSON.stringify(jsonString)            
+			jsonString: JSON.stringify(jsonString)
 		};
-        let url = "";
+		let url = "";
 		if (code == "1") {
-            url = "/mylims/order/appointment!refuseAppointmentInfos.action";			
+			url = "/mylims/order/appointment!refuseAppointmentInfos.action";
 		} else {
 			url = "/mylims/order/appointment!passAppointmentInfos.action";
-		} 
+		}
 		const res = await http.post(url, qs.stringify(params));
 		if (res) {
 			grid_confirmappointmentInfos.value.getTableList();
@@ -1068,7 +1065,6 @@ const passAppointmentInfo = (code, selectList) => {
 
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	console.log(column, row);
 	if (column == "reservnum" && row.reservnum) {
 		getappointmentNow("3", row.reservnum);
 	}

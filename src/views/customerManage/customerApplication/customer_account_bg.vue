@@ -179,7 +179,7 @@ const getIsmain = async () => {
 		"/crm/account/crmaccount!selectCrmaccountbgInfoByCond.action",
 		qs.stringify({ "cond.corpid": props.condobj.corpid, "cond.corpbgid": props.condobj.corpbgid })
 	);
-	console.log(res);
+
 	for (let item of res.crmaccountbgInfos) {
 		if (item.ismain == 1) {
 			ismain1 = true;
