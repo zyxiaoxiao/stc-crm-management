@@ -1,15 +1,6 @@
 <template>
-	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tabPaneName" @tab-change="tabChange">
-			<el-tab-pane
-				title1="客户信息查询"
-				:label="$t('corpinfopanelckxxcxtitle')"
-				class="main-tab-pane-content all-height flex-column"
-				name="0"
-			>
-				<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbg"> </zTable>
-			</el-tab-pane>
-		</el-tabs>
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
+		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbg"> </zTable>
 		<div v-dialogStretching>
 			<ZDialog v-model="custInfoUser.dialogShow" title="" width="95%">
 				<custInfouser :condobj="custInfoUser" />
@@ -22,8 +13,13 @@
 import { ref, reactive, onMounted } from "vue";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
+import { useRoute } from "vue-router";
 import { getdropSownSelection } from "@/utils/util.js";
 import custInfouser from "../customerManage/customerManagement/custInfo_user_public.vue";
+
+const route = useRoute();
+//获取路由 meta里面 query 的参数
+let workflowflag = route?.meta?.query?.workflowflag;
 
 const customerCustomertype = getdropSownSelection("customer_customertype");
 //是否
@@ -57,12 +53,20 @@ const tableList1 = reactive({
 	id: "/comprehensiveQuery/group_query_contract_list.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url: "/mylims/enterpriseinfo/enterpriseinfo!selectCustomerbyGroupManager.action",
+		url:
+			workflowflag == "0"
+				? "/mylims/enterpriseinfo/enterpriseinfo!selectCustomerbyGroupManager.action"
+				: "/mylims/enterpriseinfo/enterpriseinfo!selectEnterpriseInfosByCorpRightOnly.action",
 		root: "enterpriseInfos",
-		baseParams: {
-			"cond.auditflag": "2",
-			"cond.newcustomtype": "SE"
-		}
+		baseParams:
+			workflowflag == "0"
+				? {
+						"cond.auditflag": "2",
+						"cond.newcustomtype": "SE"
+				  }
+				: {
+						"cond.auditflag": "2"
+				  }
 	},
 	//表格表头
 	tableColumns: [
@@ -235,8 +239,6 @@ const linkDetailbg = (column, row) => {
 	custInfoUser.tableTabsValue = 0;
 	custInfoUser.dialogShow = true;
 };
-
-const tabPaneName = ref("0");
 
 //页面初始化渲染完成执行
 onMounted(() => {

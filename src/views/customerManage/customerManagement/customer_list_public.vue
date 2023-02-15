@@ -184,7 +184,8 @@ const tableList1 = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
-			fixed: "right"
+			fixed: "right",
+			width: "160"
 		}
 	],
 	// 表格数据

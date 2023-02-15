@@ -183,7 +183,8 @@ const tableList = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
-			fixed: "right"
+			fixed: "right",
+			width: "160"
 		},
 		{
 			title: "客户号",

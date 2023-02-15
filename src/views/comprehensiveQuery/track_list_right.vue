@@ -1,53 +1,8 @@
 <template>
 	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
-		<zTable ref="zTable8" :tableList="tableList8">
-			<template #tableHeaderLleft="scope">
-				<el-button size="small" type="primary" icon="Edit" plain @click="AddTrackingRecord">
-					{{ $t("menu_new") }}
-				</el-button>
-				<el-button
-					size="small"
-					type="danger"
-					icon="Delete"
-					plain
-					:disabled="!scope.isSelected"
-					@click="deleteTrackingRecord(scope.ids, scope.selectList)"
-					>{{ $t("menu_delete") }}</el-button
-				>
-				<el-button
-					size="small"
-					type="primary"
-					icon="DocumentCopy"
-					plain
-					:disabled="!scope.isSelected"
-					@click="CopyTrackingRecord(scope.ids, scope.selectList)"
-				>
-					{{ $t("menu_copynew") }}
-				</el-button>
-				<el-button
-					size="small"
-					type="danger"
-					icon="WarnTriangleFilled"
-					plain
-					:disabled="!scope.isSelected"
-					@click="abandoned_handler(scope.selectList)"
-					>{{ $t("menu_abandoned") }}</el-button
-				>
-				<el-button
-					size="small"
-					type="success"
-					icon="CircleCheckFilled"
-					plain
-					:disabled="!scope.isSelected"
-					@click="enable_handler(scope.selectList)"
-					>{{ $t("menu_enable") }}</el-button
-				>
-			</template>
+		<zTable ref="zTable8" :tableList="tableList8" @link-detailbg="linkDetailbgQuery">
 			<!-- 表格操作 -->
 			<template #operation="scope">
-				<el-button type="primary" link icon="Edit" @click="editTracking(scope.row)">
-					{{ $t("menu_edit") }}
-				</el-button>
 				<el-button type="primary" link icon="Download" @click="downloadTrack(scope.row)">
 					{{ $t("columntrackDownload") }}
 				</el-button>
@@ -69,20 +24,14 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import qs from "qs";
-import http from "@/api/index.js";
-import { GlobalStore } from "@/store/globalStore";
+
 import zTable from "/src/components/ZTable/index.vue";
-import moment from "moment";
-import { ElMessageBox, ElMessage } from "element-plus";
+
 import ZDialog from "/src/components/ZDialog.vue";
 import { getdropSownSelection } from "@/utils/util.js";
-import trackdetailnew from "./track_detail_new.vue";
 import { downloadFile } from "/src/utils/fileUtil.js";
+import trackdetailnew from "../customerManage/customerManagement/track_detail.vue";
 
-const i18n = useI18n();
-const globalStore = GlobalStore();
 const customersource = getdropSownSelection("customer_informationsource");
 const state = getdropSownSelection("itemtitlebase_userState");
 
@@ -113,7 +62,7 @@ const commtype = [
 //追踪记录
 const zTable8 = ref();
 const tableList8 = reactive({
-	id: "/customerManage/customerManagement/track_list.vue_zTable8",
+	id: "/comprehensiveQuery/track_list_right.vue_zTable8",
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/trackinfo/track!selectTrackInfoAllByCond.action",
@@ -137,7 +86,7 @@ const tableList8 = reactive({
 			title: "客户号",
 			label: "fieldcolumncustomercode",
 			prop: "corpno",
-			type: "Input",
+			type: "Link",
 			width: "120"
 		},
 		{
@@ -305,21 +254,14 @@ const addTrackingRecordList = reactive({
 	statusType: "new"
 });
 
-//添加追踪记录
-const AddTrackingRecord = () => {
-	addTrackingRecordList.commid = "";
-	addTrackingRecordList.statusType = "new";
-	addTrackingRecordList.success = false;
-	addTrackingRecordList.dialogShow = true;
-};
 //添加追踪记录,回调
 const addTrackingRecordClose = () => {
 	if (addTrackingRecordList.success) {
 		zTable8.value.getTableList();
 	}
 };
-//编辑追踪记录
-const editTracking = row => {
+
+const linkDetailbgQuery = (column, row) => {
 	addTrackingRecordList.commid = row.commid;
 	addTrackingRecordList.statusType = "edit";
 	addTrackingRecordList.success = false;
@@ -333,125 +275,6 @@ const downloadTrack = row => {
 			commid: row.commid
 		});
 	}
-};
-
-//删除追踪记录
-const deleteTrackingRecord = (ids, selectList) => {
-	for (let item of selectList) {
-		//当前登录人不是追踪记录人不能删除
-		if (item.reocrdercode != globalStore.userInfo.usercode) {
-			ElMessage.warning(i18n.t("SRM_operationTrack"));
-			return;
-		} else {
-			let currentDate = moment().format("YYYY-MM-DD");
-			let oldDate = moment(new Date(item.recordertimetwo)).format("YYYY-MM-DD");
-			//不能删除今天之前的记录！
-			if (currentDate != oldDate) {
-				ElMessage.warning(i18n.t("message_error01"));
-				return;
-			}
-		}
-	}
-
-	ElMessageBox.confirm(i18n.t("Message_Confirmdelete"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			trackInfos: []
-		};
-		ids.forEach(item => {
-			jsonString.trackInfos.push({
-				commid: item
-			});
-		});
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		const res = await http.post("/mylims/trackinfo/track!deleteTrackInfo.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("Message_deleteSuccess"));
-			zTable8.value.getTableList();
-		}
-	});
-};
-
-//复制追踪记录
-const CopyTrackingRecord = (ids, selectList) => {
-	if (ids.length > 1) {
-		ElMessage.warning(i18n.t("Message_OnlyCopyOne"));
-		return;
-	}
-	if (selectList[0].reocrdercode != globalStore.userInfo.usercode) {
-		ElMessage.warning(i18n.t("SRM_operationTrack"));
-		return;
-	}
-
-	ElMessageBox.confirm(i18n.t("SRM_copynew"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let params = {
-			"cond.oldcommid": ids[0]
-		};
-		const res = await http.post("/mylims/trackinfo/track!copyTrackInfo.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("messagemdmcodecopysuccess"));
-			zTable8.value.getTableList();
-			let trackInfo = res.trackInfo[0];
-			addTrackingRecordList.commid = trackInfo.commid;
-			addTrackingRecordList.statusType = "new";
-			addTrackingRecordList.success = false;
-			addTrackingRecordList.dialogShow = true;
-		}
-	});
-};
-
-//废弃
-const abandoned_handler = selectList => {
-	abandoned_enable(selectList, "2", "message_error_customers3", "Message_AbandonedYesNo");
-};
-
-//启用
-const enable_handler = selectList => {
-	abandoned_enable(selectList, "0", "message_error_customers5", "Message_Enabled");
-};
-
-//废弃与启用
-const abandoned_enable = (selectList, v, warningTxt, messageBoxTxt) => {
-	let data = [];
-	for (let item of selectList) {
-		if (item.state == v) {
-			ElMessage.warning(item.companyname + i18n.t(warningTxt));
-			return;
-		} else {
-			let obj = {};
-			for (let key in item) {
-				obj[key] = item[key];
-			}
-			obj.state = v;
-			data.push(obj);
-		}
-	}
-	ElMessageBox.confirm(i18n.t(messageBoxTxt), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let params = {
-			jsonString: JSON.stringify({ trackInfos: data })
-		};
-		const res = await http.post("/mylims/trackinfo/track!updateTrackInfo.action", qs.stringify(params));
-		if (res) {
-			ElMessage.success(i18n.t("Message_OperationSuccess"));
-			zTable8.value.getTableList();
-		}
-	});
 };
 
 //页面初始化渲染完成执行

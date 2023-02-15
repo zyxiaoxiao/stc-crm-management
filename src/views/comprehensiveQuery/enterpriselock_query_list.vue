@@ -1,16 +1,6 @@
 <template>
-	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tabPaneName" @tab-change="tabChange">
-			<el-tab-pane
-				title1="客户解锁申请查询"
-				:label="$t('panelUnlockrequestquery')"
-				class="main-tab-pane-content all-height flex-column"
-				name="0"
-			>
-				<zTable ref="zTable1" :tableList="tableList1" @workflow-status="workflowStatus" @link-detailbg="linkDetailbgQuery">
-				</zTable>
-			</el-tab-pane>
-		</el-tabs>
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
+		<zTable ref="zTable1" :tableList="tableList1" @workflow-status="workflowStatus" @link-detailbg="linkDetailbgQuery"> </zTable>
 		<!-- 审核记录 -->
 		<div v-dialogStretching>
 			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
@@ -28,18 +18,10 @@
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
-import { useI18n } from "vue-i18n";
-import qs from "qs";
-import http from "@/api/index.js";
-
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
-
 import audit from "@/views/audit/index.vue";
 import enterpriselockdetailnew from "../customerManage/customerUnlockManagement/enterpriselock_detail_new.vue";
-
-const i18n = useI18n();
 
 const zTable1 = ref();
 //表格对象
@@ -169,15 +151,6 @@ const linkDetailbgQuery = (column, row) => {
 	enterpriselockdetailnewList.success = false;
 	enterpriselockdetailnewList.lockid = row.lockid;
 	enterpriselockdetailnewList.readonly = true;
-};
-
-const tabPaneName = ref("0");
-const tabChange = TabPaneName => {
-	switch (TabPaneName) {
-		case "0":
-			zTable1.value.getTableList();
-			break;
-	}
 };
 
 //页面初始化渲染完成执行

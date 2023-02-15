@@ -52,19 +52,19 @@ let UserTitle = ref(
 );
 
 const logOut = () => {
-	ElMessageBox.confirm("您是否确认退出登录?", "温馨提示", {
-		confirmButtonText: "确定",
-		cancelButtonText: "取消",
+	ElMessageBox.confirm(i18n.t("exitLoginPrompt"), i18n.t("reminder"), {
+		confirmButtonText: i18n.t("SRM_confirm"),
+		cancelButtonText: i18n.t("SRM_cancel"),
 		type: "warning"
 	}).then(() => {
 		router.push({
 			name: "login"
 		});
 		globalStore.setToken("");
-		ElMessage({
-			type: "success",
-			message: "退出登录成功！"
-		});
+		// ElMessage({
+		// 	type: "success",
+		// 	message: "退出登录成功！"
+		// });
 	});
 };
 </script>

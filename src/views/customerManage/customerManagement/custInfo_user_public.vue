@@ -1845,7 +1845,8 @@ const tableList7 = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
-			fixed: "right"
+			fixed: "right",
+			width: "160"
 		}
 	],
 	// 表格数据
@@ -2039,7 +2040,8 @@ const tableList8 = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
-			fixed: "right"
+			fixed: "right",
+			width: "160"
 		}
 	],
 	// 表格数据
@@ -2311,7 +2313,8 @@ const tableList9 = reactive({
 			label: "itemtitleloginoperation",
 			prop: "operation",
 			type: "operation",
-			fixed: "right"
+			fixed: "right",
+			width: "160"
 		}
 	],
 	// 表格数据

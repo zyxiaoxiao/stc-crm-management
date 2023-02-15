@@ -54,6 +54,7 @@ export default {
 	usersex1: "男",
 	editContact: "编辑联系人",
 	enterKeywordsForFiltering: "输入关键字进行过滤",
+	exitLoginPrompt: "您是否确认退出登录?",
 
 	menu_print: "打印",
 	serviceType100: "标准服务",

@@ -54,6 +54,7 @@ export default {
 	usersex1: "Male",
 	editContact: "Edit Contact",
 	enterKeywordsForFiltering: "Enter keywords for filtering",
+	exitLoginPrompt: "Are you sure to log out?",
 
 	menu_print: "Print",
 	serviceType100: "Regular Service",

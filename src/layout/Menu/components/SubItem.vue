@@ -8,7 +8,14 @@
 				</el-icon>
 				<!-- <el-icon v-else> <Link /> </el-icon> -->
 				<i v-else style="margin-right: 10px; font-size: 18px" :class="['iconfont', 'layui-icon-extend-file-list--fill']"></i>
-				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+				<el-tooltip
+					placement="top"
+					effect="light"
+					:show-after="600"
+					:offset="-13"
+					:disabled="!subItem?.showTooltip"
+					:content="$t(subItem.title)"
+				>
 					<span :ref="el => setMenuTextRef(el, subItem.path)" @mouseover="hoverMenu(subItem)" class="menu-i-span">{{
 						$t(subItem.title)
 					}}</span>
@@ -22,14 +29,28 @@
 				<component :is="subItem.icon"></component>
 			</el-icon>
 			<template v-if="!subItem.isLink" #title>
-				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+				<el-tooltip
+					placement="top"
+					effect="light"
+					:show-after="600"
+					:offset="-13"
+					:disabled="!subItem?.showTooltip"
+					:content="$t(subItem.title)"
+				>
 					<span :ref="el => setMenuTextRef(el, subItem.path)" @mouseover="hoverMenu(subItem)" class="menu-i-span">{{
 						$t(subItem.title)
 					}}</span>
 				</el-tooltip>
 			</template>
 			<template v-else #title>
-				<el-tooltip placement="top" effect="light" :offset="-13" :disabled="!subItem?.showTooltip" :content="$t(subItem.title)">
+				<el-tooltip
+					placement="top"
+					effect="light"
+					:show-after="600"
+					:offset="-13"
+					:disabled="!subItem?.showTooltip"
+					:content="$t(subItem.title)"
+				>
 					<a
 						:ref="el => setMenuTextRef(el, subItem.path)"
 						@mouseover="hoverMenu(subItem)"

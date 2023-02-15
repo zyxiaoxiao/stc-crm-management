@@ -179,7 +179,8 @@ const tableColumns1 = [
 		label: "itemtitleloginoperation",
 		prop: "operation",
 		type: "operation",
-		fixed: "right"
+		fixed: "right",
+		width: "160"
 	},
 	{
 		title: "corpid",

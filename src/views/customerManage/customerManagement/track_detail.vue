@@ -165,7 +165,7 @@
 				:name="1"
 			>
 				<zTable v-if="tabPaneXR.get(1)" ref="zTable1" :tableList="tableList" @link-detailbg="downloadfiles">
-					<template #tableHeaderLleft="scope">
+					<!-- <template #tableHeaderLleft="scope">
 						<el-button size="small" type="primary" icon="UploadFilled" plain @click="UploadFilled">
 							{{ $t("menu_upload") }}
 						</el-button>
@@ -178,7 +178,7 @@
 							@click="deleteUpload(scope.ids, scope.selectList)"
 							>{{ $t("menu_deleteupload") }}</el-button
 						>
-					</template>
+					</template> -->
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
