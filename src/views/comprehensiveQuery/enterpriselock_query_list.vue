@@ -1,12 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
-		<zTable ref="zTable1" :tableList="tableList1" @workflow-status="workflowStatus" @link-detailbg="linkDetailbgQuery"> </zTable>
-		<!-- 审核记录 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbgQuery"> </zTable>
 		<!-- 弹出详细界面 -->
 		<div v-dialogStretching>
 			<ZDialog v-model="enterpriselockdetailnewList.dialogShow" width="95%" @close="enterpriselockdetailnewClose">
@@ -20,7 +14,6 @@
 import { ref, reactive, onMounted } from "vue";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import audit from "@/views/audit/index.vue";
 import enterpriselockdetailnew from "../customerManage/customerUnlockManagement/enterpriselock_detail_new.vue";
 
 const zTable1 = ref();
@@ -40,13 +33,6 @@ const tableList1 = reactive({
 			width: "40"
 		},
 		{
-			title: "状态",
-			label: "itemtitlecommondesc11",
-			prop: "processflag",
-			type: "workflowStatus",
-			width: "70"
-		},
-		{
 			title: "id",
 			label: "",
 			prop: "lockid",
@@ -58,6 +44,13 @@ const tableList1 = reactive({
 			title: "客户号",
 			label: "fieldcolumncustomercode",
 			prop: "corpno",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "旧客户号",
+			label: "fieldcolumncustomercodeold",
+			prop: "corpnoold",
 			type: "Input",
 			width: "160"
 		},
@@ -94,41 +87,11 @@ const tableList1 = reactive({
 			prop: "recordtime",
 			type: "DateTime",
 			width: "160"
-		},
-		{
-			title: "corpid",
-			label: "",
-			prop: "corpid",
-			type: "Input",
-			width: "160",
-			isHide: true
-		},
-		{
-			title: "recordercode",
-			label: "",
-			prop: "recordercode",
-			type: "Input",
-			width: "160",
-			isHide: true
 		}
 	],
 	// 表格数据
 	tableData: []
 });
-
-//审核记录
-const auditList = reactive({
-	dialogShow: false,
-	codeid: "",
-	tablename: "MLS_ENTERPRISELOCK",
-	columnid: "lockid"
-});
-
-//工作流审核历史记录
-const workflowStatus = (column, row) => {
-	auditList.codeid = row[auditList.columnid];
-	auditList.dialogShow = true;
-};
 
 //新增 弹出参数
 const enterpriselockdetailnewList = reactive({

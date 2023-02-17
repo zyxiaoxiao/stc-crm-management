@@ -13,32 +13,10 @@
 import { ref, reactive, onMounted } from "vue";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import { useRoute } from "vue-router";
 import { getdropSownSelection } from "@/utils/util.js";
 import custInfouser from "../customerManage/customerManagement/custInfo_user_public.vue";
 
-const route = useRoute();
-//获取路由 meta里面 query 的参数
-let workflowflag = route?.meta?.query?.workflowflag;
-
 const customerCustomertype = getdropSownSelection("customer_customertype");
-//是否
-const whetherAr = getdropSownSelection("whether");
-//归属级别
-let deptlevel = [
-	{
-		label: "tltilecolumndeptlevelbloc",
-		value: "bloc"
-	},
-	{
-		label: "tltilecolumndeptlevelbranch",
-		value: "branch"
-	},
-	{
-		label: "tltilecolumndeptlevelordinary",
-		value: "ordinary"
-	}
-];
 
 // 打开客户信息弹出层参数
 const custInfoUser = reactive({
@@ -50,23 +28,12 @@ const custInfoUser = reactive({
 const zTable1 = ref();
 //表格对象
 const tableList1 = reactive({
-	id: "/comprehensiveQuery/group_query_contract_list.vue_zTable1",
+	id: "/comprehensiveQuery/selectagentinfo.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url:
-			workflowflag == "0"
-				? "/mylims/enterpriseinfo/enterpriseinfo!selectCustomerbyGroupManager.action"
-				: "/mylims/enterpriseinfo/enterpriseinfo!selectEnterpriseInfosByCorpRightOnly.action",
+		url: "/mylims/enterpriseinfo/enterpriseinfo!selectCorpListByAgent.action",
 		root: "enterpriseInfos",
-		baseParams:
-			workflowflag == "0"
-				? {
-						"cond.auditflag": "2",
-						"cond.newcustomtype": "SE"
-				  }
-				: {
-						"cond.auditflag": "2"
-				  }
+		baseParams: {}
 	},
 	//表格表头
 	tableColumns: [
@@ -78,6 +45,13 @@ const tableList1 = reactive({
 			title: "客户号",
 			label: "fieldcolumncustomercode",
 			prop: "corpno",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "旧客户号",
+			label: "fieldcolumncustomercodeold",
+			prop: "corpnoold",
 			type: "Input",
 			width: "160"
 		},
@@ -95,27 +69,6 @@ const tableList1 = reactive({
 			type: "Select",
 			width: "185",
 			typeData: customerCustomertype
-		},
-		{
-			title: "归属分公司",
-			label: "corpinfoSubordinateToBranchtitle",
-			prop: "branchcorpdesc",
-			type: "Input",
-			width: "200"
-		},
-		{
-			title: "归属部门",
-			label: "corpinfopaneldepartmentdesctitle",
-			prop: "departmentdesc",
-			type: "Input",
-			width: "200"
-		},
-		{
-			title: "所属SE",
-			label: "columnbaseblongtose",
-			prop: "salesmandesc",
-			type: "Input",
-			width: "200"
 		},
 		{
 			title: "代理商名称",

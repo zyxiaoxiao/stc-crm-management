@@ -13,13 +13,8 @@
 import { ref, reactive, onMounted } from "vue";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import { useRoute } from "vue-router";
 import { getdropSownSelection } from "@/utils/util.js";
 import custInfouser from "../customerManage/customerManagement/custInfo_user_public.vue";
-
-const route = useRoute();
-//获取路由 meta里面 query 的参数
-let workflowflag = route?.meta?.query?.workflowflag;
 
 const customerCustomertype = getdropSownSelection("customer_customertype");
 //是否
@@ -50,23 +45,12 @@ const custInfoUser = reactive({
 const zTable1 = ref();
 //表格对象
 const tableList1 = reactive({
-	id: "/comprehensiveQuery/group_query_contract_list.vue_zTable1",
+	id: "/comprehensiveQuery/enterpriselock_list_query.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url:
-			workflowflag == "0"
-				? "/mylims/enterpriseinfo/enterpriseinfo!selectCustomerbyGroupManager.action"
-				: "/mylims/enterpriseinfo/enterpriseinfo!selectEnterpriseInfosByCorpRightOnly.action",
+		url: "/mylims/enterpriseinfo/enterpriseinfo!selectCustomerForMyCustomer.action",
 		root: "enterpriseInfos",
-		baseParams:
-			workflowflag == "0"
-				? {
-						"cond.auditflag": "2",
-						"cond.newcustomtype": "SE"
-				  }
-				: {
-						"cond.auditflag": "2"
-				  }
+		baseParams: { "cond.lockflag": "1" }
 	},
 	//表格表头
 	tableColumns: [
@@ -95,6 +79,14 @@ const tableList1 = reactive({
 			type: "Select",
 			width: "185",
 			typeData: customerCustomertype
+		},
+		{
+			title: "归属级别",
+			label: "columnlevelattribution",
+			prop: "deptlevel",
+			type: "Select",
+			width: "185",
+			typeData: deptlevel
 		},
 		{
 			title: "归属分公司",
@@ -128,6 +120,13 @@ const tableList1 = reactive({
 			title: "电话",
 			label: "itemtitlebase_usertel",
 			prop: "corpphone",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "电子邮件",
+			label: "corpinfopanelemailtitle",
+			prop: "corpemail",
 			type: "Input",
 			width: "160"
 		},
