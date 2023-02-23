@@ -10,9 +10,9 @@
 		</template>
 	</el-dropdown>
 
-	<!-- infoDialog -->
+	<!-- infoDialog  个人资料 -->
 	<InfoDialog ref="infoRef"></InfoDialog>
-	<!-- passwordDialog -->
+	<!-- passwordDialog  修改密码-->
 	<PasswordDialog ref="passwordRef"></PasswordDialog>
 
 	<div class="logOut screen-full" @click="logOut">
@@ -36,14 +36,14 @@ const i18n = useI18n();
 const infoRef = ref(null);
 const passwordRef = ref(null);
 
-// 打开修改密码和个人信息弹窗
-// const openDialog = (refName) => {
-// 	if (refName == "infoRef") {
-// 		infoRef.value?.openDialog();
-// 	} else {
-// 		passwordRef.value?.openDialog();
-// 	}
-// }
+//打开修改密码和个人信息弹窗;
+const openDialog = refName => {
+	if (refName == "infoRef") {
+		infoRef.value?.openDialog();
+	} else {
+		passwordRef.value?.openDialog();
+	}
+};
 
 let UserTitle = ref(
 	globalStore.userInfo.corpdesc + " ( " + globalStore.userInfo.usercode + " ) " + globalStore.userInfo.userdesc
