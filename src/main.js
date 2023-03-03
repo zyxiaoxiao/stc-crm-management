@@ -15,6 +15,9 @@ import * as ElementPlusIconsVue from "@element-plus/icons-vue";
 // vue i18n
 import I18n from "./language/index.js";
 
+// echarts
+import echarts from "./echarts/index.js";
+
 import { s3Layer } from "vue3-layer";
 import "vue3-layer/dist/s3Layer.css";
 
@@ -31,6 +34,8 @@ import "./styles/reset.scss";
 import "./styles/common.scss";
 
 const app = createApp(App);
+
+app.config.globalProperties.$echarts = echarts;
 app.component("s3-layer", s3Layer);
 app.use(ElementPlus, {});
 app.use(router);

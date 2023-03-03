@@ -6,6 +6,41 @@
   "description": "layui图标扩展",
   "glyphs": [
     {
+      "icon_id": "10595628",
+      "name": "待办-暂停-流程状态_jurassic",
+      "font_class": "jurassic_todo",
+      "unicode": "e6c2",
+      "unicode_decimal": 59074
+    },
+    {
+      "icon_id": "903803",
+      "name": "降价通知ICON",
+      "font_class": "jiangjiatongzhiicon",
+      "unicode": "e669",
+      "unicode_decimal": 58985
+    },
+    {
+      "icon_id": "14294141",
+      "name": "待办",
+      "font_class": "daiban1",
+      "unicode": "e61c",
+      "unicode_decimal": 58908
+    },
+    {
+      "icon_id": "826122",
+      "name": "进入导播",
+      "font_class": "jinrudaobo",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "17088480",
+      "name": "档案审批",
+      "font_class": "shenpi-weixuanzhong3x",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
       "icon_id": "8554554",
       "name": "file-list-3-fill",
       "font_class": "file-list--fill",

@@ -5,12 +5,19 @@
 </template>
 
 <script setup name="App">
-import { reactive, computed } from "vue";
+import { reactive, computed, provide } from "vue";
 import { GlobalStore } from "./store/globalStore.js";
+// echarts
+import * as echarts from "echarts";
 // 配置element中英文
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { BodyHeightStore } from "/src/store/bodyHeight.js";
+
+//因为setup中没有this, 而且这时候还没有渲染, 所以在setup中, 也可以使用provide 把echarts引入进来.
+//在根组件里引入echarts.
+//在子组件通过inject来使用echarts
+provide("echarts", echarts);
 
 const globalStore = GlobalStore();
 // 配置element按钮文字中间是否有空格

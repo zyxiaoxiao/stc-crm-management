@@ -12,7 +12,7 @@ const homeRouter = [
 				name: "home",
 				component: () => import("/src/views/home/index.vue"),
 				meta: {
-					keepAlive: true, //是否缓存页面
+					keepAlive: false, //是否缓存页面
 					requiresAuth: true, //true需要登录才能访问
 					title: "itemtitleloginpage", //"首页",
 					key: "home"

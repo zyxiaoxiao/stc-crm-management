@@ -17,12 +17,14 @@
 		padding: 10px 12px;
 		/* 防止切换出现横向滚动条 */
 		overflow-x: hidden;
-		background: #f0f2f5;
+		background: #f5f5f5;
+		//background: #f0f2f5;
 		&::-webkit-scrollbar {
-			background-color: #f0f2f5;
+			background-color: #f5f5f5;
+			//background-color: #f0f2f5;
 		}
 	}
-	
+
 	// .el-main {
 	// 	box-sizing: border-box;
 	// 	padding: 10px 13px;

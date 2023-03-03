@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3116119 */
-  src: url('iconfont.woff2?t=1673334318282') format('woff2'),
-       url('iconfont.woff?t=1673334318282') format('woff'),
-       url('iconfont.ttf?t=1673334318282') format('truetype');
+  src: url('iconfont.woff2?t=1677144782317') format('woff2'),
+       url('iconfont.woff?t=1677144782317') format('woff'),
+       url('iconfont.ttf?t=1677144782317') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,26 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.layui-icon-extend-jurassic_todo:before {
+  content: "\e6c2";
+}
+
+.layui-icon-extend-jiangjiatongzhiicon:before {
+  content: "\e669";
+}
+
+.layui-icon-extend-daiban1:before {
+  content: "\e61c";
+}
+
+.layui-icon-extend-jinrudaobo:before {
+  content: "\e614";
+}
+
+.layui-icon-extend-shenpi-weixuanzhong3x:before {
+  content: "\e628";
 }
 
 .layui-icon-extend-file-list--fill:before {

@@ -766,7 +766,14 @@
 					</el-form>
 				</div>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="vmaps" width="700px" style="" :tableList="ptableList" @row-click="itemViewCellClick" @link-detailbg="linkDetailbg">
+					<zTable
+						ref="vmaps"
+						width="700px"
+						style=""
+						:tableList="ptableList"
+						@row-click="itemViewCellClick"
+						@link-detailbg="linkDetailbg"
+					>
 					</zTable>
 				</div>
 			</el-tab-pane>
@@ -1245,7 +1252,7 @@ import { downloadFile } from "/src/utils/fileUtil.js";
 import { GlobalStore } from "/src/store/globalStore.js";
 //弹出报错或者提示框
 import { ElMessageBox, ElMessage, ElInputNumber, ElInput } from "element-plus";
-import resizeDetector from "element-resize-detector";
+
 //选择委托单
 import customerQuery from "@/views/appointmentManage/appointmentApplication/appointment_enterprise.vue";
 //选择联系人
@@ -1273,7 +1280,7 @@ import historyapplication from "@/views/appointmentManage/appointmentApplication
 //历史报价检测项查询
 import historyapplicationitme from "@/views/appointmentManage/appointmentApplication/appointment_his.vue";
 //newItemApplintmentQuery
-const erd = resizeDetector();
+
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
@@ -1759,20 +1766,20 @@ const approveAppointmentInfo = code => {
 		confirmButtonText: i18n.t("menu_ok"),
 		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
-		let cond = {'opinion':approveValue.value};
+		let cond = { opinion: approveValue.value };
 		let jsonString = {
-			reservnum:formData.reservnum,
-			'cond':cond
+			reservnum: formData.reservnum,
+			cond: cond
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
 		let url = "";
-		if(code == "-1"){
+		if (code == "-1") {
 			url = "/mylims/order/appointment!reject.action";
-		}else if(code == "-2"){
+		} else if (code == "-2") {
 			url = "/mylims/order/appointment!reject2Submitor.action";
-		}else{
+		} else {
 			url = "/mylims/order/appointment!approve.action";
 		}
 		const res = await http.post(url, qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
@@ -1785,7 +1792,6 @@ const approveAppointmentInfo = code => {
 		}
 	});
 };
-
 
 const savenewAppointmentInfo = async () => {
 	formData.status = "Create";
@@ -2269,8 +2275,9 @@ const deleteUpload = (ids, selectList) => {
 };
 
 const itemViewCellClick = (row, column, cell, event) => {
-	if(!ptableList.edit){//表单不可编辑就退回去
-        return;
+	if (!ptableList.edit) {
+		//表单不可编辑就退回去
+		return;
 	}
 	if (row.FENBAO == "Y" || workflowflag == "3" || v_readonly == "true") {
 		//分包单审核状态和只读都不可以修改
@@ -3748,7 +3755,7 @@ const dialogShow = data => {
 
 //切换tab时触发
 const tabChange = targetName => {
-    if (targetName == "info") {
+	if (targetName == "info") {
 		if (workflowflag == "1") {
 			isbtnShow.value = true;
 			saveShow.value = true;
@@ -3775,7 +3782,7 @@ const tabChange = targetName => {
 	} else if (targetName == "price") {
 		if (workflowflag == 1) {
 			itemShow.value = true;
-			ptableList.edit = true;//等于1说明是创建时可编辑
+			ptableList.edit = true; //等于1说明是创建时可编辑
 		} else if (workflowflag == 2 || confirm == "true") {
 			approveShow.value = true; //审核按钮
 			isdisabled.value = true; //表单只读
@@ -3789,15 +3796,15 @@ const tabChange = targetName => {
 			isdisabled.value = true;
 		}
 		let reservnum = formData.reservnum;
-		if (!reservnum) {			
+		if (!reservnum) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("alert_saveclient")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
-            return false;
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("alert_saveclient")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
+			return false;
 		}
 		let exchangerate = formData.desc54;
 		if (!exchangerate) {
@@ -3821,11 +3828,11 @@ const tabChange = targetName => {
 		if (!reservnum) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("alert_saveclient")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("alert_saveclient")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
 			return false;
 		} else {
 			accountTableList.httpAttribute.baseParams["cond.reservnum"] = reservnum;
@@ -3850,18 +3857,18 @@ const tabChange = targetName => {
 		if (!desc53) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("message_CurrencySave")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("message_CurrencySave")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
 			return false;
 		}
 		if (workflowflag == 1) {
 			saveOtherShow.value = true;
 			otherShow.value = true;
 			submitShow.value = true;
-			otherTableList.edit = true;//等于1说明是创建时可编辑
+			otherTableList.edit = true; //等于1说明是创建时可编辑
 		} else if (workflowflag == 2) {
 			approveShow.value = true;
 			isdisabled.value = true;
@@ -3873,11 +3880,11 @@ const tabChange = targetName => {
 		if (!status) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("message_CurrencySave")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("message_CurrencySave")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
 			return false;
 		}
 		if (reservnum) {
@@ -3901,11 +3908,11 @@ const tabChange = targetName => {
 		if (!reservnum) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("alert_saveclient")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("alert_saveclient")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
 			return false;
 		}
 		if (desc90 == "N") {
@@ -3932,11 +3939,11 @@ const tabChange = targetName => {
 		if (!reservnum) {
 			setTimeout(() => {
 				ElMessage({
-				type: i18n.t("Message_OperationTip"),
-				message: i18n.t("alert_saveclient")
-			    });
-			   tableTabsValue.value = "info"; //切换报价单信息页面
-		    }, 100);
+					type: i18n.t("Message_OperationTip"),
+					message: i18n.t("alert_saveclient")
+				});
+				tableTabsValue.value = "info"; //切换报价单信息页面
+			}, 100);
 			return false;
 		} else {
 			fileTableList.httpAttribute.baseParams["cond.businessobjectid"] = reservnum;
