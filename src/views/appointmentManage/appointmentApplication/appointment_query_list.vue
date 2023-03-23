@@ -470,32 +470,6 @@ onMounted(() => {
 	grid_appointmentInfos.value.getTableList();
 });
 
-const formData1 = reactive({
-	// reservnum: props.condobj.reservnum ?? "",
-	// desc15: props.condobj.desc15 ?? "",
-	// desc13: props.condobj.desc13 ?? "",
-	// desc21: props.condobj.desc21 ?? "",
-	// sampledesc: props.condobj.sampledesc ?? "",
-	// desc49: props.condobj.desc49 ?? "",
-	// discountrate: props.condobj.discountrate ?? "",
-	// desc35: props.condobj.desc35 ?? "",
-	// desc36: props.condobj.desc36 ?? "",
-	// desc33: props.condobj.desc33 ?? "",
-	// desc53: props.condobj.desc53 ?? "",
-	// desc34: props.condobj.desc34 ?? "",
-	// desc18: props.condobj.desc18 ?? "",
-	// desc81: props.condobj.desc81 ?? "",
-	// desc82: props.condobj.desc82 ?? "",
-	// accountid: props.condobj.accountid ?? "",
-	// samplesender: props.condobj.samplesender ?? "",
-	// accounttype: props.condobj.accounttype ?? "",
-	// recordercode: props.condobj.recordercode ?? "",
-	// recorderdesc: props.condobj.recorderdesc ?? "",
-	// recordertime: props.condobj.recordertime ?? "",
-	// desc93: props.condobj.desc93 ?? "",
-	// desc71: props.condobj.desc71 ?? ""
-});
-
 //表格对象报价申请
 const atableList = reactive({
 	id: "/appointmentManage/appointmentApplication/appointment_query_list.vue_grid_appointmentInfos",
@@ -510,7 +484,7 @@ const atableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -882,7 +856,7 @@ const htableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -1270,7 +1244,7 @@ const dtableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -1657,7 +1631,7 @@ const utableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -2043,7 +2017,7 @@ const discard_tableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

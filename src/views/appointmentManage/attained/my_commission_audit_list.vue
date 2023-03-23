@@ -80,9 +80,6 @@ onMounted(() => {
 	grid_brokerageInfos.value.getTableList();
 });
 
-const formData1 = reactive({
-});
-
 //表格对象审核提佣
 const atableList = reactive({
 	id: "/appointmentManage/attained/my_commission_audit_list.vue_grid_brokerageInfos",
@@ -96,7 +93,7 @@ const atableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -338,7 +335,7 @@ const htableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

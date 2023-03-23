@@ -191,8 +191,6 @@ onMounted(() => {
 	grid_invoiceInfos2.value.getTableList();
 });
 
-const formData1 = reactive({});
-
 //表格对象税票
 const invoicetableList2 = reactive({
 	id: "/writeoffManage/invoice/invoice_edit_list2.vue_grid_invoiceInfos2",
@@ -205,7 +203,7 @@ const invoicetableList2 = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -457,7 +455,7 @@ const revoketableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -709,7 +707,7 @@ const htableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

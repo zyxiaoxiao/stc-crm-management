@@ -3,24 +3,16 @@
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				name="cinfos"
-				:label="$t('menubasequotationconfirm')"
-				title1="报价确认"
+				name="ainfos"
+				:label="$t('menubaseQuotedQuery')"
+				title1="报价查询"
 			>
 				<zTable
-					ref="grid_confirmappointmentInfos"
+					ref="grid_appointmentInfosQuery"
 					:tableList="atableList"
-					@link-detailbg="linkDetailquey"
+					@link-detailbg="linkDetailbg"
 					@workflow-status="workflowStatus"
 				>
-					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="success" icon="Check" plain @click="passAppointmentInfo('0', scope.selectList)">{{
-							$t("menu_passconfirm")
-						}}</el-button>
-						<el-button size="small" type="danger" icon="Close" plain @click="passAppointmentInfo('1', scope.selectList)">{{
-							$t("menu_refuseconfirm")
-						}}</el-button>
-					</template>
 					<!-- 表格操作 -->
 					<template #operation="scope">
 						<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
@@ -31,12 +23,12 @@
 			</el-tab-pane>
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				:label="$t('crmcolumnconfirmquery')"
-				title1="报价确认查询"
-				name="cquery"
+				:label="$t('crm_UnprocessedQuotationInquiry')"
+				title1="过期报价单查询"
+				name="query"
 			>
 				<zTable
-					ref="grid_queryAppointmentInfos"
+					ref="grid_appointmentInfosOverdueQuery"
 					:tableList="htableList"
 					@link-detailbg="linkDetailquey"
 					@workflow-status="workflowStatus"
@@ -56,8 +48,8 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
-				<appointmentNew :condobj="condobj"></appointmentNew>
+			<ZDialog v-model="condobj.dialogShow_appointmentNew" @close="appointmentNewclose" width="95%">
+				<appointmentReadonly :condobj="condobj"></appointmentReadonly>
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
@@ -68,13 +60,6 @@
 							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
 							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
 							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
 						</el-radio-group>
 					</el-form-item>
 					<el-form-item
@@ -101,30 +86,38 @@
 </template>
 
 <script setup>
-import { h, ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
 import zTable from "/src/components/ZTable/index.vue";
-import { ElMessageBox, ElMessage, ElDatePicker } from "element-plus";
+import { ElMessage } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import moment from "moment";
-import appointmentNew from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
+import appointmentReadonly from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
 
 const i18n = useI18n();
-const grid_confirmappointmentInfos = ref();
-const grid_queryAppointmentInfos = ref();
+const grid_appointmentInfosQuery = ref();//报价查询
+const grid_appointmentInfosOverdueQuery = ref();//过期报价单查询
 
-let v_reservnum = ""; //报价单号
 let businesstype = "10"; //报价类型
 
-const tableTabsValue = ref("cinfos");
+const tableTabsValue = ref("ainfos");
 const globalStore = GlobalStore();
 let attestation = ref("01"); //下载报价单认证类型默认值
 let certificationshow = ref(false); //认证类型默认不显示
 const plain = ref("CN"); //下载默认选中
+
+//审核记录
+const dialogShow_audit = ref(false);
+const auditList = reactive({
+	dialogShow_audit: false,
+	codeid: "",
+	tablename: "MLS_APPOINTMENT",
+	columnid: "reservnum"
+});
+
 //认证类型下拉值
 const attestationData = [
 	{
@@ -152,15 +145,6 @@ const attestationData = [
 		label: "Safety Mark"
 	}
 ];
-
-//审核记录
-const dialogShow_audit = ref(false);
-const auditList = reactive({
-	dialogShow_audit: false,
-	codeid: "",
-	tablename: "MLS_APPOINTMENT",
-	columnid: "reservnum"
-});
 
 //下载弹出对话框
 let dialogFormVisible = ref(false);
@@ -208,24 +192,26 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
-//dialog的是否显示
-const dialogShow_customerListQuery = ref(false);
+//dialog的是否显示报价单详细信息
 const dialogShow_appointmentNew = ref(false);
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	grid_confirmappointmentInfos.value.getTableList();
+	grid_appointmentInfosQuery.value.getTableList();
 });
 
-//表格对象报价审核
+//表格对象报价查询
 const atableList = reactive({
-	id: "/appointmentManage/appointmentApplication/confirm_list_query.vue_grid_confirmappointmentInfos",
+	id: "/comprehensiveQuery/appointment_integratedquery_list.vue_grid_appointmentInfosQuery",
 	//请求属性设置
 	httpAttribute: {
-		url: "/mylims/order/appointment!selectAppointmentInfoConfirmByconfirmedflag.action",
+		url: "/mylims/order/appointment!selectIntegratedAppointmentquery.action",
 		root: "appointmentInfos",
 		baseParams: {
-			"cond.condition": "0"
+			"cond.auditflag": "1,2",
+			"cond.businesstype": "10",
+			"cond.condition": "0",
+			"cond.Q_Query_All": "Y"
 		}
 	},
 	//快捷查询
@@ -249,6 +235,13 @@ const atableList = reactive({
 			prop: "reservnum",
 			type: "Link",
 			width: "160"
+		},
+        {
+			title: "申请单号",
+			label: "columntolockapplynum",
+			prop: "folderno",
+			type: "Input",
+			width: "140"
 		},
 		{
 			title: "报价单下载",
@@ -586,16 +579,18 @@ const atableList = reactive({
 	tableData: []
 });
 
-//表格对象审核报价单查询
+//表格对象过期报价单查询
 const htableList = reactive({
-	id: "/appointmentManage/appointmentApplication/confirm_list_query.vue_grid_queryAppointmentInfos",
+	id: "/comprehensiveQuery/appointment_integratedquery_list.vue_grid_appointmentInfosOverdueQuery",
 	//请求属性设置
 	httpAttribute: {
-		url: "/mylims/order/appointment!selectAppointmentInfoConfirmByConfirmynflag.action",
+		url: "/mylims/order/appointment!selectIntegratedAppointmentquery.action",
 		root: "appointmentInfos",
 		baseParams: {
-			"cond.confirmynflag": "(1,2)",
-			"cond.condition": "0"
+			"cond.auditflag": "1,2",
+			"cond.businesstype": "10",
+			"cond.condition": "1",
+			"cond.Q_Query_All": "Y"
 		}
 	},
 	//快捷查询
@@ -977,6 +972,12 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
+//新增子页面关闭后的方法可以给父页面赋值等操作
+const appointmentNewclose = () => {
+	//选择联系人的关闭窗口后的事件
+	grid_appointmentInfosQuery.value.getTableList();
+};
+
 let returnValue = {};
 let getappointmentNow = async (workflowflag, reservnums) => {
 	if (!reservnums) {
@@ -991,7 +992,8 @@ let getappointmentNow = async (workflowflag, reservnums) => {
 		returnValue = res;
 		//报价信息
 		condobj.cond = {
-			workflowflag: workflowflag,
+			//workflowflag: workflowflag,
+			v_readonly: "true",
 			reservnum: reservnums,
 			defaulttax: returnValue.defaulttax,
 			isdefaulttax: returnValue.isdefaulttax
@@ -1000,51 +1002,11 @@ let getappointmentNow = async (workflowflag, reservnums) => {
 	}
 };
 
-//确认报价单信息
-const passAppointmentInfo = (code, selectList) => {
-	if (selectList != null && selectList.length < 1) {
-		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
-		return;
+//链接详细信息
+const linkDetailbg = (column, row) => {
+	if (column == "reservnum" && row.reservnum) {
+		getappointmentNow("3", row.reservnum);
 	}
-	let d = moment(new Date()).format("YYYY-MM-DD");
-	let approveValue = ref(d);
-	ElMessageBox({
-		title: i18n.t("Message_PleaeEnterAuditOpinion"),
-		message: () =>
-			h(ElDatePicker, {
-				modelValue: approveValue.value,
-				type: "date",
-				valueFormat: "YYYY-MM-DD",
-				autosize: { minRows: 4 },
-				"onUpdate:modelValue": val => {
-					approveValue.value = val;
-				}
-			}),
-		showCancelButton: true,
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel")
-	}).then(async () => {
-		let cond = {
-			date_confirm: approveValue.value
-		};
-		let jsonString = {
-			appointmentInfos: selectList,
-			cond: cond
-		};
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		let url = "";
-		if (code == "1") {
-			url = "/mylims/order/appointment!refuseAppointmentInfos.action";
-		} else {
-			url = "/mylims/order/appointment!passAppointmentInfos.action";
-		}
-		const res = await http.post(url, qs.stringify(params));
-		if (res) {
-			grid_confirmappointmentInfos.value.getTableList();
-		}
-	});
 };
 
 //链接详细信息
@@ -1056,12 +1018,12 @@ const linkDetailquey = (column, row) => {
 
 //切换tab时触发
 const tabChange = targetName => {
-	if (targetName == "cinfos") {
-		//报价单审核子页面
-		grid_confirmappointmentInfos.value.getTableList();
-	} else if (targetName == "cquery") {
-		//审核历史报价单查询子页面
-		grid_queryAppointmentInfos.value.getTableList();
+	if (targetName == "ainfos") {
+		//报价单查询
+		grid_appointmentInfosQuery.value.getTableList();
+	} else if (targetName == "query") {
+		//过期报价单查询
+		grid_appointmentInfosOverdueQuery.value.getTableList();
 	}
 };
 </script>

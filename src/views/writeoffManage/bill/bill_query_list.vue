@@ -4,8 +4,8 @@
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="billsinfos"
-				:label="$t('billinfoqueryaccountinformationtitle')"
-				title1="到账信息查询"
+				:label="$t('billinfoaccountinformationtitle')"
+				title1="到账信息"
 			>
 				<zTable ref="grid_billInfos" :tableList="billtableList" @link-detailbg="linkDetail" @workflow-status="workflowStatus">
 					<template #tableHeaderLleft="scope">
@@ -170,7 +170,6 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { downloadFile } from "/src/utils/fileUtil.js";
 import qs from "qs";
 import http from "@/api/index.js";
-import moment from "moment";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
 import billdetailNew from "@/views/writeoffManage/bill/bill_detail.vue";
@@ -199,16 +198,6 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
-let costtype = [
-	{
-		value: "0",
-		label: i18n.t("basecolumnmonthly_commission")
-	},
-	{
-		value: "1",
-		label: i18n.t("basecolumncombined_commission")
-	}
-];
 let crm_skfs = getdropSownSelection("CRM_skfs"); //收款方式下拉
 const excelform = ref({
 	eradio: "2007"

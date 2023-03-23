@@ -441,8 +441,6 @@ onMounted(() => {
 	grid_combinedInfos.value.getTableList();
 });
 
-const formData1 = reactive({});
-
 //表格对象申请提佣
 const atableList = reactive({
 	id: "/appointmentManage/commission/sales_commission_query_list.vue_grid_combinedInfos",
@@ -456,7 +454,7 @@ const atableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -812,7 +810,7 @@ const htableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -1170,7 +1168,7 @@ const automatictableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

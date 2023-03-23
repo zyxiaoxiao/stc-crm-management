@@ -432,7 +432,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="itemShow"
+						v-if="itemShow"
 						type="primary"
 						icon="Document"
 						plain
@@ -442,7 +442,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="itemShow"
+						v-if="itemShow"
 						type="primary"
 						icon="Coin"
 						@click="readDiscountApplintment()"
@@ -452,7 +452,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="itemShow"
+						v-if="itemShow"
 						type="primary"
 						icon="ZoomIn"
 						@click="dialogShow('dialogShow_newItemApplintment')"
@@ -462,7 +462,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="itemShow"
+						v-if="itemShow"
 						type="danger"
 						icon="Delete"
 						@click="deleteItemItemApplintment()"
@@ -472,7 +472,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="itemShow"
+						v-if="itemShow"
 						type="primary"
 						@click="dialogShow('dialogShow_selectFoldernoApplintment')"
 						icon="ZoomIn"
@@ -482,7 +482,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="submitShow"
+						v-if="submitShow"
 						type="success"
 						icon="Check"
 						plain
@@ -492,7 +492,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="approveShow"
+						v-if="approveShow"
 						type="success"
 						icon="Check"
 						plain
@@ -502,7 +502,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="approveShow"
+						v-if="approveShow"
 						type="danger"
 						icon="Close"
 						plain
@@ -512,7 +512,7 @@
 					<el-button
 						size="small"
 						class="button_show"
-						v-show="approveShow"
+						v-if="approveShow"
 						type="danger"
 						icon="Close"
 						plain
@@ -721,7 +721,7 @@
 							</el-col>
 							<el-col :span="4">
 								<el-form-item :label="$t('appointmentcrmformfbjg') + ':'" title1="分包外币价格" prop="DESC32">
-									<el-input type="text" v-model="formData2.DESC32" readOnly></el-input>
+									<el-input type="text" v-model="formData2.DESC32" readonly></el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="4">
@@ -762,7 +762,6 @@
 								</el-form-item>
 							</el-col>
 						</el-row>
-						<el-divider></el-divider>
 					</el-form>
 				</div>
 				<div class="flex-column" style="flex: 1; overflow: auto">
@@ -771,7 +770,7 @@
 						width="700px"
 						style=""
 						:tableList="ptableList"
-						@row-click="itemViewCellClick"
+						@cell-click="itemViewCellClick"
 						@link-detailbg="linkDetailbg"
 					>
 					</zTable>
@@ -1252,7 +1251,7 @@ import { downloadFile } from "/src/utils/fileUtil.js";
 import { GlobalStore } from "/src/store/globalStore.js";
 //弹出报错或者提示框
 import { ElMessageBox, ElMessage, ElInputNumber, ElInput } from "element-plus";
-
+import resizeDetector from "element-resize-detector";
 //选择委托单
 import customerQuery from "@/views/appointmentManage/appointmentApplication/appointment_enterprise.vue";
 //选择联系人
@@ -1263,7 +1262,7 @@ import customerAddressQuery from "@/views/appointmentManage/appointmentApplicati
 import customerReportQuery from "@/views/appointmentManage/appointmentApplication/selectCorpreport.vue";
 //附件上传页面
 import uploadnewQuery from "@/views/appointmentManage/appointmentApplication/selectUploadnew.vue";
-//附件上传页面
+//分包部门
 import deptSubpackageApplintmentQuery from "@/views/appointmentManage/appointmentApplication/appointment_query_dispersedquote.vue";
 //分包单详细信息查询
 import appointmentReadonlyTo from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
@@ -1280,7 +1279,7 @@ import historyapplication from "@/views/appointmentManage/appointmentApplication
 //历史报价检测项查询
 import historyapplicationitme from "@/views/appointmentManage/appointmentApplication/appointment_his.vue";
 //newItemApplintmentQuery
-
+const erd = resizeDetector();
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
@@ -2275,11 +2274,16 @@ const deleteUpload = (ids, selectList) => {
 };
 
 const itemViewCellClick = (row, column, cell, event) => {
+	console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+	console.log(v_readonly);
+	console.log(workflowflag);
+	console.log(column.property);
 	if (!ptableList.edit) {
 		//表单不可编辑就退回去
 		return;
 	}
 	if (row.FENBAO == "Y" || workflowflag == "3" || v_readonly == "true") {
+		row.isEdit[column.property] = false;
 		//分包单审核状态和只读都不可以修改
 		return;
 	}
@@ -2426,7 +2430,7 @@ const dialogShow_customerListQuery = ref(false);
 const ptableList = reactive({
 	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_vmaps",
 	//表单可编辑
-	edit: false,
+	edit: true,
 	//设置 为单选
 	tableToolbar: {
 		right: false
@@ -3551,13 +3555,6 @@ const reportDialogclose = () => {
 		formData.paymentaddress = condobj.objlist.address;
 	}
 };
-//子页面关闭后的方法可以给父页面赋值等操作
-const deptSubpackageApplintmentDialogclose = () => {
-	//选择报告抬头后关闭回调
-	if (condobj && condobj.objlist.id) {
-		formData.paymentaddress = condobj.objlist.address;
-	}
-};
 
 //子页面关闭后的方法可以给父页面赋值等操作
 const uploadnewDialogclose = () => {
@@ -3780,20 +3777,21 @@ const tabChange = targetName => {
 			isdisabled.value = true;
 		}
 	} else if (targetName == "price") {
-		if (workflowflag == 1) {
+		if (workflowflag == "1") {
 			itemShow.value = true;
 			ptableList.edit = true; //等于1说明是创建时可编辑
-		} else if (workflowflag == 2 || confirm == "true") {
+		} else if (workflowflag == "2" || confirm == "true") {
 			approveShow.value = true; //审核按钮
 			isdisabled.value = true; //表单只读
-		} else if (workflowflag == 3 || v_split == 1) {
+		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		}
 		if (pkm_run) {
 			pkm_hind.value = 8;
 		}
-		if (v_readonly) {
+		if (v_readonly == "true") {
 			isdisabled.value = true;
+			ptableList.edit = false;
 		}
 		let reservnum = formData.reservnum;
 		if (!reservnum) {
@@ -3838,12 +3836,12 @@ const tabChange = targetName => {
 			accountTableList.httpAttribute.baseParams["cond.reservnum"] = reservnum;
 			accountInfos.value.reuseTableList();
 		}
-		if (workflowflag == 1) {
+		if (workflowflag == "1") {
 			accountShow.value = true;
-		} else if (workflowflag == 2) {
+		} else if (workflowflag == "2") {
 			approveShow.value = true;
 			isdisabled.value = true;
-		} else if (workflowflag == 3 || v_split == 1) {
+		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		} else if (confirm == "true") {
 			isdisabled.value = true;
@@ -3864,15 +3862,15 @@ const tabChange = targetName => {
 			}, 100);
 			return false;
 		}
-		if (workflowflag == 1) {
+		if (workflowflag == "1") {
 			saveOtherShow.value = true;
 			otherShow.value = true;
 			submitShow.value = true;
 			otherTableList.edit = true; //等于1说明是创建时可编辑
-		} else if (workflowflag == 2) {
+		} else if (workflowflag == "2") {
 			approveShow.value = true;
 			isdisabled.value = true;
-		} else if (workflowflag == 3 || v_split == 1) {
+		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		} else if (confirm == "true") {
 		}
@@ -3892,13 +3890,13 @@ const tabChange = targetName => {
 			otherInfos.value.reuseTableList();
 		}
 	} else if (targetName == "subpackage") {
-		if (workflowflag == 1) {
+		if (workflowflag == "1") {
 			subpackageShow.value = true;
 			submitShow.value = true;
-		} else if (workflowflag == 2) {
+		} else if (workflowflag == "2") {
 			approveShow.value = true;
 			isdisabled.value = true;
-		} else if (workflowflag == 3 || v_split == 1) {
+		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		}
 		if (confirm == "true") {
@@ -3924,13 +3922,13 @@ const tabChange = targetName => {
 			approveShow.value = false;
 		}
 	} else if (targetName == "file") {
-		if (workflowflag == 1) {
+		if (workflowflag == "1") {
 			fileShow.value = true;
 			submitShow.value = true;
-		} else if (workflowflag == 2) {
+		} else if (workflowflag == "2") {
 			approveShow.value = true;
 			isdisabled.value = true;
-		} else if (workflowflag == 3 || v_split == 1) {
+		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		}
 		if (confirm == "true") {

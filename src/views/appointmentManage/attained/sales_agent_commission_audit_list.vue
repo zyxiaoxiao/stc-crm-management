@@ -162,8 +162,6 @@ onMounted(() => {
 	grid_salesagentbrokerageInfos_query.value.getTableList();
 });
 
-const formData1 = reactive({});
-
 //表格对象审核代理提佣
 const atableList = reactive({
 	id: "/appointmentManage/attained/sales_agent_commission_audit_list.vue_grid_salesagentbrokerageInfos_query",
@@ -177,7 +175,7 @@ const atableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{
@@ -426,7 +424,7 @@ const htableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

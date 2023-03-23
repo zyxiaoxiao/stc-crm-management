@@ -15,7 +15,7 @@ const config = {
 	baseURL: "/apis", // 跨域代理
 
 	// 设置超时时间（60s）
-	timeout: 60000,
+	timeout: 180000,
 	// 跨域时候允许携带凭证
 	withCredentials: true
 };

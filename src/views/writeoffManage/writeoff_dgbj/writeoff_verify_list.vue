@@ -3,44 +3,51 @@
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				name="invoiceinfos"
-				:label="$t('itemtitleinvoiceinvoiceinfo')"
-				title1="开票信息"
+				:label="$t('itemtitlewriteoffaudit')"
+				title1="销账审核"
+				name="writeoffInfos"
 			>
-				<zTable
-					ref="grid_invoiceInfos"
-					:tableList="invoicetableList"
-					@link-detailbg="linkDetail"
-					@workflow-status="workflowStatus"
-				>
+				<zTable ref="grid_writeoffInfos" :tableList="wtableList" @link-detailbg="linkDetail" @workflow-status="workflowStatus">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Edit" plain @click="dialogShow('dialogShow_invoicedetailNew')">{{
-							$t("SRM_add")
-						}}</el-button>
+						<el-button
+							size="small"
+							type="success"
+							icon="Check"
+							:disabled="!scope.isSelected"
+							plain
+							@click="approveWriteoffInfos('1', scope.selectList)"
+							>{{ $t("menu_approve") }}</el-button
+						>
 						<el-button
 							size="small"
 							type="danger"
-							icon="Delete"
-							plain
+							icon="Close"
 							:disabled="!scope.isSelected"
-							@click="invoiceInfosDelete(scope.selectList)"
-							>{{ $t("SRM_delete") }}</el-button
+							plain
+							@click="approveWriteoffInfos('-1', scope.selectList)"
+							>{{ $t("menu_reject") }}</el-button
 						>
-						<el-button size="small" type="success" icon="Check" plain @click="submitInvoiceInfos(scope.selectList)">{{
-							$t("SRM_submit")
-						}}</el-button>
+						<el-button
+							size="small"
+							type="danger"
+							icon="Close"
+							:disabled="!scope.isSelected"
+							plain
+							@click="approveWriteoffInfos('-2', scope.selectList)"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				:label="$t('itemtitleinvoicequery')"
-				title1="开票查询"
-				name="queryinvoiceinfo"
+				:label="$t('itemtitlewriteoffsquery')"
+				title1="销账查询"
+				name="querywriteoffInfos"
 			>
 				<zTable
-					ref="grid_invoiceInfosquery"
-					:tableList="htableList"
+					ref="grid_writeoffInfosquery"
+					:tableList="qtableList"
 					@link-detailbg="linkDetailquey"
 					@workflow-status="workflowStatus"
 				>
@@ -53,42 +60,42 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
-				<invoicedetailNew :condobj="condobj"></invoicedetailNew>
+			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
-				<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
+			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
+				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
 			</ZDialog>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { h, ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 //弹出报错或者提示框
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import qs from "qs";
 import http from "@/api/index.js";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import invoicedetailNew from "@/views/writeoffManage/invoice/invoice_detail.vue";
-import invoicedetailReadOnly from "@/views/writeoffManage/invoice/invoice_detail_readonly.vue";
+import invoiceDetailReadOnly from "@/views/writeoffManage/writeoff_dgbj/invoice_detail_readonly.vue";
+import writeoffbatchdetailReadOnly from "@/views/writeoffManage/writeoff_dgbj/writeoff_batch_detail_readOnly.vue";
 const i18n = useI18n();
-const grid_invoiceInfos = ref();
-const grid_invoiceInfosquery = ref();
-const tableTabsValue = ref("invoiceinfos");
+const grid_writeoffInfos = ref(); //销账申请页面
+const grid_writeoffInfosquery = ref(); //销账查询页面
+const tableTabsValue = ref("writeoffInfos");
 
 //审核记录
 const dialogShow_audit = ref(false);
 const auditList = reactive({
 	dialogShow_audit: false,
 	codeid: "",
-	tablename: "MLS_INVOICE",
-	columnid: "invoiceid"
+	tablename: "MLS_WRITEOFF",
+	columnid: "writeoffid"
 });
 
 const condobj = reactive({
@@ -96,78 +103,83 @@ const condobj = reactive({
 	objlist: {}
 });
 
-//删除税票申请
-const invoiceInfosDelete = async selectList => {
-	if (selectList.length < 1) {
-		ElMessage.warning(i18n.t("Workflow_SelectRecordToDelete"));
-		return false;
-	}
-	let jsonString = {
-		invoiceInfos: selectList
-	};
-	let params = {
-		jsonString: JSON.stringify(jsonString)
-	};
-
-	const res = await http.post("/crm/invoice/invoice!deleteInvoiceInfo.action", qs.stringify(params));
-	if (res) {
-		grid_invoiceInfos.value.getTableList();
-	}
-};
-
-//提交税票单信息
-const submitInvoiceInfos = selectList => {
-	if(selectList.length < 1){
-		ElMessage.warning(i18n.t("menu_chooseFolder"));
+//审核销账单信息
+const approveWriteoffInfos = ( code, selectList) => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
 	}
-	ElMessageBox.confirm(i18n.t("alertConfirmsubmission"), i18n.t("reminder"), {
+	let str = i18n.t("audit_approve");
+	if (code == "-1" || code == "-2") {
+		str = i18n.t("audit_reject");
+	}
+	let approveValue = ref(str);
+	ElMessageBox({
+		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		message: () =>
+			h(ElInput, {
+				modelValue: approveValue.value,
+				type: "textarea",
+				autosize: { minRows: 4 },
+				"onUpdate:modelValue": val => {
+					approveValue.value = val;
+				}
+			}),
+		showCancelButton: true,
 		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
+		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
+		let cond = {
+			opinion: approveValue.value
+		};
 		let jsonString = {
-			invoiceInfos: selectList
+			writeoffInfos: selectList,
+			cond: cond
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
-		const res = await http.post("/crm/invoice/invoice!submitInvoiceInfos.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		let url = "";
+		if (code == "-1") {
+			url = "/crm/writeoff/writeoff!reject.action";
+		} else if (code == "-2") {
+			url = "/crm/writeoff/writeoff!reject2Submitor.action";
+		} else {
+			url = "/crm/writeoff/writeoff!approve.action";
+		}
+		const res = await http.post(url, qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
 		if (res) {
 			ElMessage({
 				type: "success",
 				message: i18n.t("Message_OperationSuccess")
 			});
-			grid_invoiceInfos.value.getTableList();
+			grid_writeoffInfos.value.getTableList();
 		}
 	});
 };
 
-
-//税票页面关闭
-const closeinvoicedetail = () => {
-	grid_invoiceInfos.value.getTableList();
-};
-//税票查询页面关闭
-const closeinvoicedetailReadOnly = () => {
-	grid_invoiceInfosquery.value.getTableList();
+//销账信息页面关闭
+const closewiteoffdetailReadOnly = () => {
+    if(condobj.cond && condobj.cond.auditflag == "Y"){
+        grid_writeoffInfos.value.getTableList();
+    }	
 };
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	grid_invoiceInfos.value.getTableList();
+	grid_writeoffInfos.value.getTableList();
 });
 
-//表格对象税票
-const invoicetableList = reactive({
-	id: "/writeoffManage/invoice/invoice_query_list.vue_grid_invoiceInfos",
+//表格对象销账申请
+const wtableList = reactive({
+	id: "/writeoffManage/writeoff_dgbj/writeoff_verify_list.vue_grid_writeoffInfos",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/invoice/invoice!selectInvoiceInfoByCond.action",
-		root: "invoiceInfos",
+		url: "/crm/writeoff/writeoff!selectWriteoffInfoByRight.action",
+		root: "writeoffInfos",
 		baseParams: {
-			"cond.auditflag": "0"
+			"cond.auditflag": "1",
+			"cond.corpright": "true"
 		}
 	},
 	//快捷查询
@@ -186,66 +198,60 @@ const invoicetableList = reactive({
 			width: "60"
 		},
 		{
-			title: "开票编号",
-			label: "itemtitleinvoicetax",
-			prop: "taxinvoicecode",
+			title: "销账单号",
+			label: "columnwriteoff_application_listwriteoffNo",
+			prop: "writeoffcode",
 			type: "Link",
 			width: "160"
 		},
 		{
-			title: "币种",
-			label: "itemtitleinvoicecurrencies",
-			prop: "currencies",
+			title: "本次外币可冲销金额",
+			label: "columncurrencywriteoff_application_listCanWriteOffsdetail",
+			prop: "currencywriteoffmoney",
 			type: "Input",
 			width: "140"
 		},
 		{
-			title: "汇率",
-			label: "itemtitleinvoiceexchangerate",
-			prop: "exchangerate",
+			title: "本次外币冲销总金额",
+			label: "columncurrencywriteoff_application_listTotalAmountdetail",
+			prop: "currencytotalmoney",
 			type: "Input",
 			width: "140"
 		},
 		{
-			title: "外币金额",
-			label: "itemtitleinvoicecurrencyamount",
-			prop: "currencyamount",
+			title: "本次冲销总金额",
+			label: "columnwriteoff_application_listTotalAmount",
+			prop: "totalmoney",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "发票金额",
-			label: "itemtitleinvoiceinvoicemoney",
-			prop: "invoicemoney",
+			title: "本次可冲销金额",
+			label: "columnwriteoff_application_listCanWriteOffs",
+			prop: "writeoffmoney",
 			type: "Input",
-			width: "140"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "客户号",
 			label: "itemtitleinvoicecorpno",
 			prop: "corpno",
 			type: "Input",
-			width: "150"
+			width: "140"
 		},
 		{
-			title: "客户姓名",
-			label: "itemtitleinvoicecorpdesc",
-			prop: "corpname",
-			type: "Input",
-			width: "210"
-		},
-		{
-			title: "发票日期",
-			label: "itemtitleinvoiceinvoicedate",
-			prop: "invoicedate",
+			title: "客户名称",
+			label: "panelcolumncustomername",
+			prop: "corpdesc",
 			type: "Input",
 			width: "150"
 		},
 		{
-			title: "申请单号",
-			label: "columnwriteoff_application_listApplicationNo",
-			prop: "foldernos",
+			title: "分公司+批次",
+			label: "brachbatchno",
+			prop: "brachbatchno",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -272,16 +278,17 @@ const invoicetableList = reactive({
 			width: "160"
 		},
 		{
-			title: "备注",
-			label: "columnappointment_desc42",
-			prop: "remark",
+			title: "主键",
+			label: "corpid",
+			prop: "corpid",
 			type: "Input",
-			width: "160"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "主键",
-			label: "invoiceid",
-			prop: "invoiceid",
+			label: "writeoffid",
+			prop: "writeoffid",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -411,13 +418,13 @@ const invoicetableList = reactive({
 	tableData: []
 });
 
-//表格对象撤销发布
-const htableList = reactive({
-	id: "/writeoffManage/invoice/invoice_query_list.vue_grid_invoiceInfosquery",
+//表格对象销账查询
+const qtableList = reactive({
+	id: "/writeoffManage/writeoff_dgbj/writeoff_verify_list.vue_grid_writeoffInfosquery",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/invoice/invoice!selectInvoiceInfoByCond.action",
-		root: "invoiceInfos",
+		url: "/crm/writeoff/writeoff!selectWriteoffInfoCreateQueryByCond.action",
+		root: "writeoffInfos",
 		baseParams: {
 			"cond.auditflag": "1,2"
 		}
@@ -438,66 +445,60 @@ const htableList = reactive({
 			width: "60"
 		},
 		{
-			title: "开票编号",
-			label: "itemtitleinvoicetax",
-			prop: "taxinvoicecode",
+			title: "销账单号",
+			label: "columnwriteoff_application_listwriteoffNo",
+			prop: "writeoffcode",
 			type: "Link",
 			width: "160"
 		},
 		{
-			title: "币种",
-			label: "itemtitleinvoicecurrencies",
-			prop: "currencies",
+			title: "本次外币可冲销金额",
+			label: "columncurrencywriteoff_application_listCanWriteOffsdetail",
+			prop: "currencywriteoffmoney",
 			type: "Input",
 			width: "140"
 		},
 		{
-			title: "汇率",
-			label: "itemtitleinvoiceexchangerate",
-			prop: "exchangerate",
+			title: "本次外币冲销总金额",
+			label: "columncurrencywriteoff_application_listTotalAmountdetail",
+			prop: "currencytotalmoney",
 			type: "Input",
 			width: "140"
 		},
 		{
-			title: "外币金额",
-			label: "itemtitleinvoicecurrencyamount",
-			prop: "currencyamount",
+			title: "本次冲销总金额",
+			label: "columnwriteoff_application_listTotalAmount",
+			prop: "totalmoney",
 			type: "Input",
 			width: "10",
 			isHide: true
 		},
 		{
-			title: "发票金额",
-			label: "itemtitleinvoiceinvoicemoney",
-			prop: "invoicemoney",
+			title: "本次可冲销金额",
+			label: "columnwriteoff_application_listCanWriteOffs",
+			prop: "writeoffmoney",
 			type: "Input",
-			width: "140"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "客户号",
 			label: "itemtitleinvoicecorpno",
 			prop: "corpno",
 			type: "Input",
-			width: "150"
+			width: "140"
 		},
 		{
-			title: "客户姓名",
-			label: "itemtitleinvoicecorpdesc",
-			prop: "corpname",
-			type: "Input",
-			width: "210"
-		},
-		{
-			title: "发票日期",
-			label: "itemtitleinvoiceinvoicedate",
-			prop: "invoicedate",
+			title: "客户名称",
+			label: "panelcolumncustomername",
+			prop: "corpdesc",
 			type: "Input",
 			width: "150"
 		},
 		{
-			title: "申请单号",
-			label: "columnwriteoff_application_listApplicationNo",
-			prop: "foldernos",
+			title: "分公司+批次",
+			label: "brachbatchno",
+			prop: "brachbatchno",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -524,16 +525,17 @@ const htableList = reactive({
 			width: "160"
 		},
 		{
-			title: "备注",
-			label: "columnappointment_desc42",
-			prop: "remark",
+			title: "主键",
+			label: "corpid",
+			prop: "corpid",
 			type: "Input",
-			width: "160"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "主键",
-			label: "invoiceid",
-			prop: "invoiceid",
+			label: "writeoffid",
+			prop: "writeoffid",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -681,40 +683,38 @@ const workflowStatus = (column, row) => {
 
 //链接详细信息
 const linkDetail = (column, row) => {
-	if (column == "taxinvoicecode" && row.invoiceid) {
-		if (row.invoiceid) {
+	if (column == "writeoffcode" && row.writeoffid) {
+		if (row.writeoffid) {
 			condobj.cond = {
-				invoiceid: row.invoiceid,
-				rasclientid: row.corpno,
-				workflowflag: "1"
+				writeoffid: row.writeoffid,
+                auditflag: "Y",
+				corpid: row.corpid
 			};
-			condobj.dialogShow_invoicedetailNew = true;
+			condobj.dialogShow_writeoffbatchdetailReadOnly = true;
 		}
 	}
 };
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "taxinvoicecode" && row.invoiceid) {
-		if (row.invoiceid) {
+	if (column == "writeoffcode" && row.writeoffid) {
+		if (row.writeoffid) {
 			condobj.cond = {
-				invoiceid: row.invoiceid,
-				rasclientid: row.corpno,
-				workflowflag: "3"
+				writeoffid: row.writeoffid,
+				corpid: row.corpid
 			};
-			condobj.dialogShow_invoicedetailReadOnly = true;
+			condobj.dialogShow_writeoffbatchdetailReadOnly = true;
 		}
 	}
 };
 
-
 //切换tab时触发
 const tabChange = targetName => {
-	if (targetName == "invoiceinfos") {
-		//税票申请信息页面
-		grid_invoiceInfos.value.getTableList();
-	} else if (targetName == "queryinvoiceinfo") {
+	if (targetName == "writeoffInfos") {
+		//销账申请信息查询页面
+		grid_writeoffInfos.value.getTableList();
+	} else if (targetName == "querywriteoffInfos") {
 		//税票信息查询页面
-		grid_invoiceInfosquery.value.getTableList();
+		grid_writeoffInfosquery.value.getTableList();
 	}
 };
 </script>

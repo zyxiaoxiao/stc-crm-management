@@ -3,44 +3,43 @@
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				name="invoiceinfos"
-				:label="$t('itemtitleinvoiceinvoiceinfo')"
-				title1="开票信息"
+				:label="$t('columndrawbackrefuninformation')"
+				title1="退款信息"
+				name="retreatInfos"
 			>
-				<zTable
-					ref="grid_invoiceInfos"
-					:tableList="invoicetableList"
-					@link-detailbg="linkDetail"
-					@workflow-status="workflowStatus"
-				>
+				<zTable ref="grid_retreatInfos" :tableList="rtableList" @link-detailbg="linkDetail" @workflow-status="workflowStatus">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Edit" plain @click="dialogShow('dialogShow_invoicedetailNew')">{{
-							$t("SRM_add")
-						}}</el-button>
+						<el-button size="small" type="success" icon="Check" plain @click="newRetreatInfo()">{{ $t("SRM_add") }}</el-button>
 						<el-button
 							size="small"
 							type="danger"
-							icon="Delete"
-							plain
+							icon="Close"
 							:disabled="!scope.isSelected"
-							@click="invoiceInfosDelete(scope.selectList)"
+							plain
+							@click="deleteRetreatInfo( scope.selectList)"
 							>{{ $t("SRM_delete") }}</el-button
 						>
-						<el-button size="small" type="success" icon="Check" plain @click="submitInvoiceInfos(scope.selectList)">{{
-							$t("SRM_submit")
-						}}</el-button>
+						<el-button
+							size="small"
+							type="success"
+							icon="Check"
+							:disabled="!scope.isSelected"
+							plain
+							@click="submitRetreatInfo(scope.selectList)"
+							>{{ $t("SRM_submit") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
-				:label="$t('itemtitleinvoicequery')"
-				title1="开票查询"
-				name="queryinvoiceinfo"
+				:label="$t('columndrawbackrefundapplication')"
+				title1="退款申请查询"
+				name="queryretreatInfos"
 			>
 				<zTable
-					ref="grid_invoiceInfosquery"
-					:tableList="htableList"
+					ref="grid_retreatInfos1"
+					:tableList="qtableList"
 					@link-detailbg="linkDetailquey"
 					@workflow-status="workflowStatus"
 				>
@@ -53,42 +52,42 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
-				<invoicedetailNew :condobj="condobj"></invoicedetailNew>
+			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
-				<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
+			<ZDialog v-model="condobj.dialogShow_retreatdetail" @close="closeretreatdetail" width="95%">
+				<retreatdetail :condobj="condobj"></retreatdetail>
 			</ZDialog>
 		</div>
 	</div>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from "vue";
+import { h, ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 //弹出报错或者提示框
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElMessage } from "element-plus";
 import qs from "qs";
 import http from "@/api/index.js";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import invoicedetailNew from "@/views/writeoffManage/invoice/invoice_detail.vue";
-import invoicedetailReadOnly from "@/views/writeoffManage/invoice/invoice_detail_readonly.vue";
+import invoiceDetailReadOnly from "@/views/writeoffManage/writeoff_dgbj/invoice_detail_readonly.vue";
+import retreatdetail from "@/views/writeoffManage/retreatcrm/retreat_detail.vue";
 const i18n = useI18n();
-const grid_invoiceInfos = ref();
-const grid_invoiceInfosquery = ref();
-const tableTabsValue = ref("invoiceinfos");
+const grid_retreatInfos = ref(); //退款信息页面
+const grid_retreatInfos1 = ref(); //退款申请查询页面
+const tableTabsValue = ref("retreatInfos");
 
 //审核记录
 const dialogShow_audit = ref(false);
 const auditList = reactive({
 	dialogShow_audit: false,
 	codeid: "",
-	tablename: "MLS_INVOICE",
-	columnid: "invoiceid"
+	tablename: "MLS_RETREAT",
+	columnid: "retreatid"
 });
 
 const condobj = reactive({
@@ -96,76 +95,61 @@ const condobj = reactive({
 	objlist: {}
 });
 
-//删除税票申请
-const invoiceInfosDelete = async selectList => {
-	if (selectList.length < 1) {
-		ElMessage.warning(i18n.t("Workflow_SelectRecordToDelete"));
-		return false;
-	}
-	let jsonString = {
-		invoiceInfos: selectList
+//新增退回申请
+const newRetreatInfo = () => {
+	condobj.cond = {
+		html: "dialogShow_retreatdetail",
+		appflag: "true"
 	};
-	let params = {
-		jsonString: JSON.stringify(jsonString)
-	};
-
-	const res = await http.post("/crm/invoice/invoice!deleteInvoiceInfo.action", qs.stringify(params));
-	if (res) {
-		grid_invoiceInfos.value.getTableList();
-	}
+	condobj.dialogShow_retreatdetail = true;
 };
 
-//提交税票单信息
-const submitInvoiceInfos = selectList => {
-	if(selectList.length < 1){
-		ElMessage.warning(i18n.t("menu_chooseFolder"));
+//删除退款信息
+let deleteRetreatInfo = async (selectList) => {
+	if (selectList != null && selectList.length < 1) {
+		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
 	}
-	ElMessageBox.confirm(i18n.t("alertConfirmsubmission"), i18n.t("reminder"), {
-		confirmButtonText: i18n.t("menu_ok"),
-		cancelButtonText: i18n.t("menu_cancel"),
-		type: "warning",
-		draggable: true
-	}).then(async () => {
-		let jsonString = {
-			invoiceInfos: selectList
-		};
-		let params = {
-			jsonString: JSON.stringify(jsonString)
-		};
-		const res = await http.post("/crm/invoice/invoice!submitInvoiceInfos.action", qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
-		if (res) {
-			ElMessage({
-				type: "success",
-				message: i18n.t("Message_OperationSuccess")
-			});
-			grid_invoiceInfos.value.getTableList();
-		}
-	});
+	let params = {
+		jsonString: JSON.stringify({ retreatInfos: selectList })
+	};
+	const res = await http.post("/crm/retreat/retreat!deleteRetreatInfo.action", qs.stringify(params));
+	if (res) {
+		//刷新数据(退款信息)
+		grid_retreatInfos.value.getTableList();
+	}
 };
 
-
-//税票页面关闭
-const closeinvoicedetail = () => {
-	grid_invoiceInfos.value.getTableList();
+//提交退款信息
+let submitRetreatInfo = async (selectList) => {
+	let params = {
+		jsonString: JSON.stringify({ retreatInfos: selectList })
+	};
+	const res = await http.post("/crm/retreat/retreat!submit.action", qs.stringify(params));
+	if (res) {
+		//刷新数据(退款信息)
+		grid_retreatInfos.value.getTableList();
+	}
 };
-//税票查询页面关闭
-const closeinvoicedetailReadOnly = () => {
-	grid_invoiceInfosquery.value.getTableList();
+//销账信息页面关闭
+const closeretreatdetail = () => {
+	if (condobj.cond && condobj.cond.html == "dialogShow_retreatdetail") {
+		grid_retreatInfos.value.getTableList();
+	}
 };
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	grid_invoiceInfos.value.getTableList();
+	grid_retreatInfos.value.getTableList();
 });
 
-//表格对象税票
-const invoicetableList = reactive({
-	id: "/writeoffManage/invoice/invoice_query_list.vue_grid_invoiceInfos",
+//表格对象销账申请
+const rtableList = reactive({
+	id: "/writeoffManage/retreatcrm/retreat_query_list.vue_grid_retreatInfos",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/invoice/invoice!selectInvoiceInfoByCond.action",
-		root: "invoiceInfos",
+		url: "/crm/retreat/retreat!selectRetreatInfoByCond.action",
+		root: "retreatInfos",
 		baseParams: {
 			"cond.auditflag": "0"
 		}
@@ -186,102 +170,94 @@ const invoicetableList = reactive({
 			width: "60"
 		},
 		{
-			title: "开票编号",
-			label: "itemtitleinvoicetax",
-			prop: "taxinvoicecode",
+			title: "退款单号",
+			label: "columndrawbackrefundnum",
+			prop: "retreatcode",
 			type: "Link",
 			width: "160"
 		},
 		{
-			title: "币种",
-			label: "itemtitleinvoicecurrencies",
-			prop: "currencies",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "汇率",
-			label: "itemtitleinvoiceexchangerate",
-			prop: "exchangerate",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "外币金额",
-			label: "itemtitleinvoicecurrencyamount",
-			prop: "currencyamount",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "发票金额",
-			label: "itemtitleinvoiceinvoicemoney",
-			prop: "invoicemoney",
-			type: "Input",
-			width: "140"
-		},
-		{
 			title: "客户号",
-			label: "itemtitleinvoicecorpno",
+			label: "fieldcustomercode",
 			prop: "corpno",
 			type: "Input",
-			width: "150"
+			width: "140"
 		},
 		{
-			title: "客户姓名",
-			label: "itemtitleinvoicecorpdesc",
-			prop: "corpname",
+			title: "客户名称",
+			label: "columnCustomerName",
+			prop: "corpdesc",
 			type: "Input",
-			width: "210"
+			width: "200"
 		},
 		{
-			title: "发票日期",
-			label: "itemtitleinvoiceinvoicedate",
-			prop: "invoicedate",
-			type: "Input",
-			width: "150"
-		},
-		{
-			title: "申请单号",
-			label: "columnwriteoff_application_listApplicationNo",
-			prop: "foldernos",
+			title: "退款金额",
+			label: "columndrawbackrefundmoney",
+			prop: "retreatmoney",
 			type: "Input",
 			width: "10",
 			isHide: true
+		},
+		{
+			title: "外币退款金额",
+			label: "columnbillcurrencycurrencyretreatmoney",
+			prop: "currencyretreatmoney",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "退款原因",
+			label: "columndrawbackrefundreason",
+			prop: "remark",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "退款时间",
+			label: "columndrawbackrefundtime",
+			prop: "retreatdate",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "退款操作人",
+			label: "columndrawbackrefunperson",
+			prop: "recorderdesc",
+			type: "Input",
+			width: "140"
 		},
 		{
 			title: "创建人编码",
 			label: "columnCreatehumancoding",
 			prop: "recordercode",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "创建人名称",
-			label: "columnCreatehumandescription",
-			prop: "recorderdesc",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "创建时间",
-			label: "itemtitlestatusrecordertime",
-			prop: "recordtime",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "备注",
-			label: "columnappointment_desc42",
-			prop: "remark",
-			type: "Input",
-			width: "160"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "主键",
-			label: "invoiceid",
-			prop: "invoiceid",
+			label: "",
+			prop: "retreatid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "客户id",
+			label: "",
+			prop: "corpid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "到账信息id",
+			label: "",
+			prop: "billid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "创建时间",
+			label: "",
+			prop: "recordtime",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -405,21 +381,29 @@ const invoicetableList = reactive({
 			type: "Input",
 			width: "10",
 			isHide: true
+		},
+		{
+			title: "数据状态",
+			label: "",
+			prop: "status",
+			type: "Input",
+			width: "10",
+			isHide: true
 		}
 	],
 	// 表格数据
 	tableData: []
 });
 
-//表格对象撤销发布
-const htableList = reactive({
-	id: "/writeoffManage/invoice/invoice_query_list.vue_grid_invoiceInfosquery",
+//表格对象销账查询
+const qtableList = reactive({
+	id: "/writeoffManage/retreatcrm/retreat_query_list.vue_grid_retreatInfos1",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/invoice/invoice!selectInvoiceInfoByCond.action",
-		root: "invoiceInfos",
+		url: "/crm/retreat/retreat!selectRetreatInfoByCondRight.action",
+		root: "retreatInfos",
 		baseParams: {
-			"cond.auditflag": "1,2"
+			"cond.auditflag": "0"
 		}
 	},
 	//快捷查询
@@ -438,102 +422,94 @@ const htableList = reactive({
 			width: "60"
 		},
 		{
-			title: "开票编号",
-			label: "itemtitleinvoicetax",
-			prop: "taxinvoicecode",
+			title: "退款单号",
+			label: "columndrawbackrefundnum",
+			prop: "retreatcode",
 			type: "Link",
 			width: "160"
 		},
 		{
-			title: "币种",
-			label: "itemtitleinvoicecurrencies",
-			prop: "currencies",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "汇率",
-			label: "itemtitleinvoiceexchangerate",
-			prop: "exchangerate",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "外币金额",
-			label: "itemtitleinvoicecurrencyamount",
-			prop: "currencyamount",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "发票金额",
-			label: "itemtitleinvoiceinvoicemoney",
-			prop: "invoicemoney",
-			type: "Input",
-			width: "140"
-		},
-		{
 			title: "客户号",
-			label: "itemtitleinvoicecorpno",
+			label: "fieldcustomercode",
 			prop: "corpno",
 			type: "Input",
-			width: "150"
+			width: "140"
 		},
 		{
-			title: "客户姓名",
-			label: "itemtitleinvoicecorpdesc",
-			prop: "corpname",
+			title: "客户名称",
+			label: "columnCustomerName",
+			prop: "corpdesc",
 			type: "Input",
-			width: "210"
+			width: "200"
 		},
 		{
-			title: "发票日期",
-			label: "itemtitleinvoiceinvoicedate",
-			prop: "invoicedate",
-			type: "Input",
-			width: "150"
-		},
-		{
-			title: "申请单号",
-			label: "columnwriteoff_application_listApplicationNo",
-			prop: "foldernos",
+			title: "退款金额",
+			label: "columndrawbackrefundmoney",
+			prop: "retreatmoney",
 			type: "Input",
 			width: "10",
 			isHide: true
+		},
+		{
+			title: "外币退款金额",
+			label: "columnbillcurrencycurrencyretreatmoney",
+			prop: "currencyretreatmoney",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "退款原因",
+			label: "columndrawbackrefundreason",
+			prop: "remark",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "退款时间",
+			label: "columndrawbackrefundtime",
+			prop: "retreatdate",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "退款操作人",
+			label: "columndrawbackrefunperson",
+			prop: "recorderdesc",
+			type: "Input",
+			width: "140"
 		},
 		{
 			title: "创建人编码",
 			label: "columnCreatehumancoding",
 			prop: "recordercode",
-			type: "Input",
-			width: "140"
-		},
-		{
-			title: "创建人名称",
-			label: "columnCreatehumandescription",
-			prop: "recorderdesc",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "创建时间",
-			label: "itemtitlestatusrecordertime",
-			prop: "recordtime",
-			type: "Input",
-			width: "160"
-		},
-		{
-			title: "备注",
-			label: "columnappointment_desc42",
-			prop: "remark",
-			type: "Input",
-			width: "160"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "主键",
-			label: "invoiceid",
-			prop: "invoiceid",
+			label: "",
+			prop: "retreatid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "客户id",
+			label: "",
+			prop: "corpid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "到账信息id",
+			label: "",
+			prop: "billid",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "创建时间",
+			label: "",
+			prop: "recordtime",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -654,6 +630,14 @@ const htableList = reactive({
 			title: "状态",
 			label: "状态",
 			prop: "auditflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "数据状态",
+			label: "",
+			prop: "status",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -681,40 +665,38 @@ const workflowStatus = (column, row) => {
 
 //链接详细信息
 const linkDetail = (column, row) => {
-	if (column == "taxinvoicecode" && row.invoiceid) {
-		if (row.invoiceid) {
+	if (column == "retreatcode" && row.retreatid) {
+		if (row.retreatid) {
 			condobj.cond = {
-				invoiceid: row.invoiceid,
-				rasclientid: row.corpno,
-				workflowflag: "1"
+				retreatid: row.retreatid,
+				html: "dialogShow_retreatdetail",
+				appflag: "true"
 			};
-			condobj.dialogShow_invoicedetailNew = true;
+			condobj.dialogShow_retreatdetail = true;
 		}
 	}
 };
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "taxinvoicecode" && row.invoiceid) {
-		if (row.invoiceid) {
+	if (column == "retreatcode" && row.retreatid) {
+		if (row.retreatid) {
 			condobj.cond = {
-				invoiceid: row.invoiceid,
-				rasclientid: row.corpno,
-				workflowflag: "3"
+				retreatid: row.retreatid,
+				readonly: "true"
 			};
-			condobj.dialogShow_invoicedetailReadOnly = true;
+			condobj.dialogShow_retreatdetail = true;
 		}
 	}
 };
 
-
 //切换tab时触发
 const tabChange = targetName => {
-	if (targetName == "invoiceinfos") {
-		//税票申请信息页面
-		grid_invoiceInfos.value.getTableList();
-	} else if (targetName == "queryinvoiceinfo") {
+	if (targetName == "retreatInfos") {
+		//销账申请信息查询页面
+		grid_retreatInfos.value.getTableList();
+	} else if (targetName == "queryretreatInfos") {
 		//税票信息查询页面
-		grid_invoiceInfosquery.value.getTableList();
+		grid_retreatInfos1.value.getTableList();
 	}
 };
 </script>

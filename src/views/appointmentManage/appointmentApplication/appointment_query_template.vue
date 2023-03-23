@@ -204,22 +204,6 @@ onMounted(() => {
 	grid_appointmentInfos.value.getTableList();
 });
 
-const formData1 = reactive({
-	// corpno: props.condobj.corpno ?? "",
-	// corpnoold: props.condobj.corpnoold ?? "",
-	// corpdesc: props.condobj.corpdesc ?? "",
-	// corpenglishname: props.condobj.corpenglishname ?? "",
-	// corpalias: props.condobj.corpalias ?? "",
-	// businesslicenseno: props.condobj.businesslicenseno ?? "",
-	// branchcorpdesc: props.condobj.branchcorpdesc ?? "",
-	// departmentdesc: props.condobj.departmentdesc ?? "",
-	// salesmandesc: props.condobj.salesmandesc ?? "",
-	// corpemail: props.condobj.corpemail ?? "",
-	// agentdesc: props.condobj.agentdesc ?? "",
-	// country: props.condobj.country ?? "",
-	// corplocation: props.condobj.corplocation ?? ""
-});
-
 //表格对象报价审核
 const atableList = reactive({
 	id: "/appointmentManage/appointmentApplication/appointment_query_template.vue_grid_appointmentInfos",
@@ -232,7 +216,7 @@ const atableList = reactive({
 		}
 	},
 	//快捷查询
-	tablePropSearch: formData1,
+	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
 		{

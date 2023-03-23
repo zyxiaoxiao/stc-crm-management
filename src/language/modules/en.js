@@ -5786,6 +5786,7 @@ export default {
 	Message_CustomerSourceCannotBeEmpty: "Customer source cannot be empty!",
 	Message_NoSalesAgentToChooseFrom: "No sales agent to choose from！",
 	message_CustomerChangeNotes_CanNotBeEmpty: "Customer change notes can not be empty !",
+	panelbaseSalesQuotationQuery: "Sales Quotation Query",
 	logoText: "STC CRM SYSTEM",
 	detectCustomerCategory0: "Personal Customer",
 	detectCustomerCategory1: "Enterprise Customer",

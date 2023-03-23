@@ -123,6 +123,94 @@ const comprehensiveQueryRouter = [
 					title: "menubaseotherstaticcompany", //"快递信息查询"
 					key: "deliverys_query_list"
 				}
+			},
+			{
+				path: "/comprehensiveQuery/appointment_integratedquery_list",
+				name: "appointment_integratedquery_list",
+				component: () => import("@/views/comprehensiveQuery/appointment_integratedquery_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseQuotedQuery", //"报价查询"
+					key: "appointment_integratedquery_list"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/my_commission_query_automatic",
+				name: "my_commission_query_automatic",
+				component: () => import("@/views/comprehensiveQuery/my_commission_query_automatic.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasemy_commission_query_automatic", //"自动提佣查询"
+					key: "my_commission_query_automatic"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/appointment_salsequery_list",
+				name: "appointment_salsequery_list",
+				component: () => import("@/views/comprehensiveQuery/appointment_salsequery_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "panelbaseSalesQuotationQuery", //"销售报价查询"
+					key: "appointment_salsequery_list"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/invoice_query_byright",
+				name: "invoice_query_byright",
+				component: () => import("@/views/comprehensiveQuery/invoice_query_byright.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseInvoiceQuery", //税票信息查询
+					key: "invoice_query_byright"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/select_folderInfos",
+				name: "select_folderInfos",
+				component: () => import("@/views/comprehensiveQuery/select_folderInfos.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseapplicationorderquery", //申请单信息
+					key: "select_folderInfos"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/bill_accountinfo_query_list",
+				name: "bill_accountinfo_query_list",
+				component: () => import("@/views/comprehensiveQuery/bill_accountinfo_query_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseaccountinformationquery", //到账信息查询
+					key: "bill_accountinfo_query_list"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/writeoff_history_query_list",
+				name: "writeoff_history_query_list",
+				component: () => import("@/views/comprehensiveQuery/writeoff_history_query_list.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubasewriteoffhistoryquery", //销账历史查询
+					key: "writeoff_history_query_list"
+				}
+			},
+			{
+				path: "/comprehensiveQuery/appointment_query_team_offer",
+				name: "appointment_query_team_offer",
+				component: () => import("@/views/comprehensiveQuery/appointment_query_team_offer.vue"),
+				meta: {
+					keepAlive: false, //是否缓存页面
+					requiresAuth: true, //true需要登录才能访问
+					title: "menubaseTeamofferquery", //小组报价查询
+					key: "appointment_query_team_offer"
+				}
 			}
 		]
 	}
