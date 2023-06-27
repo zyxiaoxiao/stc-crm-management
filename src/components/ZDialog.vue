@@ -1,7 +1,7 @@
 <template>
 	<el-dialog
 		ref="dialog"
-		v-model="dialogShow"
+		:modelValue="dialogShow"
 		:width="width"
 		:fullscreen="false"
 		:class="customclass"

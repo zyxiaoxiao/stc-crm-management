@@ -466,7 +466,7 @@
 				:small="paginationSmall"
 				:currentPage="params.page"
 				:page-size="params.limit"
-				:page-sizes="[25, 50, 100, 200]"
+				:page-sizes="[25, 50, 100]"
 				:background="true"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="params.total"

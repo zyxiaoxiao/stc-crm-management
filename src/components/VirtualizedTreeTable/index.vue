@@ -415,7 +415,7 @@ const getTableList = async () => {
 			qs.stringify(props.treeTableList.httpAttribute.baseParams),
 			config
 		);
-		const DataSources = res;
+		let DataSources = res;
 		if (props.treeTableList.httpAttribute.root) {
 			DataSources = res[props.treeTableList.httpAttribute.root];
 		}
