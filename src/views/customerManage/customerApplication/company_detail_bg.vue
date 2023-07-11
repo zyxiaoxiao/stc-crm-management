@@ -815,6 +815,25 @@ const corpdescValidator = (rule, value, callback) => {
 		callback();
 	}
 };
+
+//联系人中不能含有非法字符
+const contactnameValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
+//邮件中不能含有非法字符
+const corpemailValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
 const agentbrokerageValidator = (rule, value, callback) => {
 	if (formData.agentcode && (!value || !Number.isInteger(value))) {
 		callback(new Error(i18n.t("rulesPropMessage") + ", " + i18n.t("mustbeanumber")));
@@ -850,9 +869,15 @@ const rules = reactive({
 	corptype: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	corplocation: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	country: [{ required: true, message: i18n.t("rulesPropMessage") }],
-	contactname: [{ required: true, message: i18n.t("rulesPropMessage") }],
+	contactname: [
+		{ required: true, message: i18n.t("rulesPropMessage") },
+		{ validator: contactnameValidator, trigger: "blur" }
+	],
 	corpphone: [{ required: true, message: i18n.t("rulesPropMessage") }],
-	corpemail: [{ required: true, message: i18n.t("rulesPropMessage") }],
+	corpemail: [
+		{ required: true, message: i18n.t("rulesPropMessage") },
+		{ validator: corpemailValidator, trigger: "blur" }
+	],
 	customersource: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	newcustomtype: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	agentbrokerage: [{ validator: agentbrokerageValidator, trigger: "blur" }],
@@ -1701,6 +1726,7 @@ const deleteContact = ids => {
 const currentChangeContact = (currentRow, oldCurrentRow) => {
 	if (currentRow) {
 		tableList22.httpAttribute.baseParams["cond.contactid"] = currentRow.contactid;
+		zTable22.value.reuseTableList();
 	}
 };
 
@@ -2047,6 +2073,7 @@ const tableList33 = reactive({
 const currentChangeAddress = (currentRow, oldCurrentRow) => {
 	if (currentRow) {
 		tableList33.httpAttribute.baseParams["cond.id"] = currentRow.id;
+		zTable33.value.reuseTableList();
 	}
 };
 const zTable4 = ref();
