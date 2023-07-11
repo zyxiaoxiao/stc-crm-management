@@ -24,9 +24,9 @@
 						<el-button type="primary" link icon="Edit" @click="editTrackingRecord(scope.row)">
 							{{ $t("corpinfoTrackrecordtitle") }}
 						</el-button>
-						<el-button type="primary" link icon="FolderRemove" @click="removeToPublic(scope.row)">
+						<!-- <el-button type="primary" link icon="FolderRemove" @click="removeToPublic(scope.row)">
 							{{ $t("menu_removeToPublic") }}
-						</el-button>
+						</el-button> -->
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -300,7 +300,7 @@ const tableList1 = reactive({
 			prop: "operation",
 			type: "operation",
 			fixed: "right",
-			width: "160"
+			width: "120"
 		}
 	],
 	// 表格数据
