@@ -2180,7 +2180,7 @@ const tableList9 = reactive({
 	httpAttribute: {
 		url: "/crm/folders/folders!selectFoldersInfoOnlyByCond.action",
 		root: "foldersInfos",
-		baseParams: {}
+		baseParams: { "cond.rightFlag": "1" }
 	},
 	//表格表头
 	tableColumns: [
@@ -2345,7 +2345,8 @@ const tableList10 = reactive({
 		baseParams: {
 			"cond.norequired": "true",
 			"cond.auditflag": "2",
-			"cond.businesstype": "10"
+			"cond.businesstype": "10",
+			"cond.enterprisedepts": "Y"
 		}
 	},
 	//表格表头
@@ -2460,7 +2461,7 @@ const tableList11 = reactive({
 	httpAttribute: {
 		url: "/crm/invoiceinfo/invoiceinfo!selectInvoceInfoByCondUseInCustomerdetail.action",
 		root: "invoicemap",
-		baseParams: {}
+		baseParams: { "cond.enterprisedepts": "Y" }
 	},
 	//表格表头
 	tableColumns: [
