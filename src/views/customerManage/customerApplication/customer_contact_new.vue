@@ -49,7 +49,7 @@
 					</el-form-item>
 				</el-col>
 				<el-col :span="6">
-					<el-form-item title1="电子邮件" :label="$t('corpinfopanelemailtitle')">
+					<el-form-item title1="电子邮件" :label="$t('corpinfopanelemailtitle')" prop="email">
 						<el-input type="text" clearable v-model.trim="formData.email"></el-input>
 					</el-form-item>
 				</el-col>
@@ -213,13 +213,32 @@ const formData = reactive({
 	corpid: props.condobj.corpid
 });
 
+//联系人中不能含有非法字符
+const contactnameValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
+//邮件中不能含有非法字符
+const corpemailValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
 //校验
 const rules = reactive({
 	contactdesc: [
 		{
 			required: true,
 			message: i18n.t("rulesPropMessage")
-		}
+		},
+		{ validator: contactnameValidator, trigger: "blur" }
 	],
 	defaultcontact: [
 		{
@@ -238,6 +257,13 @@ const rules = reactive({
 			required: true,
 			message: i18n.t("rulesPropMessage")
 		}
+	],
+	email: [
+		{
+			required: true,
+			message: i18n.t("rulesPropMessage")
+		},
+		{ validator: corpemailValidator, trigger: "blur" }
 	]
 });
 

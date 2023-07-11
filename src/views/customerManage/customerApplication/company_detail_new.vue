@@ -748,6 +748,25 @@ const corpdescValidator = (rule, value, callback) => {
 		callback();
 	}
 };
+
+//联系人中不能含有非法字符
+const contactnameValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
+//邮件中不能含有非法字符
+const corpemailValidator = (rule, value, callback) => {
+	if (value.indexOf("<") > -1 || value.indexOf(">") > -1) {
+		callback(new Error(i18n.t("portalcheckvalueillegal")));
+	} else {
+		callback();
+	}
+};
+
 const agentbrokerageValidator = (rule, value, callback) => {
 	if (formData.agentcode && !Number.isInteger(value)) {
 		callback(new Error(i18n.t("rulesPropMessage") + ", " + i18n.t("mustbeanumber")));
@@ -783,9 +802,15 @@ const rules = reactive({
 	corptype: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	corplocation: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	country: [{ required: true, message: i18n.t("rulesPropMessage") }],
-	contactname: [{ required: true, message: i18n.t("rulesPropMessage") }],
+	contactname: [
+		{ required: true, message: i18n.t("rulesPropMessage") },
+		{ validator: contactnameValidator, trigger: "blur" }
+	],
 	corpphone: [{ required: true, message: i18n.t("rulesPropMessage") }],
-	corpemail: [{ required: true, message: i18n.t("rulesPropMessage") }],
+	corpemail: [
+		{ required: true, message: i18n.t("rulesPropMessage") },
+		{ validator: corpemailValidator, trigger: "blur" }
+	],
 	customersource: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	newcustomtype: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	agentbrokerage: [{ validator: agentbrokerageValidator, trigger: "blur" }]
@@ -1646,6 +1671,7 @@ const deleteContact = ids => {
 const currentChangeContact = (currentRow, oldCurrentRow) => {
 	if (currentRow) {
 		tableList22.httpAttribute.baseParams["cond.contactid"] = currentRow.contactid;
+		zTable22.value.reuseTableList();
 	}
 };
 
@@ -1992,6 +2018,7 @@ const tableList33 = reactive({
 const currentChangeAddress = (currentRow, oldCurrentRow) => {
 	if (currentRow) {
 		tableList33.httpAttribute.baseParams["cond.id"] = currentRow.id;
+		zTable33.value.reuseTableList();
 	}
 };
 const zTable4 = ref();
@@ -2347,27 +2374,30 @@ const tabChange = TabPaneName => {
 	//只有tab页是客户基本信息才显示 保存和 客户查询按钮
 	TabPaneName == 0 ? (isbtnShow.value = true) : (isbtnShow.value = false);
 	if (formData.corpid) {
-		switch (TabPaneName) {
-			case 1:
-				// 客户资质文件信息
-				if (!tabPaneXR.get(TabPaneName)) tabPaneXR.set(TabPaneName, true); // 第一次才渲染
-				break;
-			case 2:
-				// 客户联系人信息
-				if (!tabPaneXR.get(TabPaneName)) tabPaneXR.set(TabPaneName, true); // 第一次才渲染
-				break;
-			case 3:
-				// 地址信息
-				if (!tabPaneXR.get(TabPaneName)) tabPaneXR.set(TabPaneName, true); // 第一次才渲染
-				break;
-			case 4:
-				// 账户信息
-				if (!tabPaneXR.get(TabPaneName)) tabPaneXR.set(TabPaneName, true); // 第一次才渲染
-				break;
-			case 5:
-				// 客户综合信息
-				if (!tabPaneXR.get(TabPaneName)) tabPaneXR.set(TabPaneName, true); // 第一次才渲染
-				break;
+		if (!tabPaneXR.get(TabPaneName)) {
+			switch (TabPaneName) {
+				case 1:
+					// 客户资质文件信息
+					tableList.httpAttribute.baseParams["cond.corpid"] = formData.corpid;
+					break;
+				case 2:
+					// 客户联系人信息
+					tableList2.httpAttribute.baseParams["cond.corpid"] = formData.corpid;
+					break;
+				case 3:
+					// 地址信息
+					tableList3.httpAttribute.baseParams["cond.corpid"] = formData.corpid;
+					break;
+				case 4:
+					// 账户信息
+					tableList4.httpAttribute.baseParams["cond.corpid"] = formData.corpid;
+					break;
+				case 5:
+					// 客户综合信息
+					tableList5.httpAttribute.baseParams["cond.corpid"] = formData.corpid;
+					break;
+			}
+			tabPaneXR.set(TabPaneName, true); // 第一次才渲染
 		}
 	} else {
 		if (TabPaneName != 0) {
