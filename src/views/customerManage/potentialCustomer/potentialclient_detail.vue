@@ -780,13 +780,31 @@ const agentbrokerageValidator = (rule, value, callback) => {
 	}
 };
 
+const businesslicensenoValidator = async (rule, value, callback) => {
+	if (formData.country == "086" && !value) {
+		callback(new Error(i18n.t("message_ChinaUserBusinessRefistration_CanNotEmpty")));
+	} else if (value) {
+		let params = { "cond.bulicno": formData.businesslicenseno, "cond.corpid": formData.corpid };
+		try {
+			await http.post("/mylims/enterpriseinfo/enterpriseinfo!bulicnoValidate.action", qs.stringify(params), {
+				headers: { noLoading: true }
+			});
+			callback();
+		} catch (error) {
+			callback(new Error(i18n.t("Message_OperationFailureInformation")));
+		}
+	} else {
+		callback();
+	}
+};
+
 const rules = reactive({
 	corpdesc: [
 		{ required: true, message: i18n.t("rulesPropMessage") },
 		{ validator: corpdescValidator, trigger: "blur" }
 	],
 	corpenglishname: [{ required: true, message: i18n.t("rulesPropMessage") }],
-	businesslicenseno: [{ required: true, message: i18n.t("rulesPropMessage") }],
+	businesslicenseno: [{ validator: businesslicensenoValidator, trigger: "blur" }],
 	corptype: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	corplocation: [{ required: true, message: i18n.t("rulesPropMessage") }],
 	country: [{ required: true, message: i18n.t("rulesPropMessage") }],
