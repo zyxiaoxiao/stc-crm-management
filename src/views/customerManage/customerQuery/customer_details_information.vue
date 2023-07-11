@@ -155,12 +155,20 @@ const tableList1 = reactive({
 			width: "200"
 		},
 		{
+			title: "联系人",
+			label: "companypanelcontactdesctitle",
+			prop: "contactname",
+			type: "Input",
+			width: "160"
+		},
+		{
 			title: "归属部门",
 			label: "corpinfopaneldepartmentdesctitle",
 			prop: "departmentdesc",
 			type: "Input",
 			width: "200"
 		},
+
 		{
 			title: "是否锁定",
 			label: "itemtitlebase_userlockflag",
