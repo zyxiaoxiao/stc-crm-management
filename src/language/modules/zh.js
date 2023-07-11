@@ -5573,6 +5573,7 @@ export default {
 	Message_NoSalesAgentToChooseFrom: "没有可以选择的销售代理！",
 	message_CustomerChangeNotes_CanNotBeEmpty: "客户变更备注不能为空!",
 	panelbaseSalesQuotationQuery: "销售报价单查询",
+	menubaseDGEP_CMANationalChapter : "DGEP-骑缝章(CMA章+检测章)",
 	fieldcolumncustomername: "客户名称",
 	detectCustomerCategory0: "个人客户",
 	detectCustomerCategory1: "企业客户",

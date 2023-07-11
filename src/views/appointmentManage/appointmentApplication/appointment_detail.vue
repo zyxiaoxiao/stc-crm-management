@@ -336,13 +336,13 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item :label="$t('itemtitlebase_flowcorpcode') + ':'" title1="单位编码" readonly>
-								<el-input type="text" clearable v-model="formData.desc3" :disabled="isdisabled"></el-input>
+							<el-form-item :label="$t('itemtitlebase_flowcorpcode') + ':'" title1="单位编码">
+								<el-input type="text" clearable v-model="formData.desc3" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
-							<el-form-item :label="$t('columnappointmentdiscount') + ':'" title1="单位折扣" readonly>
-								<el-input type="text" clearable v-model="formData.desc4" :disabled="isdisabled"></el-input>
+							<el-form-item :label="$t('columnappointmentdiscount') + ':'" title1="单位折扣">
+								<el-input type="text" clearable v-model="formData.desc4" readonly></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="12">
@@ -1246,6 +1246,7 @@ import ZDialog from "/src/components/ZDialog.vue";
 import { getdropSownSelection } from "/src/utils/util.js";
 import qs from "qs";
 import http from "@/api/index.js";
+import moment from "moment";
 import zTable from "/src/components/ZTable/index.vue";
 import { downloadFile } from "/src/utils/fileUtil.js";
 import { GlobalStore } from "/src/store/globalStore.js";
@@ -1401,15 +1402,16 @@ const formData2 = reactive({
 }); //检测项费用信息
 let rastatime = ref([]); //服务类型
 let currencyInfo = ref([]); //币种
-let data = new Date().toLocaleString();
-data = data.substring(0, data.indexOf(" "));
+let date = new Date().toLocaleString();
+date = date.substring(0, date.indexOf(" "));
+let adate = moment(new Date(date)).format("YYYY-MM-DD");
 
 //报价单初始化信息
 const formData = reactive({
 	reservnum: "",
 	desc90: "N",
 	desc15: "",
-	desc21: data,
+	desc21: adate,
 	desc79: "",
 	desc81: "",
 	desc78: "",
@@ -1516,6 +1518,7 @@ let getappointmentInfo = async obj => {
 			formData[key] = res.appointmentInfo[0][key];
 		}
 		paycondition_renderer(formData.paytype);
+		paycondition_rendererto(formData.desc5); //付款方式的下拉值从新定义
 	}
 };
 //获取检测类型
@@ -1706,6 +1709,7 @@ let locationAppointmentInfo = async top => {
 		}
 		v_reservnum = formData.reservnum;
 		paycondition_renderer(formData.paytype);
+		paycondition_rendererto(formData.desc5); //付款方式的下拉值从新定义
 	}
 };
 
@@ -1822,6 +1826,7 @@ const savenewAppointmentInfo = async () => {
 			formData[key] = res.appointmentInfo[0][key];
 		}
 		paycondition_renderer(formData.paytype);
+		paycondition_rendererto(formData.desc5); //付款方式的下拉值从新定义
 	}
 };
 
@@ -1881,6 +1886,8 @@ const downloadAppointment = v_type => {
 //批量修改折扣率
 const readDiscountApplintment = () => {
 	let discountvalue = ref(0);
+	let sList = vmaps.value.selectList;
+	console.log(sList);
 	ElMessageBox({
 		title: i18n.t("columnappointmentdiscount"),
 		message: () =>
@@ -2274,10 +2281,6 @@ const deleteUpload = (ids, selectList) => {
 };
 
 const itemViewCellClick = (row, column, cell, event) => {
-	console.log("&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-	console.log(v_readonly);
-	console.log(workflowflag);
-	console.log(column.property);
 	if (!ptableList.edit) {
 		//表单不可编辑就退回去
 		return;
@@ -2325,6 +2328,8 @@ const itemViewCellClick = (row, column, cell, event) => {
 		row.isEdit[column.property] = true;
 		return;
 	}
+	row.isEdit[column.property] = false;
+	return;
 };
 let getValue = async () => {
 	let jsonString = {};
@@ -2538,8 +2543,7 @@ const ptableList = reactive({
 			prop: "DISCOUNTRATE",
 			type: "Number",
 			precision: 2,
-			width: "140",
-			edit: true
+			width: "140"
 		},
 		{
 			title: "历史报价",
@@ -3110,7 +3114,7 @@ onMounted(() => {
 		} else if (workflowflag == "2") {
 			approveShow.value = true;
 			isbtnShow.value = true;
-			historyappShow = true;
+			historyappShow.value = true;
 			isdisabled.value = true;
 		} else if (workflowflag == "3") {
 			isbtnShow.value = true;
@@ -3207,11 +3211,12 @@ const dialogclose = () => {
 					if (formData.enterprisecode) {
 						//获取当前客户的归属销售
 						let getUserValue = async corpno => {
-							let jsonString = { "cond.corpno": corpno };
+							let cond = { "corpno": corpno };
+							let jsonString = { cond: cond };
 							let params = {
 								jsonString: JSON.stringify(jsonString)
 							};
-							const res = await http.post("/mylims/order/appointment!selectEnterpriseForUserInfo.action", qs.stringify(params));
+							const res = await http.post("/mylims/order/appointment!selectEnterpriseForUserInfo.action", qs.stringify(params));							
 							if (res && res.maps != null && res.maps.length > 0) {
 								let maps = res.maps;
 								formData.desc81 = maps[0].userdesc; //SE姓名
@@ -3346,7 +3351,8 @@ const dialogclose = () => {
 				let obj = condobj.objlist;
 				let reservnumnow = formData.reservnum;
 				if (obj.folderno && reservnumnow) {
-					let cond = { folderno: obj.folderno, dept: obj.dept };
+					let corpno = formData.desc13;//委托客户号
+					let cond = { corpno: corpno, folderno: obj.folderno, dept: obj.dept };
 					//查询申请单检测项
 					let selectF = async o => {
 						let params = {
@@ -3544,15 +3550,18 @@ const contactDialogclose = () => {
 //子页面关闭后的方法可以给父页面赋值等操作
 const addressDialogclose = () => {
 	//选择付款单位地址后的关闭窗口后的事件
-	if (condobj && condobj.objlist.id) {
+	if (condobj && condobj.objlist && condobj.objlist) {
 		formData.paymentaddress = condobj.objlist.address;
 	}
 };
 //子页面关闭后的方法可以给父页面赋值等操作
 const reportDialogclose = () => {
 	//选择报告抬头后关闭回调
-	if (condobj && condobj.objlist.id) {
-		formData.paymentaddress = condobj.objlist.address;
+	if (condobj && condobj.objlist && condobj.objlist.reportid) {
+		formData.report_zh = condobj.objlist.report_zh;
+		formData.report_us = condobj.objlist.report_us;
+		formData.report_address_zh = condobj.objlist.report_address_zh;
+		formData.report_address_us = condobj.objlist.report_address_us;
 	}
 };
 
@@ -3720,9 +3729,11 @@ const dialogShow = data => {
 	} else if (data == "dialogShow_selectFoldernoApplintment") {
 		//选择申请单
 		let desc56 = formData1.desc56; //服务类型
+		let desc13 = formData.desc13;//委托客户号		
 		if (desc56) {
 			condobj.cond = {
-				html: data
+				html: data,
+				corpno:desc13
 			};
 			condobj.deptFolderApplintmentDialogShow = true;
 		} else {

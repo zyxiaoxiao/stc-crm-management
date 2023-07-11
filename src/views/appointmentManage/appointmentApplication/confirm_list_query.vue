@@ -41,11 +41,18 @@
 					@link-detailbg="linkDetailquey"
 					@workflow-status="workflowStatus"
 				>
-					<!-- 表格操作 -->
-					<template #operation="scope">
-						<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
-							{{ $t("menubasequotationorderdownload") }}
-						</el-button>
+					<!-- 自定义 -->
+					<template #Custom="scope">
+						<span v-if="scope.column == 'download'" style="color: red; font-weight: bold; font-size: medium">
+							<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
+								{{ $t("menubasequotationorderdownload") }}
+							</el-button></span
+						>
+						<span v-if="scope.column == 'payment'" style="color: red; font-weight: bold; font-size: medium">
+							<el-button type="primary" link icon="Download" @click="editPaymentAdvice(scope.row)">
+								{{ $t("menubasePayment_Advice") }}
+							</el-button></span
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -97,6 +104,24 @@
 				</template>
 			</el-dialog>
 		</div>
+		<div v-dialogStretching>
+			<el-dialog v-model="dialogFormPaymentVisible" :title="$t('DOWNLOAD_download')">
+				<el-form :model="dform" style="margin: 25px 15px">
+					<el-form-item label="Can Display :" title1="Can Display" label-width="140px">
+						<el-checkbox-group v-model="paymenttype">							
+							<el-checkbox :label="$t('columnappointmentCurrencyUnitPrice')" name="price" />
+							<el-checkbox :label="$t('columnappointmentdiscount')" name="payment" />
+						</el-checkbox-group>
+					</el-form-item>
+				</el-form>
+				<template #footer>
+					<span class="dialog-footer">
+						<el-button @click="dialogFormPaymentVisible = false">{{ $t("SRM_cancel") }}</el-button>
+						<el-button type="primary" @click="downloadFormPayment()"> {{ $t("SRM_ok") }}</el-button>
+					</span>
+				</template>
+			</el-dialog>
+		</div>
 	</div>
 </template>
 
@@ -125,6 +150,7 @@ const globalStore = GlobalStore();
 let attestation = ref("01"); //下载报价单认证类型默认值
 let certificationshow = ref(false); //认证类型默认不显示
 const plain = ref("CN"); //下载默认选中
+const paymenttype = ref([i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")]); //下载默认选中
 //认证类型下拉值
 const attestationData = [
 	{
@@ -164,6 +190,8 @@ const auditList = reactive({
 
 //下载弹出对话框
 let dialogFormVisible = ref(false);
+//下载弹出对话框
+let dialogFormPaymentVisible = ref(false);
 
 let v_row = null;
 const editAddress = row => {
@@ -172,6 +200,29 @@ const editAddress = row => {
 		certificationshow.value = true;
 	}
 	dialogFormVisible.value = true;
+};
+
+const editPaymentAdvice = row => {
+	dialogFormPaymentVisible.value = true;
+};
+
+const downloadFormPayment = () => {
+	console.log("qqqqqqqqqqqqqqqqqq");
+	console.log(paymenttype.value);
+	let pList = paymenttype.value;
+	let price = i18n.t("columnappointmentCurrencyUnitPrice");
+	let discount = i18n.t("columnappointmentdiscount");
+	let defaulttax = "N";
+	let isdefaulttax = "N";
+	for(let p of pList){
+        if(p == price){
+
+		}
+		if(p == discount){
+			
+		}
+	}
+    //paymenttype.value = [i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")];
 };
 
 //下载报价文件
@@ -630,8 +681,15 @@ const htableList = reactive({
 		{
 			title: "报价单下载",
 			label: "menubasequotationorderdownload",
-			prop: "operation",
-			type: "operation",
+			prop: "download",
+			type: "Custom",
+			width: "130"
+		},
+		{
+			title: "付款通知单",
+			label: "menubasePayment_Advice",
+			prop: "payment",
+			type: "Custom",
 			width: "130"
 		},
 		{

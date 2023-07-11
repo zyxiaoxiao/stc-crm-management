@@ -182,7 +182,7 @@ let tableColumns = [
 		title: "归属部门",
 		label: "corpinfopaneldepartmentdesctitle",
 		prop: "departmentdesc",
-		type: "Number",
+		type: "Input",
 		width: "140"
 	},
 	{

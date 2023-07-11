@@ -30,6 +30,15 @@
 							@click="batchbg_handler(scope.ids)"
 							>{{ $t("menu_batchbg") }}</el-button
 						>
+						<el-button
+							size="small"
+							type="primary"
+							icon="Edit"
+							plain
+							:disabled="!scope.isSelected"
+							@click="batchbg_handler(scope.ids)"
+							>{{ $t("menu_revise") }}</el-button
+						>
 					</template>
 					<!-- 表格操作 -->
 					<template #operation="scope">

@@ -38,7 +38,6 @@ const brokerage = [
 		label: i18n.t("crmcolumnwsp0")
 	}
 ];
-
 //检验类型
 //let CRM_businessCategory = getdropSownSelection("CRM_businessCategory");
 //默认需要传入的参数

@@ -161,7 +161,7 @@
 									<el-input v-model.trim="formData.dept" clearable disabled></el-input>
 								</el-form-item>
 							</el-col>
-							<el-col :span="6">
+							<!-- <el-col :span="6">
 								<el-form-item title1="销售代理佣金点" :label="$t('itemtitlefoldersagentbrokerage')">
 									<el-input v-model.trim="formData.detections" clearable disabled></el-input>
 								</el-form-item>
@@ -170,7 +170,7 @@
 								<el-form-item title1="销售代理名称" :label="$t('corpinfopanelqydlsmctitle')">
 									<el-input v-model.trim="formData.inspections" clearable disabled></el-input>
 								</el-form-item>
-							</el-col>
+							</el-col> -->
 						</el-row>
 						<el-row :gutter="15" class="main-align-items-center">
 							<el-col :span="24">

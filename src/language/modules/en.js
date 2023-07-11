@@ -5787,6 +5787,7 @@ export default {
 	Message_NoSalesAgentToChooseFrom: "No sales agent to choose from！",
 	message_CustomerChangeNotes_CanNotBeEmpty: "Customer change notes can not be empty !",
 	panelbaseSalesQuotationQuery: "Sales Quotation Query",
+	menubaseDGEP_CMANationalChapter : "DGEP Paging Seal(CMA chapter + detection seal)",
 	logoText: "STC CRM SYSTEM",
 	detectCustomerCategory0: "Personal Customer",
 	detectCustomerCategory1: "Enterprise Customer",

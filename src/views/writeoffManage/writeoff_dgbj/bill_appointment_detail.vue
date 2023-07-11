@@ -182,6 +182,17 @@ const saveBillAppointment_handler = async () => {
 
 //删除到账信息
 const billappointmentInfosDelete = async selectList => {
+	let editList = grid_billappointmentInfos.value.getEditSelectList(); //编辑后的数据
+	if(editList != null && editList.length > 0){
+        for(let e of editList){
+            for(let s of selectList){
+				if(e.billid == s.billid){
+					ElMessage.warning(i18n.t("Message_SaveCurrenInfo"));
+		            return;
+				}
+			}
+		}
+	}
 	let jsonString = {
 		billappointmentInfos: selectList
 	};

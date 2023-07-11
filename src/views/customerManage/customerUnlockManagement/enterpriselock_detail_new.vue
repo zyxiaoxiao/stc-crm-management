@@ -680,7 +680,7 @@ const tableList3 = reactive({
 	httpAttribute: {
 		url: "/crm/folders/folders!selectFoldersInfoOnlyByCond.action",
 		root: "foldersInfos",
-		baseParams: {}
+		baseParams: { "cond.rightFlag": "1" }
 	},
 	//表格表头
 	tableColumns: [
