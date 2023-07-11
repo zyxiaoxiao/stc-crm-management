@@ -1,6 +1,6 @@
 <template>
-	<div class="all-height flex-column">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+	<div class="all-height flex-column main-card">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="folderinfos"
