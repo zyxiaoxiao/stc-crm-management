@@ -21,21 +21,15 @@ const tableList = reactive({
 	id: "/customerManage/customerApplication/selectFoldersForCustomerlist.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/folders/folders!selectFoldersInfoOnlyByCond.action",
+		url: "/crm/folders/folders!selectFoldersInfoForLimsFolders.action",
 		root: "foldersInfos",
 		baseParams: {
+			"cond.ischeckstatus": "Y",
 			"cond.rasclientid": props.condobj.corpno
 		}
 	},
 	//表格表头
 	tableColumns: [
-		{
-			title: "客户名称",
-			label: "corpinfonametitle",
-			prop: "compname",
-			type: "Input",
-			width: "300"
-		},
 		{
 			title: "申请单号",
 			label: "columntolockapplynum",
@@ -44,9 +38,16 @@ const tableList = reactive({
 			width: "160"
 		},
 		{
-			title: "申请受理日期",
-			label: "crmcolumnapplyacceptdate",
-			prop: "logdate",
+			title: "报价单号",
+			label: "crmcolumnreservnum",
+			prop: "quotationno",
+			type: "Input",
+			width: "300"
+		},
+		{
+			title: "入单日期",
+			label: "panelcolumnLoginDate",
+			prop: "drawdate",
 			type: "Date"
 		}
 	],
