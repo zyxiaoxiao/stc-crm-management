@@ -85,6 +85,17 @@
 					<el-button size="small" type="primary" icon="Search" plain @click="quickQuery">{{ $t("menu_select") }} </el-button>
 					<el-button size="small" type="info" icon="RefreshLeft" plain @click="resetSearch">{{ $t("menu_clear") }} </el-button>
 				</template>
+				<!-- 自定义 -->
+				<template #Custom="scope">
+					<!-- 给客户信息列表中客户名称变红色用来区分废弃客户。 -->
+					<span
+						:style="{
+							color: scope.row['discardflag'] == '1' ? '#ff0000' : '#606266'
+						}"
+					>
+						{{ scope.row[scope.column] }}
+					</span>
+				</template>
 				<!-- 表格操作 -->
 				<template #operation="scope">
 					<el-button type="primary" link icon="Link" @click="openDrawer('1', scope.row)">
@@ -92,6 +103,9 @@
 					</el-button>
 					<el-button type="primary" link icon="Link" @click="openDrawer('2', scope.row)">
 						{{ $t("menubaseOwnershipChangeRecord") }}
+					</el-button>
+					<el-button type="primary" link icon="Link" @click="openDrawer('3', scope.row)">
+						{{ $t("corpinfopanelgsxxtitle") }}
 					</el-button>
 				</template>
 			</zTable>
@@ -116,6 +130,16 @@
 				<customerchangedetail :condobj="condobj"></customerchangedetail>
 			</ZDialog>
 		</div>
+		<div v-dialogStretching>
+			<ZDialog
+				v-model="dialogShow_mycustomer"
+				:title="$t('corpinfopanelgsxxtitle')"
+				width="55%"
+				customclass="dialogShowChangeRecord"
+			>
+				<mycustomer :condobj="condobj"></mycustomer>
+			</ZDialog>
+		</div>
 	</div>
 </template>
 <script setup>
@@ -125,10 +149,11 @@ import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
 import selectFolders from "../customerApplication/selectFoldersForCustomerlist.vue";
 import customerchangedetail from "../customerApplication/customer_change_detail.vue";
-
+import mycustomer from "../customerApplication/my_customer.vue";
 const zTable1 = ref();
 const dialogShow_Folders = ref(false);
 const dialogShow_ChangeRecord = ref(false);
+const dialogShow_mycustomer = ref(false);
 
 const condobj = reactive({
 	corpno: String,
@@ -197,7 +222,7 @@ const tableList = reactive({
 			title: "客户名称",
 			label: "corpinfonametitle",
 			prop: "corpdesc",
-			type: "Input",
+			type: "Custom",
 			width: "160"
 		},
 
@@ -321,6 +346,11 @@ const openDrawer = (v, row) => {
 	if (v == 2) {
 		condobj.corpid = row.corpid;
 		dialogShow_ChangeRecord.value = true;
+	}
+	//归属信息查询
+	if (v == 3) {
+		condobj.corpid = row.corpid;
+		dialogShow_mycustomer.value = true;
 	}
 };
 //页面初始化渲染完成执行
