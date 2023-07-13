@@ -47,7 +47,7 @@
 			</el-row>
 		</el-form>
 		<el-divider />
-		<zTable ref="zTable1" :tableList="tableList1">
+		<zTable ref="zTable1" :tableList="tableList1" style="overflow: auto">
 			<template #tableHeaderLleft="scope">
 				<el-button size="small" type="primary" icon="ZoomIn" plain @click="selectDepartment">{{
 					$t("view_multiSelectDepartment")

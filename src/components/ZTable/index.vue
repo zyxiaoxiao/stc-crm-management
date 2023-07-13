@@ -467,6 +467,7 @@
 				:currentPage="params.page"
 				:page-size="params.limit"
 				:page-sizes="[25, 50, 100]"
+				:pager-count="3"
 				:background="true"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="params.total"
@@ -903,19 +904,24 @@ const getTableList = async () => {
 
 //baseParams发生变化重新调用
 const reuseTableList = async () => {
-	let newBaseParams = props.tableList.httpAttribute.baseParams;
-	for (let key in newBaseParams) {
-		params[key] = newBaseParams[key];
-	}
-	try {
-		loading.value = true;
-		const res = await http.post(props.tableList.httpAttribute.url, qs.stringify(params), config); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
-		if (res) {
-			//对数据源进行处理
-			handleTableData(res);
+	//判断请求属性是否为空
+	if (props.tableList.httpAttribute) {
+		if (props.tableList.httpAttribute.baseParams) {
+			let newBaseParams = props.tableList.httpAttribute.baseParams;
+			for (let key in newBaseParams) {
+				params[key] = newBaseParams[key];
+			}
 		}
-	} finally {
-		loading.value = false;
+		try {
+			loading.value = true;
+			const res = await http.post(props.tableList.httpAttribute.url, qs.stringify(params), config); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+			if (res) {
+				//对数据源进行处理
+				handleTableData(res);
+			}
+		} finally {
+			loading.value = false;
+		}
 	}
 };
 

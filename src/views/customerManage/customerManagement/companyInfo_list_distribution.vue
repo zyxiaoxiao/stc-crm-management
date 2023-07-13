@@ -30,15 +30,9 @@
 							@click="batchbg_handler(scope.ids)"
 							>{{ $t("menu_batchbg") }}</el-button
 						>
-						<el-button
-							size="small"
-							type="primary"
-							icon="Edit"
-							plain
-							:disabled="!scope.isSelected"
-							@click="batchbg_handler(scope.ids)"
-							>{{ $t("menu_revise") }}</el-button
-						>
+						<el-button size="small" type="primary" icon="Edit" plain @click="salesattributionreplacement_handler(scope.ids)">{{
+							$t("menu_revise")
+						}}</el-button>
 					</template>
 					<!-- 表格操作 -->
 					<template #operation="scope">
@@ -87,6 +81,12 @@
 				<customerdistributiondetail :condobj="customerdistributiondetailList" />
 			</ZDialog>
 		</div>
+		<!-- 销售归属批量替换 -->
+		<div v-dialogStretching>
+			<ZDialog v-model="selectattributivesubstitutionList.dialogShow" width="95%" @close="selectattributivesubstitutionClose">
+				<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
+			</ZDialog>
+		</div>
 	</div>
 </template>
 
@@ -104,6 +104,7 @@ import audit from "@/views/audit/index.vue";
 import companylistselect from "../customerSelete/company_list_select.vue";
 import selectbatchdeptanduser from "./select_batch_deptanduser.vue";
 import customerdistributiondetail from "./customer_distribution_detail.vue";
+import selectattributivesubstitution from "./select_attributive_substitution.vue";
 
 const i18n = useI18n();
 
@@ -494,6 +495,16 @@ const linkDetailbgQuery = (column, row) => {
 	customerdistributiondetailList.success = false;
 	customerdistributiondetailList.id = row.id;
 	customerdistributiondetailList.readonly = true;
+};
+
+//销售归属批量替换
+const selectattributivesubstitutionList = reactive({
+	dialogShow: false,
+	success: false
+});
+
+const salesattributionreplacement_handler = () => {
+	selectattributivesubstitutionList.dialogShow = true;
 };
 
 const tabPaneName = ref("0");

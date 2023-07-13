@@ -5787,7 +5787,7 @@ export default {
 	Message_NoSalesAgentToChooseFrom: "No sales agent to choose from！",
 	message_CustomerChangeNotes_CanNotBeEmpty: "Customer change notes can not be empty !",
 	panelbaseSalesQuotationQuery: "Sales Quotation Query",
-	menubaseDGEP_CMANationalChapter : "DGEP Paging Seal(CMA chapter + detection seal)",
+	menubaseDGEP_CMANationalChapter: "DGEP Paging Seal(CMA chapter + detection seal)",
 	logoText: "STC CRM SYSTEM",
 	detectCustomerCategory0: "Personal Customer",
 	detectCustomerCategory1: "Enterprise Customer",
@@ -5813,5 +5813,9 @@ export default {
 	crm_xmlx04: "Other",
 	paymentmethod0: "Prepayments",
 	paymentmethod1: "Down Payment",
-	paymentmethod2: "Credit Payment"
+	paymentmethod2: "Credit Payment",
+	menu_revise: "Sales Attribution Replacement",
+	basecolumnOriginal_Personnel_Code: "Original personnel code",
+	basecolumnNew_Employee_Code: "New employee code",
+	itemtitleNowSalesservice: "Now Of Sales Executive /Customer service"
 };

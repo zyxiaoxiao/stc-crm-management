@@ -5573,7 +5573,7 @@ export default {
 	Message_NoSalesAgentToChooseFrom: "没有可以选择的销售代理！",
 	message_CustomerChangeNotes_CanNotBeEmpty: "客户变更备注不能为空!",
 	panelbaseSalesQuotationQuery: "销售报价单查询",
-	menubaseDGEP_CMANationalChapter : "DGEP-骑缝章(CMA章+检测章)",
+	menubaseDGEP_CMANationalChapter: "DGEP-骑缝章(CMA章+检测章)",
 	fieldcolumncustomername: "客户名称",
 	detectCustomerCategory0: "个人客户",
 	detectCustomerCategory1: "企业客户",
@@ -5599,5 +5599,10 @@ export default {
 	crm_xmlx04: "Other",
 	paymentmethod0: "预付款",
 	paymentmethod1: "预付定金",
-	paymentmethod2: "月结"
+	paymentmethod2: "月结",
+	menu_revise: "销售归属替换",
+	basecolumnOriginal_Personnel_Code: "原归属人员编码",
+	basecolumnNew_Employee_Code: "新归属人员编码",
+	itemtitleNowSalesservice: "现任销售主管/客户服务"
+
 };
