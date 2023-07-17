@@ -220,9 +220,9 @@
 							</div>
 						</div>
 						<div class="flex-row" :style="{ height: height - 42 + `px`, width: width + `px` }">
-							<div :style="{ width: width - 260 + `px` }">
-								<div class="flex-row" :style="{ height: height - 242 + `px`, width: width - 268 + `px` }">
-									<div class="appointmentSplitdetail-card" style="max-width: 25%; flex: 0 0 25%">
+							<div :style="{ width: width - 280 + `px` }">
+								<div class="flex-row" :style="{ height: height - 242 + `px`, width: width - 288 + `px` }">
+									<div class="appointmentSplitdetail-card" style="max-width: 35%; flex: 0 0 35%">
 										<zTable ref="zTable1" :tableList="tableList1" @selectionChange="zTable1SelectionChange"
 											><template #tableHeaderLleft="scope">
 												<el-button
@@ -238,7 +238,7 @@
 											</template></zTable
 										>
 									</div>
-									<div class="appointmentSplitdetail-card" style="max-width: 50%; flex: 0 0 50%">
+									<div class="appointmentSplitdetail-card" style="max-width: 40%; flex: 0 0 40%">
 										<zTable ref="zTable2" :tableList="tableList2" @selectionChange="zTable2SelectionChange">
 											<template #tableHeaderLleft="scope">
 												<el-button
@@ -280,11 +280,11 @@
 										>
 									</div>
 								</div>
-								<div class="flex-row" style="height: 200px" :style="{ width: width - 268 + `px` }">
-									<div class="appointmentSplitdetail-card" style="max-width: 25%; flex: 0 0 25%; margin-top: -11px">
+								<div class="flex-row" style="height: 200px" :style="{ width: width - 288 + `px` }">
+									<div class="appointmentSplitdetail-card" style="max-width: 35%; flex: 0 0 35%; margin-top: -11px">
 										<zTable ref="zTable4" :tableList="tableList4" @selectionChange="zTable4SelectionChange"></zTable>
 									</div>
-									<div class="appointmentSplitdetail-card" style="max-width: 50%; flex: 0 0 50%; margin-top: -11px">
+									<div class="appointmentSplitdetail-card" style="max-width: 40%; flex: 0 0 40%; margin-top: -11px">
 										<zTable ref="zTable5" :tableList="tableList5" @selectionChange="zTable5SelectionChange"></zTable>
 									</div>
 									<div class="appointmentSplitdetail-card" style="max-width: 25%; flex: 0 0 25%; margin-top: -11px">
@@ -292,7 +292,7 @@
 									</div>
 								</div>
 							</div>
-							<div class="appointmentSplitdetail-card" style="width: 260px">
+							<div class="appointmentSplitdetail-card" style="width: 280px">
 								<zTable ref="zTable7" :tableList="tableList7">
 									<template #tableHeaderLleft="scope">
 										<el-button
@@ -1090,7 +1090,7 @@ const tableList7 = reactive({
 			label: "columnappointmentCurrencyTotalPrice",
 			prop: "DESC34",
 			type: "Number",
-			width: "100",
+			width: "140",
 			precision: 2,
 			min: 0,
 			edit: true

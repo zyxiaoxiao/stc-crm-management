@@ -525,9 +525,9 @@ const delete_handler2 = selectList => {
 };
 
 //提交
-const submit_handler = () => {
+const submit_handler = selectList => {
 	let userInfoMaps = [];
-	tableList2.tableData.forEach(item => {
+	selectList.forEach(item => {
 		let obj = {};
 		obj.corpid = item.corpid; //客户主键
 		obj.corpno = item.corpno; //客户编号
@@ -553,6 +553,15 @@ const submit_handler = () => {
 			})
 		);
 		if (res) {
+			selectList.forEach(item => {
+				//删除右边表格tableList2 选中的数据
+				let index = tableList2.tableData.findIndex(item2 => {
+					return item2.corpno == item.corpno;
+				});
+				if (index !== -1) {
+					tableList2.tableData.splice(index, 1);
+				}
+			});
 			ElMessage.success(i18n.t("Message_OperationSuccess"));
 			props.condobj.success = true;
 			//props.condobj.dialogShow = false;

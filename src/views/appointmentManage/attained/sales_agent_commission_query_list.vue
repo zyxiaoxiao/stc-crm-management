@@ -63,7 +63,7 @@
 			</ZDialog>
 		</div>
 		<div>
-			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-dialog v-model="dialogFormVisible" :title="$t('Message_selectMessage')">
 				<el-form ref="cEform" :model="dform" style="margin: 25px 15px" :rules="rules">
 					<el-form-item :label="$t('Consign_chooseMouthTime') + ':'" style="width: 90%;" title1="请选择提佣月份" prop="commission">
 						<el-date-picker

@@ -46,7 +46,7 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentTemplate" @close="appointmentNewclose" width="95%">
+			<ZDialog v-model="condobj.dialogShow_appointmentTemplate" :title="$t('menubasequotationtemplate')" @close="appointmentNewclose" width="95%">
 				<appointmentTemplate :condobj="condobj"></appointmentTemplate>
 			</ZDialog>
 		</div>
@@ -564,7 +564,7 @@ let getappointmentNow = async reservnums => {
 		returnValue = res;
 		//报价详细信息
 		condobj.cond = {
-			readonly: true,
+			readonly: "true",
 			reservnum: reservnums,
 			defaulttax: returnValue.defaulttax,
 			isdefaulttax: returnValue.isdefaulttax

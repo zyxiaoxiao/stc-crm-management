@@ -26,17 +26,6 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
-//是否为主账户
-let crm_ismanager = [
-	{
-		value: "1",
-		label: i18n.t("crmcolumnwsp1")
-	},
-	{
-		value: "0",
-		label: i18n.t("crmcolumnwsp0")
-	}
-];
 //默认需要传入的参数
 const params = {};
 //页面传入的值判断还需要添加的参数
@@ -125,9 +114,8 @@ let tableColumns = [
 		title: "是否为主账户",
 		label: "itemtitlegroupmainaccount",
 		prop: "ismanager",
-		type: "Select",
-		width: "140",
-		typeData: crm_ismanager
+		type: "Input",
+		width: "140"
 	},
 	{
 		title: "制单人编码",

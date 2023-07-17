@@ -207,8 +207,6 @@ const editPaymentAdvice = row => {
 };
 
 const downloadFormPayment = () => {
-	console.log("qqqqqqqqqqqqqqqqqq");
-	console.log(paymenttype.value);
 	let pList = paymenttype.value;
 	let price = i18n.t("columnappointmentCurrencyUnitPrice");
 	let discount = i18n.t("columnappointmentdiscount");
@@ -300,6 +298,13 @@ const atableList = reactive({
 			prop: "reservnum",
 			type: "Link",
 			width: "160"
+		},
+		{
+			title: "申请单号",
+			label: "columntolockapplynum",
+			prop: "folderno",
+			type: "Input",
+			width: "140"
 		},
 		{
 			title: "报价单下载",
@@ -674,7 +679,7 @@ const htableList = reactive({
 		{
 			title: "申请单号",
 			label: "columntolockapplynum",
-			prop: "desc71",
+			prop: "folderno",
 			type: "Input",
 			width: "140"
 		},
@@ -1067,7 +1072,7 @@ const passAppointmentInfo = (code, selectList) => {
 	let d = moment(new Date()).format("YYYY-MM-DD");
 	let approveValue = ref(d);
 	ElMessageBox({
-		title: i18n.t("Message_PleaeEnterAuditOpinion"),
+		title: i18n.t("Consign_chooseTime"),
 		message: () =>
 			h(ElDatePicker, {
 				modelValue: approveValue.value,

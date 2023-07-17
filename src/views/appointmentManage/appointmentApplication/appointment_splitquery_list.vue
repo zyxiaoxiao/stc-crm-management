@@ -49,6 +49,11 @@
 				<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
 			</ZDialog>
 		</div>
+		<div v-dialogStretching>
+			<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
+				<appointmentReadonly :condobj="condobj"></appointmentReadonly>
+			</ZDialog>
+		</div>
 	</div>
 </template>
 
@@ -59,10 +64,15 @@ import ZDialog from "/src/components/ZDialog.vue";
 import audit from "@/views/audit/index.vue";
 import appointmentsplitdetail from "./appointment_splitdetail.vue";
 import appointmentdetailReadonly from "./appointment_detail_Readonly.vue";
+import appointmentReadonly from "@/views/appointmentManage/appointmentApplication/appointment_detail.vue";
 import { getdropSownSelection } from "@/utils/util.js";
 
 const businesstypeTypeData = getdropSownSelection("CRM_businessCategory");
 
+const condobj = reactive({
+	cond: {},
+	objlist: {}
+});
 //表格
 const zTable1 = ref();
 //表格对象
@@ -507,21 +517,37 @@ const split_handlerClose = () => {
 // 报价详细信息弹出参数;
 const appointmentdetailReadonlyList = reactive({
 	dialogShow: false,
+	readonly: "true",
 	reservnum: ""
 });
 
 //链接详细信息
 const linkDetailbg = (column, row) => {
-	appointmentdetailReadonlyList.reservnum = row.reservnum;
-	appointmentdetailReadonlyList.dialogShow = true;
+	//报价只读查看页面
+	condobj.cond = {
+			businesstype: "10",
+			readonly: "true",
+			reservnum: row.reservnum
+		};
+	condobj.dialogShow_appointmentNew = true;
+	//appointmentdetailReadonlyList.reservnum = row.reservnum;
+	//appointmentdetailReadonlyList.dialogShow = true;
 };
 
 const linkDetailbgQuery = (column, row) => {
-	appointmentdetailReadonlyList.reservnum = row.reservnum;
 	if (column == "parentid") {
-		appointmentdetailReadonlyList.reservnum = row.parentid;
+		//报价只读查看页面
+		condobj.cond = {
+			businesstype: "10",
+			readonly: "true",
+			reservnum: row.parentid
+		};
+		condobj.dialogShow_appointmentNew = true;
+	}else{
+        appointmentdetailReadonlyList.reservnum = row.reservnum;
+        appointmentdetailReadonlyList.dialogShow = true;
 	}
-	appointmentdetailReadonlyList.dialogShow = true;
+	
 };
 
 const tabPaneName = ref("0");

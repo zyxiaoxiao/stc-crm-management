@@ -1092,7 +1092,7 @@
 			<ZDialog
 				v-model="condobj.reportDialogShow"
 				@close="reportDialogclose"
-				:title="$t('UPLOAD_uploadFile')"
+				:title="$t('companypanelreportstitle')"
 				width="85%"
 				customclass="selectAdressCss"
 			>
@@ -1135,7 +1135,7 @@
 			<ZDialog
 				v-model="condobj.dialogShow_historyappListDialogShow"
 				@close="dialogclose"
-				:title="$t('crmcolumndsppl')"
+				:title="$t('itemtitlequotationquotationhis')"
 				width="85%"
 				customclass="selectAdressCss"
 			>
@@ -1887,7 +1887,6 @@ const downloadAppointment = v_type => {
 const readDiscountApplintment = () => {
 	let discountvalue = ref(0);
 	let sList = vmaps.value.selectList;
-	console.log(sList);
 	ElMessageBox({
 		title: i18n.t("columnappointmentdiscount"),
 		message: () =>
@@ -2473,7 +2472,8 @@ const ptableList = reactive({
 			label: "columnappointmentdescription",
 			prop: "DESCRIPTION",
 			type: "Input",
-			width: "180"
+			width: "180",
+			edit: true
 		},
 		{
 			title: "是否混测",
@@ -3094,6 +3094,10 @@ onMounted(() => {
 		v_id = props.condobj.cond.reservnum; //报价编码
 		v_split = props.condobj.cond.split; //报价拆分
 		v_readonly = props.condobj.cond.v_readonly; //报价只读
+		let readonly_u = props.condobj.cond.readonly; //报价只读
+		if(readonly_u == "true"){
+            v_readonly = "true";
+		}
 		if (v_isdefaulttax && v_isdefaulttax.indexOf("_") > 0) {
 			//说明是PKM
 			pkm_run = true;
@@ -3568,8 +3572,10 @@ const reportDialogclose = () => {
 //子页面关闭后的方法可以给父页面赋值等操作
 const uploadnewDialogclose = () => {
 	//选择附件后关闭回调
-	if (condobj && condobj.objlist.success) {
+	if (condobj && condobj.objlist && condobj.objlist.success) {
 		fileInfos.value.getTableList();
+	}else{
+		condobj.uploadnewDialogShow = false;
 	}
 };
 
@@ -3794,6 +3800,7 @@ const tabChange = targetName => {
 		} else if (workflowflag == "2" || confirm == "true") {
 			approveShow.value = true; //审核按钮
 			isdisabled.value = true; //表单只读
+			ptableList.edit = false;//检测项只读
 		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		}

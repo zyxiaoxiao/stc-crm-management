@@ -42,7 +42,13 @@
 				class="main-tab-pane-content all-height flex-column"
 				name="1"
 			>
-				<zTable ref="zTable2" :tableList="tableList2" @link-detailbg="linkDetailbgQuery" @workflow-status="workflowStatus">
+				<zTable
+					ref="zTable2"
+					:tableList="tableList2"
+					@link-detailbg="linkDetailbgQuery"
+					@workflow-status="workflowStatus"
+					@advanced-search="advancedSearch"
+				>
 					<template #tableHeaderLleft="scope">
 						<el-button
 							size="small"
@@ -77,6 +83,38 @@
 				<companyDetailNewReadonly :condobj="customerNewReadonly"></companyDetailNewReadonly>
 			</ZDialog>
 		</div>
+		<!-- 高级查询 -->
+		<el-dialog v-model="advanceSearch_dialogVisible" :title="$t('Search_AdvanceSearch')" width="40%" draggable>
+			<div style="padding: 20px">
+				<el-row :gutter="15" class="main-align-items-center">
+					<el-col :span="12">
+						<el-form-item title1="创建开始时间" :label="$t('itemtitlebaserecordtimestart')">
+							<el-date-picker
+								v-model.trim="advanceSearchFormData.recordtime_start"
+								type="date"
+								format="YYYY-MM-DD"
+								value-format="YYYY-MM-DD"
+							/>
+						</el-form-item>
+					</el-col>
+					<el-col :span="12">
+						<el-form-item title1="创建结束时间" :label="$t('itemtitlebaserecordtimeend')">
+							<el-date-picker
+								v-model.trim="advanceSearchFormData.recordtime_end"
+								type="date"
+								format="YYYY-MM-DD"
+								value-format="YYYY-MM-DD"
+							/>
+						</el-form-item>
+					</el-col>
+				</el-row>
+			</div>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button type="primary" @click="advanceSearchQuery"> {{ $t("Search_Query") }} </el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -99,6 +137,12 @@ import { getdropSownSelection } from "@/utils/util.js";
 const i18n = useI18n();
 
 const customerCustomertype = getdropSownSelection("customer_customertype");
+
+const advanceSearch_dialogVisible = ref(false);
+const advanceSearchFormData = reactive({
+	recordtime_start: "",
+	recordtime_end: ""
+});
 
 //审核记录
 const auditList = reactive({
@@ -257,6 +301,10 @@ const zTable2 = ref();
 //表格对象
 const tableList2 = reactive({
 	id: "/customerManage/customerApplication/newCustomer.vue_zTable2",
+	tableToolbar: {
+		//高级查询
+		right_advanceSearch: true
+	},
 	//请求属性设置
 	httpAttribute: {
 		url: "/mylims/enterpriseinfo/enterpriseinfo!selectCorpListByCond.action",
@@ -268,8 +316,19 @@ const tableList2 = reactive({
 	//表格表头
 	tableColumns: tableColumns1,
 	// 表格数据
-	tableData: []
+	tableData: [],
+	//查询
+	tablePropSearch: advanceSearchFormData
 });
+
+//高级查询
+const advancedSearch = () => {
+	advanceSearch_dialogVisible.value = true;
+};
+const advanceSearchQuery = () => {
+	zTable2.value.reuseTableList();
+	advanceSearch_dialogVisible.value = false;
+};
 
 //当表格的当前行发生变化的时候会触发该事件
 const tableCurrentChange1 = (currentRow, oldCurrentRow) => {};

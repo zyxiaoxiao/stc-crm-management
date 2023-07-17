@@ -134,7 +134,7 @@ let tableColumns = [
 	},
 	{
 		title: "可销账金额",
-		label: "columnwriteoff_application_listCanWriteOffsdetail",
+		label: "columncurrencywriteoff_application_listCanWriteOffsdetail",
 		prop: "currencycanwriteoffsnum",
 		type: "Input",
 		width: "200"
@@ -206,7 +206,7 @@ let tableColumns = [
 		title: "是否已提佣",
 		label: "itemtitleWhetherToRaiseCommissionOrNot",
 		prop: "brokerageflag",
-		type: "Input",
+		type: "Select",
 		width: "140",
 		typeData: brokerage,
 	},

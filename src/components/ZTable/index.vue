@@ -46,6 +46,14 @@
 				>
 					<el-button @click="tableResetSearch" class="main-table-header-ri-button" size="small" icon="ZoomOut" />
 				</el-tooltip>
+				<el-tooltip
+					v-if="props.tableList.tableToolbar.right_advanceSearch"
+					:content="$t('Search_AdvanceSearch')"
+					placement="top"
+					:show-after="500"
+				>
+					<el-button @click="advancedSearch" class="main-table-header-ri-button" size="small" icon="ZoomIn" />
+				</el-tooltip>
 				<slot name="tableHeaderRight"></slot>
 			</div>
 		</div>
@@ -606,6 +614,11 @@ const props = defineProps({
 						//显示右清空
 						type: Boolean,
 						default: true
+					},
+					right_advanceSearch: {
+						//显示右高级查询
+						type: Boolean,
+						default: true
 					}
 				}
 			},
@@ -777,6 +790,9 @@ if (props.tableList.tableToolbar) {
 	typeof props.tableList.tableToolbar.right_filter == "undefined" ? (props.tableList.tableToolbar.right_filter = true) : false;
 	typeof props.tableList.tableToolbar.right_query == "undefined" ? (props.tableList.tableToolbar.right_query = true) : false;
 	typeof props.tableList.tableToolbar.right_empty == "undefined" ? (props.tableList.tableToolbar.right_empty = true) : false;
+	typeof props.tableList.tableToolbar.right_advanceSearch == "undefined"
+		? (props.tableList.tableToolbar.right_advanceSearch = false)
+		: true;
 } else {
 	props.tableList.tableToolbar = {
 		whole: true,
@@ -785,7 +801,8 @@ if (props.tableList.tableToolbar) {
 		right_download: true,
 		right_filter: true,
 		right_query: true,
-		right_empty: true
+		right_empty: true,
+		right_advanceSearch: false
 	};
 }
 
@@ -1232,6 +1249,11 @@ const quickQuery = () => {
 	getTableList();
 };
 
+//高级查询
+const advancedSearch = () => {
+	emits("advancedSearch");
+};
+
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	emits("linkDetailbg", column, row);
@@ -1346,7 +1368,15 @@ onMounted(() => {
 });
 
 //注册emit // 抛出事件
-const emits = defineEmits(["currentChange", "linkDetailbg", "workflowStatus", "rowClick", "cellClick", "selectionChange"]);
+const emits = defineEmits([
+	"currentChange",
+	"linkDetailbg",
+	"workflowStatus",
+	"rowClick",
+	"cellClick",
+	"selectionChange",
+	"advancedSearch"
+]);
 // 暴露给父组件的参数和方法
 defineExpose({
 	getTableList, //调用接口

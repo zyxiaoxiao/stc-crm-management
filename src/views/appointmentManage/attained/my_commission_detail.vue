@@ -91,6 +91,11 @@
 				<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
+		<div v-dialogStretching>
+			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
+				<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
+			</ZDialog>
+		</div>
 	</div>
 </template>
 
@@ -104,9 +109,16 @@ import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
 
+import expendituredetailReadonly from "@/views/appointmentManage/attained/expenditure_detail_readonly.vue";
+
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
+});
+
+const condobj = reactive({
+	cond: {},
+	objlist: {}
 });
 
 let stype = getdropSownSelection("sales_type"); //开支类型下拉
@@ -146,8 +158,11 @@ const tableTabsValue = ref("infos");
 
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "folderno" && row.folderno) {
-				
+	if (column == "folderno" && row.id) {
+		condobj.cond = {
+				id: row.id
+			};
+		condobj.dialogShow_appointmentReadonly = true;		
 	}
 };
 
