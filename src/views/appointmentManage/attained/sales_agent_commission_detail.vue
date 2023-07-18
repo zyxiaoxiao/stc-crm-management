@@ -121,6 +121,12 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
+		
+	</div>
+	<div v-dialogStretching>
+			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" :title="$t('titleExpenditureInformation')" width="95%">
+				<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
+			</ZDialog>
 	</div>
 </template>
 
@@ -134,12 +140,19 @@ import http from "@/api/index.js";
 import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
+import ZDialog from "/src/components/ZDialog.vue";
+import expendituredetailReadonly from "@/views/appointmentManage/attained/expenditure_detail_readonly.vue";
 
 
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
+});
+//传参
+const condobj = reactive({
+	cond: {},
+	objlist: {}
 });
 let approveShow = ref(false); //审核通过、拒绝至上一步、审核拒绝
 let saveShow = ref(false); //保存
@@ -183,8 +196,11 @@ const tableTabsValue = ref("infos");
 
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "folderno" && row.folderno) {
-				
+	if (column == "folderno" && row.id) {
+		condobj.cond = {
+				id: row.id
+			};
+		condobj.dialogShow_appointmentReadonly = true;		
 	}
 };
 //保存销售代理佣金

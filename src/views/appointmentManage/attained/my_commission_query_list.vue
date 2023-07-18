@@ -647,14 +647,14 @@ const automatictableList = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "labduedate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
 			title: "invoice打印日期",
 			label: "columnwriteoff_invoiceprintdate",
 			prop: "realdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{

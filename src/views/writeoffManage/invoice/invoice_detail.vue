@@ -92,7 +92,7 @@
 									format="YYYY-MM-DD"
 									value-format="YYYY-MM-DD"
 									style="width: 100%"
-									:disabled="isdisabled"
+									disabled
 								></el-date-picker>
 							</el-form-item>
 						</el-col>
@@ -101,7 +101,7 @@
 							<el-form-item :label="$t('columnappointment_desc42') + ':'" title1="remark">
 								<el-input type="textarea" v-model="sformData.remark" :disabled="isdisabled"></el-input>
 							</el-form-item>
-						</el-col>
+						</el-col>						
 					</el-row>
 					<el-divider title1="创建人信息" content-position="left">{{ $t("corpinfopanelcjrxxtitle") }}</el-divider>
 					<el-row class="main-align-items-center">
@@ -207,10 +207,10 @@ let addbillShow = ref(true); //invoice和申请单显示
 let isdisabled = ref(false); //可编辑
 let isCurrency = ref(false); //币种可编辑
 let currencyInfo = ref([]); //币种
-let data = new Date().toLocaleString();
-data = data.substring(0, data.indexOf(" "));
+//let data = new Date().toLocaleString();
+//data = data.substring(0, data.indexOf(" "));
 
-let idate = moment(new Date(data)).format("YYYY-MM-DD");
+//let idate = moment(new Date(data)).format("YYYY-MM-DD");
 //税票信息初始化信息
 const sformData = reactive({
 	taxinvoicecode: "",
@@ -222,7 +222,7 @@ const sformData = reactive({
 	totalamount: "",
 	totalinvoiceamount: "",
 	invoicecode: "",
-	invoicedate: idate,
+	invoicedate: "",
 	foldernos: "",
 	remark: "",
 	recordercode: "",
@@ -464,8 +464,8 @@ let getinvoiceInfo = async obj => {
 
 // 显示
 const dialogShow = data => {
-	if (data == "dialogShow_customerQuery") {
-		if (!tableListFolders.tableData && tableListFolders.tableData.length > 0) {
+	if (data == "dialogShow_selectCustomerQuery") {
+		if (tableListFolders.tableData && tableListFolders.tableData.length > 0) {
 			ElMessageBox.confirm(i18n.t("Message_WantToContinue"), i18n.t("Message_OperationTip"), {
 				confirmButtonText: i18n.t("menu_ok"),
 				cancelButtonText: i18n.t("menu_cancel"),
@@ -477,20 +477,20 @@ const dialogShow = data => {
 					lockflag: "0",
 					html: data
 				};
-				condobj.dialogShow = true;
+				condobj.dialogShow_selectCustomerQuery = true;
 			});
 		} else {
 			condobj.cond = {
 				lockflag: "0",
 				html: data
 			};
-			condobj.dialogShow_selectFolderQuery = true;
+			condobj.dialogShow_selectCustomerQuery = true;
 		}
-	} else if (data == "dialogShow_selectCustomerQuery") {
+	} else if (data == "dialogShow_selectCustomerQuery1") {
 		condobj.cond = {
 			html: data
 		};
-		condobj.dialogShow_selectCustomerQuery = true;
+		condobj.dialogShow_selectCustomerQuery1 = true;
 	}
 };
 //子页面关闭后的方法可以给父页面赋值等操作

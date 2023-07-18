@@ -27,9 +27,9 @@ export default defineConfig(mode => {
 			open: true, //启动项目自动弹出浏览器
 			port: 3000, //启动端口
 			proxy: {
-				// 跨域代理
+				// 跨域代理http://192.168.3.33:8086
 				"/apis": {
-					target: "http://192.168.3.33:8086", //实际请求地址
+					target: "http://192.168.3.33:8086",
 					changeOrigin: true,
 					rewrite: path => path.replace(/^\/apis/, "")
 				}

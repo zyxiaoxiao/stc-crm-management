@@ -1,7 +1,7 @@
 <template>
 	<div class="small-panel-box">
 		<div class="small-panel-header">
-			<div class="small-panel-header-left">我的待办</div>
+			<div class="small-panel-header-left">{{ $t("homepanelMyJobs") }}</div>
 			<div class="small-panel-header-right">
 				<dic class="flx-center" @click="collapseClick">
 					<span>{{ headerRightText }}</span>
@@ -15,7 +15,7 @@
 					</el-icon>
 				</dic>
 				<dic class="flx-center" style="margin-left: 10px" @click="refreshClick">
-					<span>刷新</span>
+					<span>{{ $t("desktop_Refresh") }}</span>
 					<el-icon>
 						<Refresh />
 					</el-icon>
@@ -23,171 +23,19 @@
 			</div>
 		</div>
 		<el-collapse-transition>
-			<el-row :gutter="20" v-show="smallPanelShow" class="small-panel-el-row">
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
+			<el-row :gutter="20" v-show="smallPanelShow" class="small-panel-el-row" v-loading="loading">
+				<el-col v-for="(pendingInfo, index) in pendingInfos" :key="index" :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
+					<div @click="myToDoRouter(pendingInfo.routename)" class="small-panel suspension">
 						<div class="small-panel-top">
 							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
 						</div>
-						<div class="small-panel-title">销售代理提佣审核</div>
+						<div class="small-panel-title">{{ $t(pendingInfo.i18ncode) }}</div>
 						<div class="small-panel-content">
 							<div class="content-left">
 								<div class="detail--logo">
 									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
 								</div>
-								<div class="number">26</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">报价审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">6</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">客户创建审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">13</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">销账审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">10</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">月结客户审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">5</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">客户标签审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">7</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">销售代理提佣审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">26</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">销售代理提佣审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">26</div>
-							</div>
-							<div class="content-right">
-								<!-- <el-tag>待审批</el-tag> -->
-							</div>
-						</div>
-					</div>
-				</el-col>
-				<el-col :span="24" :xs="12" :sm="8" :lg="6" :xl="4">
-					<div class="small-panel suspension">
-						<div class="small-panel-top">
-							<div class="top-right"><i class="iconfont layui-icon-extend-jinrudaobo icon"></i></div>
-						</div>
-						<div class="small-panel-title">销售代理提佣审核</div>
-						<div class="small-panel-content">
-							<div class="content-left">
-								<div class="detail--logo">
-									<i class="iconfont layui-icon-extend-jurassic_todo icon"></i>
-								</div>
-								<div class="number">26</div>
+								<div class="number">{{ pendingInfo.num }}</div>
 							</div>
 							<div class="content-right">
 								<!-- <el-tag>待审批</el-tag> -->
@@ -201,17 +49,44 @@
 </template>
 
 <script setup name="myToDo">
-import { ref, onMounted } from "vue";
-import { GlobalStore } from "/src/store/globalStore.js";
+import { ref, onMounted, reactive } from "vue";
+import qs from "qs";
+import http from "@/api/index.js";
 import { useRouter } from "vue-router";
-const globalStore = GlobalStore();
 const router = useRouter();
 
 const headerRightText = ref("收起");
 const headerRightIcon = ref("collapse");
-const transitionName = ref("el-zoom-in-top");
+
 const smallPanelShow = ref(true);
 
+const pendingInfos = reactive([]);
+
+// 加载 loading
+const loading = ref(false);
+
+//获取我的待办
+const getMyToDo = async () => {
+	try {
+		loading.value = true;
+		const res = await http.post("/pending/pending/pending!selectPendingByCond.action", qs.stringify({}), {
+			headers: {
+				noLoading: true //隐藏加载--
+			}
+		});
+		if (res.pendingInfos) {
+			//对数据源进行处理
+			pendingInfos.length = 0;
+			res.pendingInfos.forEach(element => {
+				pendingInfos.push({ i18ncode: element.i18ncode, routename: element.routename, num: element.num });
+			});
+		}
+	} finally {
+		loading.value = false;
+	}
+};
+
+//展开和折叠
 const collapseClick = () => {
 	if (headerRightText.value == "收起") {
 		headerRightText.value = "展开";
@@ -223,12 +98,20 @@ const collapseClick = () => {
 		smallPanelShow.value = true;
 	}
 };
-
-const refreshClick = () => {};
+//刷新
+const refreshClick = () => {
+	getMyToDo();
+};
+//跳转到对应路由
+const myToDoRouter = routename => {
+	router.push({
+		name: routename
+	});
+};
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	console.log("我的任务");
+	getMyToDo();
 });
 </script>
 

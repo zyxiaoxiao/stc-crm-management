@@ -177,7 +177,7 @@
 			</ZDialog>
 		</div>
 		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_accountQuery" @close="dialogclose" width="95%">
+			<ZDialog v-model="condobj.dialogShow_accountQuery" :title="$t('columnmonthlyClientselectAccount')" @close="dialogclose" width="95%">
 				<accountQuery :condobj="condobj"></accountQuery>
 			</ZDialog>
 		</div>

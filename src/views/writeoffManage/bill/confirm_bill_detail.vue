@@ -68,8 +68,8 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item :label="$t('itemtitleinvoicecurrencyamountss') + ':'" title1="归属部门">
-								<el-input type="text" v-model="sformData.amount"></el-input>
+							<el-form-item :label="$t('corpinfopaneldepartmentdesctitle') + ':'" title1="归属部门">
+								<el-input type="text" v-model="sformData.deptdesc"></el-input>
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">

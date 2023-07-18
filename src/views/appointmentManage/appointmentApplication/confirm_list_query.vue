@@ -132,6 +132,7 @@ import qs from "qs";
 import http from "@/api/index.js";
 import zTable from "/src/components/ZTable/index.vue";
 import { ElMessageBox, ElMessage, ElDatePicker } from "element-plus";
+import { downloadFile } from "/src/utils/fileUtil.js";
 import { GlobalStore } from "/src/store/globalStore.js";
 import audit from "@/views/audit/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
@@ -141,6 +142,7 @@ import appointmentNew from "@/views/appointmentManage/appointmentApplication/app
 const i18n = useI18n();
 const grid_confirmappointmentInfos = ref();
 const grid_queryAppointmentInfos = ref();
+
 
 let v_reservnum = ""; //报价单号
 let businesstype = "10"; //报价类型
@@ -202,8 +204,11 @@ const editAddress = row => {
 	dialogFormVisible.value = true;
 };
 
+let p_row = null;
 const editPaymentAdvice = row => {
+	p_row = row;
 	dialogFormPaymentVisible.value = true;
+
 };
 
 const downloadFormPayment = () => {
@@ -213,13 +218,27 @@ const downloadFormPayment = () => {
 	let defaulttax = "N";
 	let isdefaulttax = "N";
 	for(let p of pList){
-        if(p == price){
-
+        if(p == price){//外币单价
+            defaulttax = "Y";
 		}
-		if(p == discount){
-			
+		if(p == discount){//折扣率
+			isdefaulttax = "Y";
 		}
 	}
+	downloadFile("/mylims/order/appointment!downloadPaymentaDvice.action", "WTDL-"+p_row.reservnum+".doc", {
+		"defaulttax": defaulttax,
+		"reservnum" : p_row.reservnum,
+		"isdefaulttax": isdefaulttax
+	});
+
+	// window.location.href =
+	// 			serverUrl +
+	// 			"/mylims/order/appointment!downloadPaymentaDvice.action?reservnum=" +
+	// 			p_row.reservnum +
+	// 			"&defaulttax=" +
+	// 			defaulttax +
+	// 			"&isdefaulttax=" +
+	// 			isdefaulttax;
     //paymenttype.value = [i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")];
 };
 

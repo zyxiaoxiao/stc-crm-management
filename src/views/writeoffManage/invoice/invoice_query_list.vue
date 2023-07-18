@@ -48,7 +48,7 @@
 			</el-tab-pane>
 		</el-tabs>
 		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
 				<audit :auditList="auditList"></audit>
 			</ZDialog>
 		</div>

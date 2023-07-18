@@ -79,7 +79,7 @@
 			</el-tab-pane>
 		</el-tabs>
 		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
 				<audit :auditList="auditList"></audit>
 			</ZDialog>
 		</div>
@@ -104,7 +104,7 @@
 			</ZDialog>
 		</div>
 		<div>
-			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-dialog v-model="dialogFormVisible" :title="$t('menubasemycommissionapplication')">
 				<el-form ref="cEform" :model="dform" style="margin: 25px 15px">
 					<el-form-item title1="提佣类型" :label="$t('basecolumncommission_type') + ':'" style="width: 90%" prop="commissiontype">
 						<el-select
@@ -1221,14 +1221,14 @@ const automatictableList = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "labduedate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
 			title: "invoice打印日期",
 			label: "columnwriteoff_invoiceprintdate",
 			prop: "realdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{

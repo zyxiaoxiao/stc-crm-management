@@ -1114,7 +1114,7 @@
 			<ZDialog
 				v-model="condobj.selecthistoryapplicationitmeDialogShow"
 				@close="dialogclose"
-				:title="$t('itemtitleaccountaccount')"
+				:title="$t('itemtitleappointmenthisprice')"
 				width="85%"
 			>
 				<historyapplicationitme :condobj="condobj"></historyapplicationitme>

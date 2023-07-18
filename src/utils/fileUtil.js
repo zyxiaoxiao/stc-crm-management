@@ -40,6 +40,22 @@ export const downloadFile = async (url, tempName, params = {}, isNotify = true) 
 		document.body.removeChild(exportFile);
 		window.URL.revokeObjectURL(blobUrl);
 	} catch (error) {
-		ElMessage.error(error);
+		if (error && error.response && error.response.data) {
+			let data = error.response.data;
+			//判断Bolb格式并输出报错信息
+			if (toString.call(data) === '[object Blob]') {
+				const blob = new Blob([data]);
+				let reader = new FileReader();
+				reader.readAsText(blob, 'utf-8');
+				let messsage = "";
+				reader.onload = function (e) {
+					messsage = reader.result;
+				    ElMessage.error(messsage);
+				}				
+			}
+		} else {
+			ElMessage.error(error);
+		}
+
 	}
 };

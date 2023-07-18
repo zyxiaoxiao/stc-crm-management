@@ -25,6 +25,18 @@
 					<el-button size="small" type="danger" icon="Close" v-show="buttonShow" plain @click="approveInvoiceInfos('-2')">{{
 						$t("menu_reject2Submitor")
 					}}</el-button>
+					<el-button
+						size="small"
+						v-show="buttonShow"
+						type="primary"
+						icon="Document"
+						plain
+						@click="saveInvoiceInfo()"
+						>{{ $t("menu_save") }}</el-button
+					>
+					<el-button size="small" type="danger" icon="Close" v-show="buttonShow" plain @click="approveInvoiceInfos('-2')">{{
+						$t("menu_reject2Submitor")
+					}}</el-button>
 				</div>
 				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="form_billInfo">
 					<el-divider title1="基本信息" content-position="left">{{ $t("fieldtitleyingjibasic_information") }}</el-divider>
@@ -87,9 +99,15 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="6"> </el-col>
-						<el-col :span="24">
+						<el-col :span="12">
 							<el-form-item :label="$t('columnappointment_desc42') + ':'" title1="remark">
 								<el-input type="textarea" v-model="sformData.remark" :disabled="isdisabled"></el-input>
+							</el-form-item>
+						</el-col>
+						<el-col :span="12">
+							<el-form-item :label="$t('basecolumnElectronic_Invoice') + ':'" title1="电子发票">
+								<el-link href=""  @click="invoicedownload_renderer()" type="primary" ><span
+								v-html="sformData.invoicefilename"></span></el-link>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -142,6 +160,13 @@
 			</el-tab-pane>
 		</el-tabs>
 	</div>
+    <div v-dialogStretching>
+		<el-dialog v-model="condobj.dialogShow_invoicePDFDownloadFile" width="85%" :title="$t('DOWNLOAD_download')">
+            <iframe :src="downloadUrl"
+                style="width: 100%; height: 440px"></iframe>
+        </el-dialog>
+	</div>
+	
 </template>
 
 <script setup>
@@ -154,6 +179,7 @@ import http from "@/api/index.js";
 import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
+import { GlobalStore } from "/src/store/globalStore.js";
 import moment from "moment";
 const i18n = useI18n();
 // 父组件传入的参数
@@ -167,10 +193,12 @@ const condobj = reactive({
 let isdisabled = ref(true); //可编辑
 let buttonShow = ref(false); //按钮不可显示
 
-let data = new Date().toLocaleString();
-data = data.substring(0, data.indexOf(" "));
+let downloadUrl = ref(""); //文件路径
+//let data = new Date().toLocaleString();
+//data = data.substring(0, data.indexOf(" "));
+const globalStore = GlobalStore();
 
-let idate = moment(new Date(data)).format("YYYY-MM-DD");
+//let idate = moment(new Date(data)).format("YYYY-MM-DD");
 //税票信息初始化信息
 const sformData = reactive({
 	taxinvoicecode: "",
@@ -182,12 +210,14 @@ const sformData = reactive({
 	totalamount: "",
 	totalinvoiceamount: "",
 	invoicecode: "",
-	invoicedate: idate,
+	invoicedate: "",
 	foldernos: "",
 	remark: "",
 	recordercode: "",
 	recorderdesc: "",
 	recordtime: "",
+	invoicefilename: "",
+	filepath: "",
 	remark: "",
 
 	corpid: "",
@@ -297,7 +327,23 @@ const approveInvoiceInfos = (code) => {
 			grid_invoiceInfos2.value.getTableList();
 		}
 	});
-}
+};
+
+//税票下载
+let invoicedownload_renderer = () => {
+	let filename = sformData.invoicefilename;//文件名
+	let filepath = sformData.filepath;//文件路径
+	let serverUrl = globalStore.serverUrl;
+	if(filename == "" || filename == "" || filepath == "" || filepath == "" ){		     
+	}else{
+		downloadUrl.value = serverUrl+"/"+filepath;
+		condobj.dialogShow_invoicePDFDownloadFile = true;
+		//window.location.href = serverUrl+"/"+filepath;
+		//downloadFile(serverUrl+"/"+filepath, filename, {});
+		
+	}
+	
+};
 
 //查询税票信息
 let getinvoiceInfo = async obj => {

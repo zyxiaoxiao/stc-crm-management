@@ -465,7 +465,7 @@ const tableListSales = reactive({
 		},
 		{
 			title: "团队类别",
-			label: "basecolumncommission_type",
+			label: "basecolumnteam_category",
 			prop: "teamcategory",
 			type: "Select",
 			width: "140",
@@ -544,8 +544,7 @@ const tableListSales = reactive({
 			title: "是否试用期",
 			label: "basecolumnis_probation_period",
 			prop: "iscountfloors",
-			type: "Number",
-			precision: 2,
+			type: "Input",
 			width: "140"
 		},
 		{
@@ -572,7 +571,7 @@ const tableListSales = reactive({
 //表格销售认证佣金信息
 const grid_authenticationQuery = ref();
 const tableListCertification = reactive({
-	id: "/appointmentManage/attained/combined_detail.vue_grid_authenticationQuery",
+	id: "/appointmentManage/commission/combined_detail.vue_grid_authenticationQuery",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/commission/commission!selectFoldersInfoByBrokerageformouth.action",
@@ -591,13 +590,6 @@ const tableListCertification = reactive({
 			prop: "folderno",
 			type: "Input",
 			width: "180"
-		},
-		{
-			title: "申请单关联HCC号",
-			label: "columnbaseHCCRelatedDocNo",
-			prop: "preprunfolder",
-			type: "Input",
-			width: "160"
 		},
 		{
 			title: "销售编码",

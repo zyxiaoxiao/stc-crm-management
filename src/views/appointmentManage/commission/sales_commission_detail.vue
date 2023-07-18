@@ -31,8 +31,13 @@
 								<el-input type="text" v-model="sformData.badmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
+						<el-col :span="6">
+							<el-form-item :label="$t('basecolumnActual_Turnover') + ':'" title1="实际营业额">
+								<el-input type="text" v-model="sformData.totalmoney" readonly></el-input>
+							</el-form-item>
+						</el-col>
                         <el-col :span="6">
-							<el-form-item :label="$t('columnwriteoff_application_listCost') + ':'" title1="实际营业额">
+							<el-form-item :label="$t('columnwriteoff_application_listCost') + ':'" title1="成本费">
 								<el-input type="text" v-model="sformData.costnum" readonly></el-input>
 							</el-form-item>
 						</el-col>
@@ -123,7 +128,28 @@
 					<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing" > </zTable>
 				</div>
 			</el-tab-pane>
-		</el-tabs>
+			<el-tab-pane title1="呆账追回扣减佣金查询" :label="$t('menubaseBadDebtRecoveryDeductionCommissionInquiry')" class="all-height flex-column" name="baddebt">
+				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" model="badformData" ref="badDebtFormRef">
+					<el-divider title1="计算规则" content-position="left">{{ $t("columnwriteoff_application_listCalculationrules") }}</el-divider>
+					<el-row class="main-align-items-center">                        
+                        <el-col :span="24">
+							<el-form-item :label="$t('basecolumnactual_commission') + ':'" title1="实际佣金">
+								<el-input type="textarea" v-model="badformData.baddebtremark" readonly></el-input>
+							</el-form-item>
+						</el-col>
+					</el-row>
+				</el-form>
+				<el-divider style="margin: 1px 0"></el-divider>
+				<div class="flex-column" style="flex: 1; overflow: auto">
+					<zTable ref="grid_badDebtCalculationRules" :tableList="tableListBadDebt" > </zTable>
+				</div>
+			</el-tab-pane>
+		</el-tabs>		
+	</div>
+	<div v-dialogStretching>
+		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" :title="$t('titleExpenditureInformation')" width="95%">
+			<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -134,12 +160,18 @@ import qs from "qs";
 import http from "@/api/index.js";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
-
+import ZDialog from "/src/components/ZDialog.vue";
+import expendituredetailReadonly from "@/views/appointmentManage/attained/expenditure_detail_readonly.vue";
 
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
 	condobj: Object
+});
+
+const condobj = reactive({
+	cond: {},
+	objlist: {}
 });
 
 let stype = getdropSownSelection("sales_type"); //开支类型下拉
@@ -175,12 +207,19 @@ const sformData = reactive({
 	combinedid: ""
 });
 
+//呆账计算公式
+const badformData = reactive({	
+	baddebtremark: "追回单笔佣金 = ((总价-成本费-坏账-销售开支-增值税)*((总价-呆账)/总价)*佣金点/100)+((总价-成本费-坏账-销售开支-增值税)*(50%呆账收回)*(呆账/总价)*佣金点/100)"
+});
+
 const tableTabsValue = ref("infos");
 
 
 //链接详细信息
 const linkDetailquey = (column, row) => {
-	if (column == "folderno" && row.folderno) {
+	if (column == "folderno" && row.id) {
+		condobj.cond = { id: row.id };//销售开支ID
+		condobj.dialogShow_appointmentReadonly = true;		
 	}
 };
 
@@ -232,6 +271,13 @@ const tabChange = TabPaneName => {
             //传参后会自动调用接口刷新
 			tableListOutsourcing.httpAttribute.baseParams["cond.commissionid"] = commissionid;
 			grid_outsourcingInfos.value.reuseTableList();
+        }
+	} else if (TabPaneName == "baddebt") {
+		//呆账追回扣减佣金查询
+        if(commissionid){
+            //传参后会自动调用接口刷新
+			tableListBadDebt.httpAttribute.baseParams["cond.commissionid"] = commissionid;
+			grid_badDebtCalculationRules.value.reuseTableList();
         }
 	}
 };
@@ -389,7 +435,7 @@ const tableListSales = reactive({
 //表格呆账查询
 const grid_BaddebtsInfos = ref();
 const tableListBaddebts = reactive({
-	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_BaddebtsInfos",
+	id: "/appointmentManage/commission/sales_commission_detail.vue_grid_BaddebtsInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/commission/commission!selectBaddebtsInfoByCond.action",
@@ -528,7 +574,7 @@ const tableListBaddebts = reactive({
 //表格销售开支
 const grid_expenditureInfos = ref();
 const tableListExpenditure = reactive({
-	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_expenditureInfos",
+	id: "/appointmentManage/commission/sales_commission_detail.vue_grid_expenditureInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectExpenditureInfoForBrokerage.action",
@@ -799,7 +845,7 @@ const tableListExpenditure = reactive({
 //表格内分包
 const grid_outsourcingInfos = ref();
 const tableListOutsourcing = reactive({
-	id: "/appointmentManage/attained/sales_commission_detail.vue_grid_outsourcingInfos",
+	id: "/appointmentManage/commission/sales_commission_detail.vue_grid_outsourcingInfos",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectoutsourcingInfoByBrokerage.action",
@@ -924,6 +970,140 @@ const tableListOutsourcing = reactive({
 	// 表格数据
 	tableData: []
 });
+//呆账追回扣减佣金查询
+const grid_badDebtCalculationRules = ref();
+const tableListBadDebt = reactive({
+	id: "/appointmentManage/commission/sales_commission_detail.vue_grid_badDebtCalculationRules",
+	//请求属性设置
+	httpAttribute: {
+		url: "/crm/commission/commission!selectCalculateCommissionForBadDebtRecovery.action",
+		root: "shareFoldersInfos",
+		baseParams: {}
+	},
+	//表格表头
+	tableColumns: [
+		{
+			type: "selection",
+			width: "40"
+		},
+		{
+			title: "申请单号",
+			label: "columntolockapplynum",
+			prop: "folderno",
+			type: "Input",
+			width: "130"
+		},
+		{
+			title: "计算呆账追回佣金",
+			label: "menubaseCalculateCommissionForBadDebtRecovery",
+			prop: "isrole",
+			type: "Input",
+			width: "870"
+		},
+		{
+			title: "呆账金额",
+			label: "basecolumnfolderAR_Amount",
+			prop: "folderage",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+		{
+			title: "总价",
+			label: "appointmentTotalprice_hkd",
+			prop: "totalprice",
+			type: "Number",
+			precision: 2,
+			width: "140"
+		},
+		{
+			title: "成本费",
+			label: "columnwriteoff_application_listCost",
+			prop: "costnum",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+		{
+			title: "坏账金额",
+			label: "panelcolumnbaddebt",
+			prop: "badmoney",
+			type: "Number",
+			precision: 2,
+			width: "180"
+		},
+		{
+			title: "销售开支",
+			label: "columnbasesalesexpenses_hkd",
+			prop: "salesexpenses",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+		{
+			title: "增值税额",
+			label: "panelcolumnvalueaddedtaxmoney",
+			prop: "taxmoney",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+        {
+			title: "提佣点(%)",
+			label: "itemtitlefoldersbrokerage",
+			prop: "brokerage",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+		{
+			title: "佣金",
+			label: "panelcolumnbrokerage_hkd",
+			prop: "commission",
+			type: "Number",
+			precision: 2,
+			width: "120"
+		},
+		{
+			title: "报价单编号",
+			label: "crmcolumnreservnum",
+			prop: "quotationno",
+			type: "Input",
+			width: "160"
+		},        
+		{
+			title: "BM编号",
+			label: "basecolumnbm_code",
+			prop: "bmcode",
+			type: "Input",
+			width: "120"
+		},
+		{
+			title: "客户号",
+			label: "fieldcolumncustomercode",
+			prop: "rasclientid",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "客户名称",
+			label: "panelcolumncustomername",
+			prop: "compname",
+			type: "Input",
+			width: "140"
+		},        
+		{
+			title: "销账单号",
+			label: "columnwriteoff_application_listwriteoffNo",
+			prop: "writeoffcode",
+			type: "Input",
+			width: "160"
+		}
+	],
+	// 表格数据
+	tableData: []
+});
+
 </script>
 
 <style lang="scss">

@@ -4770,7 +4770,6 @@ export default {
 	Page_The: "The",
 	Page_TotalPage: "Page Total {0} Page",
 	Page_Search_Displaying: "Show Record {0} - {1} of {2}",
-	Search_AdvanceSearch: "Adv.Search",
 	Search_Closequery: "closed fast inquires the",
 	Search_Openquery: "Open the shortcut inquires",
 	Search_Search: "search",
@@ -4869,7 +4868,7 @@ export default {
 	Message_Password1: "Password strength：Weak!",
 	Message_Password2: "Password strength：General!",
 	Message_Password3: "Password strength：Good!",
-	Message_selectMessage: "Please select data!",
+	Message_selectMessageto: "Please select data!",
 	Message_selectConnection: "Please select the connection information",
 	Message_SaveSuccessToSee: "Save Success,please see the statistical information!",
 	Message_copyuserrights: "Are you sure copy user rights",
@@ -5817,5 +5816,10 @@ export default {
 	menu_revise: "Sales Attribution Replacement",
 	basecolumnOriginal_Personnel_Code: "Original personnel code",
 	basecolumnNew_Employee_Code: "New employee code",
-	itemtitleNowSalesservice: "Now Of Sales Executive /Customer service"
+	itemtitleNowSalesservice: "Now Of Sales Executive /Customer service",
+	menubaseBadDebtRecoveryDeductionCommissionInquiry: "Bad Debt Recovery Deduction Commission Inquiry",
+	menubaseCalculateCommissionForBadDebtRecovery: "Calculate Commission For Bad Debt Recovery",
+	menu_base_AuditRecords: "Audit records",
+	menu_base_AuditRecords: "Do you want to automatically fill in the application form amount?",
+	basecolumnElectronic_Invoice: "Electronic Invoice"
 };
