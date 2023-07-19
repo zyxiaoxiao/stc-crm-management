@@ -1,8 +1,8 @@
 <template>
 	<div>
 		<!-- 我的待办 -->
-		<!-- <myToDo></myToDo>
-		<group2></group2> -->
+		<myToDo></myToDo>
+		<group2></group2>
 	</div>
 </template>
 

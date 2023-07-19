@@ -5,7 +5,6 @@
 			style="overflow: auto; margin-top: 10px; padding-bottom: 10px"
 			v-model="tableTabsValue"
 			type="border-card"
-			@tab-click="tabClick"
 			@tab-change="tabChange"
 		>
 			<el-tab-pane :label="$t('menu_flowChartTracking')" style="overflow: auto" :name="0">
@@ -22,7 +21,7 @@
 </template>
 
 <script setup name="audit">
-import { onMounted, ref, reactive, nextTick } from "vue";
+import { onMounted, ref, reactive, nextTick, onUnmounted, onBeforeUnmount } from "vue";
 import qs from "qs";
 import http from "@/api/index.js";
 import { layer } from "vue3-layer";
@@ -44,32 +43,40 @@ let params = {
 	"cond.columnid": props.auditList.columnid
 };
 
-let svgHtml = ref("");
-let svgIds = reactive([]);
-let idsMsg = reactive([]);
+const svgHtml = ref("");
+let svgIds = [];
+let idsMsg = [];
+let handlers = [];
+
+const mouseenter_event = (idsMsg, index, box) => () => {
+	let msg;
+	if (idsMsg[index] == "开始事件1") {
+		msg = "Start";
+	} else if (idsMsg[index] == "结束事件1") {
+		msg = "End";
+	} else {
+		msg = idsMsg[index];
+	}
+	layer.tips(msg, box, {
+		tips: [1, "#55557f"],
+		time: 10000
+	});
+};
+
+const mouseleave_event = () => {
+	layer.closeAll("tips"); //关闭所有的tips层
+};
 
 // 流程图 tips组件 公共部分
 const historySvgTips = (id, idsMsg, index) => {
 	const box = document.getElementById(id);
+	const mouseenterHandler = mouseenter_event(idsMsg, index, box);
 	//停留
-	box.addEventListener("mouseenter", () => {
-		let msg;
-		if (idsMsg[index] == "开始事件1") {
-			msg = "Start";
-		} else if (idsMsg[index] == "结束事件1") {
-			msg = "End";
-		} else {
-			msg = idsMsg[index];
-		}
-		layer.tips(msg, box, {
-			tips: [1, "#55557f"],
-			time: 10000
-		});
-	});
+	box.addEventListener("mouseenter", mouseenterHandler);
 	//离开
-	box.addEventListener("mouseleave", () => {
-		layer.closeAll("tips"); //关闭所有的tips层
-	});
+	box.addEventListener("mouseleave", mouseleave_event);
+
+	return { mouseenterHandler, mouseleaveHandler: mouseleave_event };
 };
 
 //邮件收件人和流程图、审核历史
@@ -82,7 +89,8 @@ const getHistorySvg = async () => {
 	//DOM更新后的回调函数
 	nextTick(() => {
 		svgIds.forEach((item, index, arr) => {
-			historySvgTips("svg-" + item, idsMsg, index);
+			const { mouseenterHandler, mouseleaveHandler } = historySvgTips("svg-" + item, idsMsg, index);
+			handlers.push({ id: "svg-" + item, mouseenterHandler, mouseleaveHandler });
 		});
 	});
 };
@@ -231,6 +239,21 @@ const tabChange = TabPanelName => {
 
 //页面初始化渲染完成执行
 onMounted(() => {});
+//页面卸载之前调用
+onBeforeUnmount(() => {
+	//防止内存泄露移除除事件监听器
+	handlers.forEach(({ id, mouseenterHandler, mouseleaveHandler }) => {
+		const box = document.getElementById(id);
+		box.removeEventListener("mouseenter", mouseenterHandler);
+		box.removeEventListener("mouseleave", mouseleaveHandler);
+	});
+});
+
+//页面卸载
+onUnmounted(() => {
+	svgHtml.value = null;
+	handlers = null;
+});
 </script>
 
 <style></style>

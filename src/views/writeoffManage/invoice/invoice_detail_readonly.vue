@@ -25,17 +25,11 @@
 					<el-button size="small" type="danger" icon="Close" v-show="buttonShow" plain @click="approveInvoiceInfos('-2')">{{
 						$t("menu_reject2Submitor")
 					}}</el-button>
-					<el-button
-						size="small"
-						v-show="buttonShow"
-						type="primary"
-						icon="Document"
-						plain
-						@click="saveInvoiceInfo()"
-						>{{ $t("menu_save") }}</el-button
-					>
-					<el-button size="small" type="danger" icon="Close" v-show="buttonShow" plain @click="approveInvoiceInfos('-2')">{{
-						$t("menu_reject2Submitor")
+					<el-button size="small" v-show="fileShow" type="primary" icon="UploadFilled" plain @click="dialogShow('dialogShow_invoiceUploadNew')">{{
+						$t("UPLOAD_uploadFile")
+					}}</el-button>
+					<el-button size="small" type="danger" icon="Close" v-show="fileShow" plain @click="approveInvoiceInfos('-2')">{{
+						$t("UPLOAD_deleteFile")
 					}}</el-button>
 				</div>
 				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="form_billInfo">
@@ -106,8 +100,9 @@
 						</el-col>
 						<el-col :span="12">
 							<el-form-item :label="$t('basecolumnElectronic_Invoice') + ':'" title1="电子发票">
-								<el-link href=""  @click="invoicedownload_renderer()" type="primary" ><span
-								v-html="sformData.invoicefilename"></span></el-link>
+								<el-link href="" @click="invoicedownload_renderer()" type="primary"
+									><span v-html="sformData.invoicefilename"></span
+								></el-link>
 							</el-form-item>
 						</el-col>
 					</el-row>
@@ -160,13 +155,21 @@
 			</el-tab-pane>
 		</el-tabs>
 	</div>
-    <div v-dialogStretching>
+	<div v-dialogStretching>
 		<el-dialog v-model="condobj.dialogShow_invoicePDFDownloadFile" width="85%" :title="$t('DOWNLOAD_download')">
-            <iframe :src="downloadUrl"
-                style="width: 100%; height: 440px"></iframe>
-        </el-dialog>
+			<iframe :src="downloadUrl" style="width: 100%; height: 440px"></iframe>
+		</el-dialog>
 	</div>
-	
+	<div v-dialogStretching>
+		<ZDialog
+			v-model="condobj.uploadnewDialogShow"
+			@close="dialogclose"
+			:title="$t('itemtitleyingjiupfile')"
+			width="50%"
+		>
+			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+		</ZDialog>
+	</div>
 </template>
 
 <script setup>
@@ -180,6 +183,9 @@ import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import { GlobalStore } from "/src/store/globalStore.js";
+import ZDialog from "/src/components/ZDialog.vue";
+//附件上传页面
+import uploadnewQuery from "@/views/writeoffManage/invoice/selectUploadnew.vue";
 import moment from "moment";
 const i18n = useI18n();
 // 父组件传入的参数
@@ -192,11 +198,12 @@ const condobj = reactive({
 });
 let isdisabled = ref(true); //可编辑
 let buttonShow = ref(false); //按钮不可显示
-
+let fileShow = ref(false); //上传删除附件按钮不可显示
 let downloadUrl = ref(""); //文件路径
+const globalStore = GlobalStore();
+let userInfo = globalStore.userInfo;
 //let data = new Date().toLocaleString();
 //data = data.substring(0, data.indexOf(" "));
-const globalStore = GlobalStore();
 
 //let idate = moment(new Date(data)).format("YYYY-MM-DD");
 //税票信息初始化信息
@@ -252,6 +259,8 @@ const downloadfiles = (column, row) => {
 
 const tableTabsValue = ref("invoiceinfo");
 
+let uploadFileInfo = () => {};
+
 //保存税票信息
 let saveInvoiceInfo = async () => {
 	if (!sformData.exchangerate || !sformData.corpno || !sformData.corpname || !sformData.currencies || !sformData.invoiceid) {
@@ -267,16 +276,38 @@ let saveInvoiceInfo = async () => {
 		for (let key in res.invoiceInfo[0]) {
 			//判定 invoiceInfo 的key 是否存在 sformData 的key
 			sformData[key] = res.invoiceInfo[0][key];
+		}
+	}
+};
+
+//获取税票上传附件权限
+let getInvoiceRoleInfo = async () => {
+	if (!userInfo.usercode) {
+		ElMessage.warning(i18n.t("menubaselocalusersuserinfo"));
+		return;
+	}
+	//查询用户是否有权限上传电子水单
+	let cond = { exactrolecode: "m_tax_upload", usercode: userInfo.usercode };
+	let par = {
+		jsonString: JSON.stringify({cond:cond})
+	};
+	const res = await http.post("/core/user/user!selectUserRoleInfoByCond.action", qs.stringify(par));
+	if (res && res.userRoleInfos) {
+		//有权限显示上传按钮
+		if(res.userRoleInfos.length > 0){
+			fileShow.value = true;
 		}		
 	}
 };
 
+//getInvoiceInfo();
+
 //审核税票信息
-const approveInvoiceInfos = (code) => {
-    if(!sformData.invoiceid){
-        ElMessage.warning(i18n.t("Message_TaxTicketTnformation"));
+const approveInvoiceInfos = code => {
+	if (!sformData.invoiceid) {
+		ElMessage.warning(i18n.t("Message_TaxTicketTnformation"));
 		return;
-    }
+	}
 	let str = i18n.t("audit_approve");
 	if (code == "-1" || code == "-2") {
 		str = i18n.t("audit_reject");
@@ -300,8 +331,8 @@ const approveInvoiceInfos = (code) => {
 		let cond = {
 			opinion: approveValue.value
 		};
-        let invoiceInfos= [];
-        invoiceInfos.push(sformData);
+		let invoiceInfos = [];
+		invoiceInfos.push(sformData);
 		let jsonString = {
 			invoiceInfos: invoiceInfos,
 			cond: cond
@@ -323,7 +354,7 @@ const approveInvoiceInfos = (code) => {
 				type: "success",
 				message: i18n.t("Message_OperationSuccess")
 			});
-            props.condobj.dialogShow_invoicedetailApprove = false;
+			props.condobj.dialogShow_invoicedetailApprove = false;
 			grid_invoiceInfos2.value.getTableList();
 		}
 	});
@@ -331,18 +362,16 @@ const approveInvoiceInfos = (code) => {
 
 //税票下载
 let invoicedownload_renderer = () => {
-	let filename = sformData.invoicefilename;//文件名
-	let filepath = sformData.filepath;//文件路径
+	let filename = sformData.invoicefilename; //文件名
+	let filepath = sformData.filepath; //文件路径
 	let serverUrl = globalStore.serverUrl;
-	if(filename == "" || filename == "" || filepath == "" || filepath == "" ){		     
-	}else{
-		downloadUrl.value = serverUrl+"/"+filepath;
+	if (filename == "" || filename == "" || filepath == "" || filepath == "") {
+	} else {
+		downloadUrl.value = serverUrl + "/" + filepath;
 		condobj.dialogShow_invoicePDFDownloadFile = true;
 		//window.location.href = serverUrl+"/"+filepath;
 		//downloadFile(serverUrl+"/"+filepath, filename, {});
-		
 	}
-	
 };
 
 //查询税票信息
@@ -376,9 +405,46 @@ let getinvoiceInfo = async obj => {
 };
 
 // 显示
-const dialogShow = data => {};
+const dialogShow = data => {
+	if (data == "dialogShow_invoiceUploadNew") {
+		condobj.cond = {
+			businesscode: "invoice",
+			businessobjectid: sformData.invoiceid,
+			html: data
+		};
+		condobj.uploadnewDialogShow = true;
+	}
+};
 //子页面关闭后的方法可以给父页面赋值等操作
-const dialogclose = () => {};
+const dialogclose = () => {
+	if (condobj && condobj.cond) {
+		if (condobj.cond.html && condobj.objlist) {
+			if (condobj.cond.html == "dialogShow_customerBuyerQuery") {
+				//选择买家单位名称
+				let obj = condobj.objlist;
+				if (obj.CORPID) {
+					formData.desc2 = obj.CORPID; //客户id
+					formData.desc3 = obj.CORPNO; //客户编码
+					formData.desc1 = obj.CORPDESC; //客户名称
+					if (obj.ISDISCOUNT == "1") {
+						discount = obj.DISCOUNT;
+					} else {
+						discount = "";
+					}
+					formData.desc4 = discount; //折扣
+					formData.desc5 = obj.PAYCONDITION; //付款方式
+					paycondition_rendererto(obj.PAYCONDITION); //付款方式的下拉值从新定义
+				}
+			} else if (condobj.cond.html == "reportDialogShow") {
+				//选择报告抬头
+				let obj = condobj.objlist;
+				if (obj.CORPID) {
+					formData.desc2 = obj.CORPID; //客户id
+				}
+			}
+		}
+	}
+};
 
 //切换tab时触发
 const tabChange = TabPaneName => {
@@ -406,11 +472,12 @@ onMounted(() => {
 		let invoiceid = props.condobj.cond.invoiceid; //税票主键
 		let rasclientid = props.condobj.cond.rasclientid; //客户编码
 		let workflowflag = props.condobj.cond.workflowflag; //状态
-        if(workflowflag == "5"){
-            isdisabled.value = false;
-            buttonShow.value = true;
-        }
+		if (workflowflag == "5") {
+			isdisabled.value = false;
+			buttonShow.value = true;
+		}
 		if (invoiceid) {
+			getInvoiceRoleInfo();
 			getinvoiceInfo({ invoiceid: invoiceid });
 			//传参后会自动调用接口刷新
 			tableListFolders.httpAttribute.baseParams["cond.invoiceid"] = invoiceid;

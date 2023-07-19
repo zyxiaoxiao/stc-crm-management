@@ -244,8 +244,8 @@ const billInfosDelete = async selectList => {
 
 //Excel模板下载
 const downloadExcelfiles = excelform => {
-	var filename = "BillInfo.xlsx";
-	var filepath = "";
+	let filename = "BillInfo.xlsx";
+	let filepath = "";
 	if (excelform.eradio == "2003") {
 		filepath = "/filedownload/2000";
 	} else if (excelform.eradio == "2007") {

@@ -274,7 +274,7 @@ const billdialogclose = async () => {
 							qs.stringify(params)
 						);
 						if (res) {
-							var msg = res.errorMsg;
+							let msg = res.errorMsg;
 							if (msg == "fail") {
 								//存在正在销账的到账单
 								ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));
@@ -330,7 +330,7 @@ const billdialogclose = async () => {
 								qs.stringify(paramsto)
 							);
 							if (resto) {
-								var msg = resto.errorMsg;
+								let msg = resto.errorMsg;
 								if (msg == "fail") {
 									//存在正在销账的到账单
 									ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));

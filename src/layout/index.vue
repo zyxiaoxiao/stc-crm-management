@@ -33,9 +33,9 @@ import cacheRouter from "/src/routers/cacheRouter.js";
 
 import { computed } from "vue";
 import { GlobalStore } from "/src/store/globalStore.js";
-import { useRouter } from "vue-router";
+// import { useRouter } from "vue-router";
 
-const router = useRouter();
+//const router = useRouter();
 const globalStore = GlobalStore();
 
 const themeConfig = computed(() => globalStore.themeConfig);

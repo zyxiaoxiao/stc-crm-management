@@ -17,8 +17,6 @@ import I18n from "./language/index.js";
 
 // echarts
 import echarts from "./echarts/index.js";
-
-//import { s3Layer } from "vue3-layer";
 import "vue3-layer/dist/s3Layer.css";
 
 //全局 引入 icon（自定义）
@@ -36,7 +34,6 @@ import "./styles/common.scss";
 const app = createApp(App);
 
 app.config.globalProperties.$echarts = echarts;
-//app.component("s3-layer", s3Layer);
 app.use(ElementPlus, {});
 app.use(router);
 app.use(store);

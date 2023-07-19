@@ -5821,5 +5821,8 @@ export default {
 	menubaseCalculateCommissionForBadDebtRecovery: "Calculate Commission For Bad Debt Recovery",
 	menu_base_AuditRecords: "Audit records",
 	menu_base_AuditRecords: "Do you want to automatically fill in the application form amount?",
-	basecolumnElectronic_Invoice: "Electronic Invoice"
+	basecolumnElectronic_Invoice: "Electronic Invoice",
+	mytodolist: "My to-do list",
+	collapse: "collapse",
+	expanded: "expanded"
 };

@@ -304,7 +304,7 @@ const dialogclose = async () => {
 				if (list != null && list.length > 0) {
 					let retreatbills = []; //到账信息数据集
 					let retreatbill = {}; //到账信息
-					var retreatInfo = {}; //退款信息
+					let retreatInfo = {}; //退款信息
 					for (let l of list) {
 						retreatbill = {};
 						retreatbill.billid = l.billid;

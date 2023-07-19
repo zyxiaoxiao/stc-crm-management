@@ -250,14 +250,14 @@ const getCombinedMonth = () => {
 		year = year - 1;
 		month = 12;
 	}
-	var year1 = year;
-	var month1 = month - 1;
+	let year1 = year;
+	let month1 = month - 1;
 	if (month1 == 0) {
 		year1 = year1 - 1;
 		month1 = 12;
 	}
-	var year2 = year1;
-	var month2 = month1 - 1;
+	let year2 = year1;
+	let month2 = month1 - 1;
 	if (month2 == 0) {
 		year2 = year2 - 1;
 		month2 = 12;

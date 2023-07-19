@@ -199,16 +199,7 @@ const formData1 = reactive({
 const itemviw = ref();
 const multipleSelection = ref([]);
 
-<<<<<<< .mine
-||||||| .r439
-const toggleRow = (selection, row) => {
-	console.log("xxxxxxxxxxx");
-	console.log(selection);
-	console.log(row);
-};
-=======
 const toggleRow = (selection, row) => {};
->>>>>>> .r460
 
 const clicked = ref(true);
 let v_itemviewData = []; //获取检测项目最初的值

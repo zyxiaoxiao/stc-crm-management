@@ -136,7 +136,7 @@ const newWriteoffInfos = async selectList => {
 	}
 	let corpno = selectList[0].SENDCLIENTNO;
 	let currencytype = selectList[0].CURRENCYTYPE;
-	var invoicenos = [];
+	let invoicenos = [];
 	for (let s of selectList) {
 		if (corpno != s.SENDCLIENTNO) {
 			ElMessage.warning(i18n.t("Message_selectCorpDifferent"));

@@ -520,7 +520,7 @@ const submitWriteoffInfo = () => {
 		return;
 	}
 	let sdata = [];
-	var wainfo = {};
+	let wainfo = {};
 	for (let i of tableListFolders.tableData) {
 		wainfo = {};
 		wainfo.totalmoney = i.totalmoney; //申请单总金额
@@ -625,7 +625,7 @@ const billdialogclose = async () => {
 						let exchangerate = obj.exchangerate; //汇率
 						let billid = obj.billid; //到账主键id
 						let billRemark = ""; //汇率
-						var mess = i18n.t("Message_BillToFoldersDifferenceValue");
+						let mess = i18n.t("Message_BillToFoldersDifferenceValue");
 						if (!mess) {
 							mess = "到账折算申请单可冲销金额{0},本次冲销总金额{1}，差值{2}。";
 						}

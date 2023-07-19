@@ -1,10 +1,10 @@
 <template>
 	<div class="small-panel-box">
 		<div class="small-panel-header">
-			<div class="small-panel-header-left">{{ $t("homepanelMyJobs") }}</div>
+			<div class="small-panel-header-left">{{ $t("mytodolist") }}</div>
 			<div class="small-panel-header-right">
-				<dic class="flx-center" @click="collapseClick">
-					<span>{{ headerRightText }}</span>
+				<div class="flx-center" @click="collapseClick">
+					<span>{{ $t(headerRightText) }}</span>
 					<el-icon>
 						<template v-if="headerRightIcon == 'expand'">
 							<ArrowDownBold />
@@ -13,13 +13,13 @@
 							<ArrowUpBold />
 						</template>
 					</el-icon>
-				</dic>
-				<dic class="flx-center" style="margin-left: 10px" @click="refreshClick">
+				</div>
+				<div class="flx-center" style="margin-left: 10px" @click="refreshClick">
 					<span>{{ $t("desktop_Refresh") }}</span>
 					<el-icon>
 						<Refresh />
 					</el-icon>
-				</dic>
+				</div>
 			</div>
 		</div>
 		<el-collapse-transition>
@@ -55,7 +55,7 @@ import http from "@/api/index.js";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-const headerRightText = ref("收起");
+const headerRightText = ref("collapse");
 const headerRightIcon = ref("collapse");
 
 const smallPanelShow = ref(true);
@@ -88,12 +88,12 @@ const getMyToDo = async () => {
 
 //展开和折叠
 const collapseClick = () => {
-	if (headerRightText.value == "收起") {
-		headerRightText.value = "展开";
+	if (headerRightText.value == "collapse") {
+		headerRightText.value = "expanded";
 		headerRightIcon.value = "expand";
 		smallPanelShow.value = false;
 	} else {
-		headerRightText.value = "收起";
+		headerRightText.value = "collapse";
 		headerRightIcon.value = "collapse";
 		smallPanelShow.value = true;
 	}

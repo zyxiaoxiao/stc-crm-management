@@ -1920,8 +1920,8 @@ const readDiscountApplintment = () => {
 			ElMessage.success(i18n.t("Message_OperationSuccess"));
 			if (res.vmaps) {
 				if (res.vmaps.length > 0) {
-					for (var i = 0; i < vList.length; i++) {
-						for (var j = 0; j < res.vmaps.length; j++) {
+					for (let i = 0; i < vList.length; i++) {
+						for (let j = 0; j < res.vmaps.length; j++) {
 							if (vList[i].TESTID == res.vmaps[j].TESTID) {
 								if ("N" == vList[i].FENBAO && vList[i].netprice != "Y" && vList[i].iscontractprice != "Y") {
 									vList[i].AFTER_TESTPRICE_FOREIGN = res.vmaps[j].AFTER_TESTPRICE_FOREIGN;
@@ -3313,7 +3313,7 @@ const dialogclose = () => {
 				let reservnumnow = formData.reservnum;
 				if (obj.reservnum && reservnumnow) {
 					let o = { dispersednum: obj.reservnum, reservnum: reservnumnow };
-					var saveD = async o => {
+					let saveD = async o => {
 						let list = [];
 						list.push(o);
 						let jsonString = { dispersedquoteInfos: list };

@@ -21,7 +21,7 @@
 </template>
 
 <script setup name="home">
-import { ref, onMounted, inject } from "vue";
+import { ref, onMounted, inject, onBeforeUnmount } from "vue";
 import elementResizeDetectorMaker from "element-resize-detector";
 import { GlobalStore } from "/src/store/globalStore.js";
 import { useRouter } from "vue-router";
@@ -87,13 +87,16 @@ let option3 = {
 		}
 	]
 };
+let myChart = null;
+let myChart2 = null;
+let myChart3 = null;
 
 //页面初始化渲染完成执行
 onMounted(() => {
 	// 基于准备好的dom，初始化echarts实例
-	let myChart = echarts.init(echartsRef.value);
-	let myChart2 = echarts.init(echartsRef2.value);
-	let myChart3 = echarts.init(echartsRef3.value);
+	myChart = echarts.init(echartsRef.value);
+	myChart2 = echarts.init(echartsRef2.value);
+	myChart3 = echarts.init(echartsRef3.value);
 	// 绘制图表
 	myChart.setOption(option);
 	myChart2.setOption(option2);
@@ -104,6 +107,14 @@ onMounted(() => {
 		myChart2.resize();
 		myChart3.resize();
 	});
+});
+//页面卸载之前调用
+onBeforeUnmount(() => {
+	//防止内存泄露移除除事件监听器
+	erd.uninstall(group2Ref.value);
+	myChart.dispose();
+	myChart2.dispose();
+	myChart3.dispose();
 });
 </script>
 

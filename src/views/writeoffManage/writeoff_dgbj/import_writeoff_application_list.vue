@@ -145,8 +145,8 @@ let dialogExcelRadio = ref(false);
 
 //Excel模板下载
 const downloadExcelfiles = excelform => {
-	var filename = "Writeoff_imp.xlsx";
-	var filepath = "";
+	let filename = "Writeoff_imp.xlsx";
+	let filepath = "";
 	if (excelform.eradio == "2003") {
 		filepath = "/filedownload/2000";
 	} else if (excelform.eradio == "2007") {

@@ -475,7 +475,7 @@
 				:currentPage="params.page"
 				:page-size="params.limit"
 				:page-sizes="[25, 50, 100]"
-				:pager-count="3"
+				:pager-count="5"
 				:background="true"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="params.total"
@@ -1302,19 +1302,21 @@ const operationColumnHeight = computed(() => {
 const columnDrop = () => {
 	nextTick(() => {
 		const wrapper = tableRef.value.$el.querySelector(".el-table__body thead tr ");
-		Sortable.create(wrapper, {
-			handle: ".columnDrop",
-			animation: 300,
-			delay: 0,
-			onEnd: async ({ newIndex, oldIndex }) => {
-				const oldItem = props.tableList.tableColumns[oldIndex];
-				props.tableList.tableColumns.splice(oldIndex, 1);
-				props.tableList.tableColumns.splice(newIndex, 0, oldItem);
-				if (props?.tableList?.id) {
-					await saveColumnDrop();
+		if (wrapper) {
+			Sortable.create(wrapper, {
+				handle: ".columnDrop",
+				animation: 300,
+				delay: 0,
+				onEnd: async ({ newIndex, oldIndex }) => {
+					const oldItem = props.tableList.tableColumns[oldIndex];
+					props.tableList.tableColumns.splice(oldIndex, 1);
+					props.tableList.tableColumns.splice(newIndex, 0, oldItem);
+					if (props?.tableList?.id) {
+						await saveColumnDrop();
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 };
 
@@ -1322,19 +1324,21 @@ const columnDrop = () => {
 const columnDrop1 = () => {
 	nextTick(() => {
 		const wrapper = tableRef.value.$el.querySelector(" .el-table .el-table__header thead tr ");
-		Sortable.create(wrapper, {
-			handle: ".columnDrop",
-			animation: 300,
-			delay: 0,
-			onEnd: async ({ newIndex, oldIndex }) => {
-				const oldItem = props.tableList.tableColumns[oldIndex];
-				props.tableList.tableColumns.splice(oldIndex, 1);
-				props.tableList.tableColumns.splice(newIndex, 0, oldItem);
-				if (props?.tableList?.id) {
-					await saveColumnDrop();
+		if (wrapper) {
+			Sortable.create(wrapper, {
+				handle: ".columnDrop",
+				animation: 300,
+				delay: 0,
+				onEnd: async ({ newIndex, oldIndex }) => {
+					const oldItem = props.tableList.tableColumns[oldIndex];
+					props.tableList.tableColumns.splice(oldIndex, 1);
+					props.tableList.tableColumns.splice(newIndex, 0, oldItem);
+					if (props?.tableList?.id) {
+						await saveColumnDrop();
+					}
 				}
-			}
-		});
+			});
+		}
 	});
 };
 

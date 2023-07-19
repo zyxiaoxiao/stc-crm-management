@@ -31,36 +31,21 @@
 					</el-col>
 					<el-col :span="24">
 						<el-form-item :label="$t('columnSealtypetitle') + ':'" title1="用印类型">
-							<el-select
-								v-model="sformData.sealname"
-								class="full-width-input"
-								filterable
-								placeholder="Select"
-							>
+							<el-select v-model="sformData.sealname" class="full-width-input" filterable placeholder="Select">
 								<el-option v-for="item in v_saleList" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24">
 						<el-form-item :label="$t('menubasePagingSealNumber') + ':'" title1="骑缝章数量">
-							<el-select
-								v-model="sformData.sealnumber"
-								class="full-width-input"
-								filterable
-								placeholder="Select"
-							>
+							<el-select v-model="sformData.sealnumber" class="full-width-input" filterable placeholder="Select">
 								<el-option v-for="item in numberlist" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item>
 					</el-col>
 					<el-col :span="24">
 						<el-form-item :label="$t('menubaseIsEncryption') + ':'" title1="是否加密">
-							<el-select
-								v-model="sformData.isencryption"
-								class="full-width-input"
-								filterable
-								placeholder="Select"
-							>
+							<el-select v-model="sformData.isencryption" class="full-width-input" filterable placeholder="Select">
 								<el-option v-for="item in encryption" :key="item.value" :label="item.label" :value="item.value" />
 							</el-select>
 						</el-form-item>
@@ -77,8 +62,8 @@
 				:on-error="handleError"
 				:data="upload_data"
 				:auto-upload="false"
-                :http-request="httprequestfun"
-                :accept="['pdf','PDF']"
+				:http-request="httprequestfun"
+				:accept="['pdf', 'PDF']"
 			>
 				<template #trigger>
 					<el-button icon="Document" type="primary">{{ $t("UPLOAD_selectFile") }}</el-button>
@@ -122,14 +107,14 @@ let v_saleList = reactive([]);
 
 //是否加密
 let encryption = [
-    {
+	{
 		value: "0",
 		label: i18n.t("itemtitleMainAccountOrNot0")
 	},
 	{
 		value: "1",
 		label: i18n.t("itemtitleMainAccountOrNot1")
-	}	
+	}
 ];
 
 //骑缝章数量
@@ -153,6 +138,26 @@ const numberlist = [
 	{
 		value: "5",
 		label: "5"
+	},
+	{
+		value: "6",
+		label: "6"
+	},
+	{
+		value: "7",
+		label: "7"
+	},
+	{
+		value: "8",
+		label: "8"
+	},
+	{
+		value: "9",
+		label: "9"
+	},
+	{
+		value: "10",
+		label: "10"
 	}
 ];
 
@@ -167,19 +172,18 @@ const handleExceed = files => {
 	upload.value.handleStart(file);
 };
 
-const httprequestfun = async (params) => {
-    let f = new FormData();//表单数据以及文件
-    f.append("file",params.file);
-    let filename = params.file.name;
-    f.append("jsonString",params.data.jsonString);
-    const res = await http.post("/core/uploadnew/upload!uploadfile.action", f,{
-			responseType: "blob"
-		});
-	if(res){
-        exportDownload( res, filename); 
-        props.condobj.dialogShow_documentsealfiledetail = false;     
-    }
-    
+const httprequestfun = async params => {
+	let f = new FormData(); //表单数据以及文件
+	f.append("file", params.file);
+	let filename = params.file.name;
+	f.append("jsonString", params.data.jsonString);
+	const res = await http.post("/core/uploadnew/upload!uploadfile.action", f, {
+		responseType: "blob"
+	});
+	if (res) {
+		exportDownload(res, filename);
+		props.condobj.dialogShow_documentsealfiledetail = false;
+	}
 };
 
 //上传
@@ -196,19 +200,19 @@ const submitUpload = () => {
 
 //发送请求前执行的函数，在这里可以做一些条件判断，配置参数等
 const handleBeforeUpload = file => {
-    if(file.name){
-        let fileName = file.name;
-        fileName = fileName.toLowerCase();
-        if(fileName.indexOf("pdf") < 0){
-            ElMessage.warning("上传需要PDF文件!");
-		    return false;
-        }
-        if(fileName.length > 200){
-            ElMessage.warning("Statement_longname");
-		    return false;
-        }
-    }
-    sformData.filename = file.name;//文件名称
+	if (file.name) {
+		let fileName = file.name;
+		fileName = fileName.toLowerCase();
+		if (fileName.indexOf("pdf") < 0) {
+			ElMessage.warning("上传需要PDF文件!");
+			return false;
+		}
+		if (fileName.length > 200) {
+			ElMessage.warning("Statement_longname");
+			return false;
+		}
+	}
+	sformData.filename = file.name; //文件名称
 	upload_data.jsonString = JSON.stringify({ uploadPDFFileInfo: sformData });
 
 	return true;
@@ -216,38 +220,37 @@ const handleBeforeUpload = file => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
-	if(props.condobj){
-        let list = props.condobj.cond.v_saleList;
-        let fdata = props.condobj.cond.fdata;
-        if(list != null && list.length > 0){
-            for(let sale of list){
-                v_saleList.push(sale);
-            }
-        }
-        if(fdata.folderno){
-            sformData.corpcode = fdata.rasclientid;
-            sformData.corpdesc = fdata.compname;
-            sformData.folderno = fdata.folderno;
-            sformData.sealnumber = "1";
-            sformData.isencryption = "1";
-        }
-    }
+	if (props.condobj) {
+		let list = props.condobj.cond.v_saleList;
+		let fdata = props.condobj.cond.fdata;
+		if (list != null && list.length > 0) {
+			for (let sale of list) {
+				v_saleList.push(sale);
+			}
+		}
+		if (fdata.folderno) {
+			sformData.corpcode = fdata.rasclientid;
+			sformData.corpdesc = fdata.compname;
+			sformData.folderno = fdata.folderno;
+			sformData.sealnumber = "1";
+			sformData.isencryption = "1";
+		}
+	}
 });
 
-const exportDownload = async (data,fileName) => {
-    //执行下载,{type : 'application/pdf;charset=utf-8''}
-    // let b = new Blob([data]);
-    let url = window.URL.createObjectURL(data);    
-    let link = document.createElement('a');
-    link.download = fileName;
-    link.style.display = 'none';
-    link.href = url;
-    //link.setAttribute('download',fileName + '.' + fileFormat);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(link.href);
-
+const exportDownload = async (data, fileName) => {
+	//执行下载,{type : 'application/pdf;charset=utf-8''}
+	// let b = new Blob([data]);
+	let url = window.URL.createObjectURL(data);
+	let link = document.createElement("a");
+	link.download = fileName;
+	link.style.display = "none";
+	link.href = url;
+	//link.setAttribute('download',fileName + '.' + fileFormat);
+	document.body.appendChild(link);
+	link.click();
+	document.body.removeChild(link);
+	window.URL.revokeObjectURL(link.href);
 };
 
 //请求失败后执行的函数，相当于axios的catch
