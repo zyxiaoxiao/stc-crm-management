@@ -158,16 +158,15 @@
 			</div>
 		</div>
 		<!-- 选择发票 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectinvoiceList.dialogShow"
-				:title="$t('columnwriteoff_paymentconfirmation')"
-				width="75%"
-				@close="selectinvoiceClose"
-			>
-				<selectinvoice :condobj="selectinvoiceList"></selectinvoice>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectinvoiceList.dialogShow"
+			v-model="selectinvoiceList.dialogShow"
+			:title="$t('columnwriteoff_paymentconfirmation')"
+			width="75%"
+			@close="selectinvoiceClose"
+		>
+			<selectinvoice :condobj="selectinvoiceList"></selectinvoice>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

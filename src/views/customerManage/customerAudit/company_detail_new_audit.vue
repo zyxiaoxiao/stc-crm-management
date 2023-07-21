@@ -461,11 +461,10 @@
 				<zTable v-if="tabPaneXR.get(5)" ref="zTable5" :tableList="tableList5" />
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
 	</div>
 </template>
 

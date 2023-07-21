@@ -86,16 +86,15 @@
 			</el-row>
 		</el-form>
 		<!-- 账户信息选择文件 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="accountFilesList.dialogShow"
-				:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
-				width="95%"
-				@close="accountFilesClose"
-			>
-				<customerfileselect :condobj="accountFilesList"></customerfileselect>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="accountFilesList.dialogShow"
+			v-model="accountFilesList.dialogShow"
+			:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
+			width="95%"
+			@close="accountFilesClose"
+		>
+			<customerfileselect :condobj="accountFilesList"></customerfileselect>
+		</ZDialog>
 	</div>
 </template>
 

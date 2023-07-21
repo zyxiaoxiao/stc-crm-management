@@ -71,28 +71,26 @@
 		</zTable>
 
 		<!-- 选择部门 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectDistributionCorpList.dialogShow"
-				:title="$t('corpinfopaneldepartmentdesctitle')"
-				width="40%"
-				@close="selectDistributionCorpClose"
-			>
-				<selectDistributionCorp :condobj="selectDistributionCorpList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectDistributionCorpList.dialogShow"
+			v-model="selectDistributionCorpList.dialogShow"
+			:title="$t('corpinfopaneldepartmentdesctitle')"
+			width="40%"
+			@close="selectDistributionCorpClose"
+		>
+			<selectDistributionCorp :condobj="selectDistributionCorpList" />
+		</ZDialog>
 
 		<!-- 编辑 批量修改 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="batchDeptanduserList.dialogShow"
-				width="85%"
-				@close="batchDeptanduserClose"
-				customclass="selectbatchdeptanduserClass"
-			>
-				<selectbatchdeptanduser :condobj="batchDeptanduserList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="batchDeptanduserList.dialogShow"
+			v-model="batchDeptanduserList.dialogShow"
+			width="85%"
+			@close="batchDeptanduserClose"
+			customclass="selectbatchdeptanduserClass"
+		>
+			<selectbatchdeptanduser :condobj="batchDeptanduserList" />
+		</ZDialog>
 	</div>
 </template>
 

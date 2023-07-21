@@ -176,28 +176,27 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="customernumberlistselectList.dialogShow"
-				width="40%"
-				customclass="customernumberlistselectCss"
-				@close="customernumberlistselectClose"
-			>
-				<customernumberlistselect :condobj="customernumberlistselectList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="customernumberlistselectList.dialogShow"
+			v-model="customernumberlistselectList.dialogShow"
+			width="40%"
+			customclass="customernumberlistselectCss"
+			@close="customernumberlistselectClose"
+		>
+			<customernumberlistselect :condobj="customernumberlistselectList" />
+		</ZDialog>
+
 		<!-- 上传附件弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="uploadAttachmentList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="uploadAttachmentCss"
-				@close="qualificationClose"
-			>
-				<uploadAttachment :condobj="uploadAttachmentList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="uploadAttachmentList.dialogShow"
+			v-model="uploadAttachmentList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="uploadAttachmentCss"
+			@close="qualificationClose"
+		>
+			<uploadAttachment :condobj="uploadAttachmentList" />
+		</ZDialog>
 	</div>
 </template>
 

@@ -48,17 +48,19 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核记录 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
 		<!-- 新增数据 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="enterpriselockdetailnewList.dialogShow" width="95%" @close="enterpriselockdetailnewClose">
-				<enterpriselockdetailnew :condobj="enterpriselockdetailnewList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="enterpriselockdetailnewList.dialogShow"
+			v-model="enterpriselockdetailnewList.dialogShow"
+			width="95%"
+			@close="enterpriselockdetailnewClose"
+		>
+			<enterpriselockdetailnew :condobj="enterpriselockdetailnewList" />
+		</ZDialog>
 	</div>
 </template>
 

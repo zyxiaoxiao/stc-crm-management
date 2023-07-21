@@ -19,11 +19,10 @@
 				</el-button>
 			</template>
 		</zTable>
-		<div v-dialogStretching>
-			<ZDialog v-model="custInfoUser.dialogShow" title="" width="95%">
-				<custInfouserpublic :condobj="custInfoUser" />
-			</ZDialog>
-		</div>
+
+		<ZDialog v-if="custInfoUser.dialogShow" v-model="custInfoUser.dialogShow" title="" width="95%">
+			<custInfouserpublic :condobj="custInfoUser" />
+		</ZDialog>
 	</div>
 </template>
 

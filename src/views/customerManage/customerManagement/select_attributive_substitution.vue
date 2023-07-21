@@ -137,39 +137,37 @@
 			</template>
 		</el-auto-resizer>
 		<!-- 选择部门 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectattributivesubstitutionList.dialogShow"
-				:title="$t('corpinfopaneldepartmentdesctitle')"
-				width="40%"
-				@close="selectattributivesubstitutionClose"
-			>
-				<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectattributivesubstitutionList.dialogShow"
+			v-model="selectattributivesubstitutionList.dialogShow"
+			:title="$t('corpinfopaneldepartmentdesctitle')"
+			width="40%"
+			@close="selectattributivesubstitutionClose"
+		>
+			<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
+		</ZDialog>
+
 		<!-- 选择销售 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectsalesuserList.dialogShow"
-				:title="$t('tabtitlemdmselectconnuser')"
-				width="40%"
-				@close="selectsalesuserClose"
-			>
-				<selectsalesuser :condobj="selectsalesuserList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectsalesuserList.dialogShow"
+			v-model="selectsalesuserList.dialogShow"
+			:title="$t('tabtitlemdmselectconnuser')"
+			width="40%"
+			@close="selectsalesuserClose"
+		>
+			<selectsalesuser :condobj="selectsalesuserList" />
+		</ZDialog>
 
 		<!-- 编辑 批量修改 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectsalescutomerList.dialogShow"
-				:title="$t('menubaseCustomerlist')"
-				width="85%"
-				@close="selectsalescutomerClose"
-			>
-				<selectsalescutomer :condobj="selectsalescutomerList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectsalescutomerList.dialogShow"
+			v-model="selectsalescutomerList.dialogShow"
+			:title="$t('menubaseCustomerlist')"
+			width="85%"
+			@close="selectsalescutomerClose"
+		>
+			<selectsalescutomer :condobj="selectsalescutomerList" />
+		</ZDialog>
 	</div>
 </template>
 

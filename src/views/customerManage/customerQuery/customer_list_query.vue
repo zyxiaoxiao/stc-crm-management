@@ -110,36 +110,36 @@
 				</template>
 			</zTable>
 		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="dialogShow_Folders"
-				:title="$t('menubaseapplicationorderquery')"
-				width="50%"
-				customclass="dialogShowFolders"
-			>
-				<selectFolders :condobj="condobj"></selectFolders>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="dialogShow_ChangeRecord"
-				:title="$t('menubaseOwnershipChangeRecord')"
-				width="90%"
-				customclass="dialogShowChangeRecord"
-			>
-				<customerchangedetail :condobj="condobj"></customerchangedetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="dialogShow_mycustomer"
-				:title="$t('corpinfopanelgsxxtitle')"
-				width="55%"
-				customclass="dialogShowChangeRecord"
-			>
-				<mycustomer :condobj="condobj"></mycustomer>
-			</ZDialog>
-		</div>
+
+		<ZDialog
+			v-if="dialogShow_Folders"
+			v-model="dialogShow_Folders"
+			:title="$t('menubaseapplicationorderquery')"
+			width="50%"
+			customclass="dialogShowFolders"
+		>
+			<selectFolders :condobj="condobj"></selectFolders>
+		</ZDialog>
+
+		<ZDialog
+			v-if="dialogShow_ChangeRecord"
+			v-model="dialogShow_ChangeRecord"
+			:title="$t('menubaseOwnershipChangeRecord')"
+			width="90%"
+			customclass="dialogShowChangeRecord"
+		>
+			<customerchangedetail :condobj="condobj"></customerchangedetail>
+		</ZDialog>
+
+		<ZDialog
+			v-if="dialogShow_mycustomer"
+			v-model="dialogShow_mycustomer"
+			:title="$t('corpinfopanelgsxxtitle')"
+			width="55%"
+			customclass="dialogShowChangeRecord"
+		>
+			<mycustomer :condobj="condobj"></mycustomer>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

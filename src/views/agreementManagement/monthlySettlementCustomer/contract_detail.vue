@@ -367,40 +367,37 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectCustomerList.dialogShow"
-				:title="$t('panelSelectcustomer')"
-				width="75%"
-				@close="selectCustomerClose"
-			>
-				<selectCustomer :condobj="selectCustomerList"></selectCustomer>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectCustomerList.dialogShow"
+			v-model="selectCustomerList.dialogShow"
+			:title="$t('panelSelectcustomer')"
+			width="75%"
+			@close="selectCustomerClose"
+		>
+			<selectCustomer :condobj="selectCustomerList"></selectCustomer>
+		</ZDialog>
+
 		<!-- 选择联系人 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectcontactList.dialogShow" width="75%" @close="selectcontactClose">
-				<selectcontact :condobj="selectcontactList"></selectcontact>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="selectcontactList.dialogShow" v-model="selectcontactList.dialogShow" width="75%" @close="selectcontactClose">
+			<selectcontact :condobj="selectcontactList"></selectcontact>
+		</ZDialog>
+
 		<!-- 选择账户 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectAccountList.dialogShow" width="70%" @close="selectAccountClose">
-				<selectAccount :condobj="selectAccountList"></selectAccount>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="selectAccountList.dialogShow" v-model="selectAccountList.dialogShow" width="70%" @close="selectAccountClose">
+			<selectAccount :condobj="selectAccountList"></selectAccount>
+		</ZDialog>
+
 		<!-- 上传附件弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="uploadAttachmentList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="selectAgentCss"
-				@close="qualificationClose"
-			>
-				<uploadAttachment :condobj="uploadAttachmentList"></uploadAttachment>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="uploadAttachmentList.dialogShow"
+			v-model="uploadAttachmentList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="selectAgentCss"
+			@close="qualificationClose"
+		>
+			<uploadAttachment :condobj="uploadAttachmentList"></uploadAttachment>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

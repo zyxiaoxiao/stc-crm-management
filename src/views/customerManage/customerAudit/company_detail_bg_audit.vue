@@ -526,22 +526,19 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
-				<companydetailbgreadonly :condobj="customerbgReadonly" />
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
-				<companydetailnewhistoryreadonly :condobj="customerNewReadonly" />
-			</ZDialog>
-		</div>
+
+		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+			<companydetailbgreadonly :condobj="customerbgReadonly" />
+		</ZDialog>
+
+		<ZDialog v-if="customerNewReadonly.dialogShow" v-model="customerNewReadonly.dialogShow" title="" width="95%">
+			<companydetailnewhistoryreadonly :condobj="customerNewReadonly" />
+		</ZDialog>
+
 		<!-- 客户查询 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
 	</div>
 </template>
 

@@ -106,17 +106,19 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 移除到公共池弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerattributioninformationList.dialogShow" width="95%" @close="customerattributioninformationClose">
-				<customerattributioninformation :condobj="customerattributioninformationList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="customerattributioninformationList.dialogShow"
+			v-model="customerattributioninformationList.dialogShow"
+			width="95%"
+			@close="customerattributioninformationClose"
+		>
+			<customerattributioninformation :condobj="customerattributioninformationList" />
+		</ZDialog>
+
 		<!-- 客户信息 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="custInfoUser.dialogShow" title="" width="95%">
-				<custInfouserpublic :condobj="custInfoUser" />
-			</ZDialog>
-		</div>
+		<ZDialog v-if="custInfoUser.dialogShow" v-model="custInfoUser.dialogShow" title="" width="95%">
+			<custInfouserpublic :condobj="custInfoUser" />
+		</ZDialog>
 	</div>
 </template>
 

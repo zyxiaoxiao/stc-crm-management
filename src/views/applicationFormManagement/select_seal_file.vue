@@ -63,7 +63,7 @@
 				:data="upload_data"
 				:auto-upload="false"
 				:http-request="httprequestfun"
-				:accept="['pdf', 'PDF']"
+				accept=".pdf"
 			>
 				<template #trigger>
 					<el-button icon="Document" type="primary">{{ $t("UPLOAD_selectFile") }}</el-button>

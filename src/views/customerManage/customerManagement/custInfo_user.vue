@@ -571,77 +571,84 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 上传资质文件弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="qualificationList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="selectAgentCss"
-				@close="qualificationClose"
-			>
-				<qualificationsUpload :condobj="qualificationList"></qualificationsUpload>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="qualificationList.dialogShow"
+			v-model="qualificationList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="selectAgentCss"
+			@close="qualificationClose"
+		>
+			<qualificationsUpload :condobj="qualificationList"></qualificationsUpload>
+		</ZDialog>
+
 		<!-- 填写联系人弹出层 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="contactList.dialogShow"
-				:title="$t('companypanelCustomerContactInformationtitle')"
-				width="95%"
-				customclass="selectAgentCss"
-				@close="contactClose"
-			>
-				<customercontactnew :condobj="contactList"></customercontactnew>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contactList.dialogShow"
+			v-model="contactList.dialogShow"
+			:title="$t('companypanelCustomerContactInformationtitle')"
+			width="95%"
+			customclass="selectAgentCss"
+			@close="contactClose"
+		>
+			<customercontactnew :condobj="contactList"></customercontactnew>
+		</ZDialog>
+
 		<!-- 联系人选择对应地址 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="contactAddressList.dialogShow"
-				:title="$t('titlebaseAddressinformation')"
-				width="80%"
-				customclass="selectAgentCss"
-				@close="contactAddressClose"
-			>
-				<customeraddressselect :condobj="contactAddressList"></customeraddressselect>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contactAddressList.dialogShow"
+			v-model="contactAddressList.dialogShow"
+			:title="$t('titlebaseAddressinformation')"
+			width="80%"
+			customclass="selectAgentCss"
+			@close="contactAddressClose"
+		>
+			<customeraddressselect :condobj="contactAddressList"></customeraddressselect>
+		</ZDialog>
+
 		<!-- 新增地址弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="addressList.dialogShow"
-				:title="$t('titlebaseAddressinformation')"
-				width="80%"
-				customclass="selectAgentCss"
-				@close="addressClose"
-			>
-				<customeraddress :condobj="addressList"></customeraddress>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="addressList.dialogShow"
+			v-model="addressList.dialogShow"
+			:title="$t('titlebaseAddressinformation')"
+			width="80%"
+			customclass="selectAgentCss"
+			@close="addressClose"
+		>
+			<customeraddress :condobj="addressList"></customeraddress>
+		</ZDialog>
+
 		<!-- 历史变更记录弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
-				<companydetailbgreadonly :condobj="customerbgReadonly" />
-			</ZDialog>
-		</div>
+		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+			<companydetailbgreadonly :condobj="customerbgReadonly" />
+		</ZDialog>
+
 		<!-- 历史变更记录弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
-				<companydetailnewhistoryreadonly :condobj="customerNewReadonly" />
-			</ZDialog>
-		</div>
+		<ZDialog v-if="customerNewReadonly.dialogShow" v-model="customerNewReadonly.dialogShow" title="" width="95%">
+			<companydetailnewhistoryreadonly :condobj="customerNewReadonly" />
+		</ZDialog>
+
 		<!-- 查看检测结果弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="testresultsList.dialogShow" title="" width="60%" customclass="selectAgentCss">
-				<selectResults :condobj="testresultsList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="testresultsList.dialogShow"
+			v-model="testresultsList.dialogShow"
+			title=""
+			width="60%"
+			customclass="selectAgentCss"
+		>
+			<selectResults :condobj="testresultsList" />
+		</ZDialog>
+
 		<!-- 填写追踪历史记录 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="addTrackingRecordList.dialogShow" title="" width="90%" @close="addTrackingRecordClose">
-				<trackdetail :condobj="addTrackingRecordList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="addTrackingRecordList.dialogShow"
+			v-model="addTrackingRecordList.dialogShow"
+			title=""
+			width="90%"
+			@close="addTrackingRecordClose"
+		>
+			<trackdetail :condobj="addTrackingRecordList" />
+		</ZDialog>
 	</div>
 </template>
 

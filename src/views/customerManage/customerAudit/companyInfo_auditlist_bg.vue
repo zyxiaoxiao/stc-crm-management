@@ -55,26 +55,28 @@
 				<zTable ref="zTable2" :tableList="tableList2" @link-detailbg="linkDetailbgQuery" @workflow-status="workflowStatus" />
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="companydetailbgauditList.dialogShow" title="" width="95%" @close="companydetailbgauditClose">
-				<companydetailbgaudit :condobj="companydetailbgauditList" />
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
-				<companyDetailbgReadonly :condobj="customerbgReadonly" />
-			</ZDialog>
-		</div>
+
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-if="companydetailbgauditList.dialogShow"
+			v-model="companydetailbgauditList.dialogShow"
+			title=""
+			width="95%"
+			@close="companydetailbgauditClose"
+		>
+			<companydetailbgaudit :condobj="companydetailbgauditList" />
+		</ZDialog>
+
+		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+			<companyDetailbgReadonly :condobj="customerbgReadonly" />
+		</ZDialog>
 	</div>
 </template>
 

@@ -185,17 +185,16 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 上传附件弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="uploadAttachmentList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="uploadAttachmentCss"
-				@close="qualificationClose"
-			>
-				<uploadAttachment :condobj="uploadAttachmentList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="uploadAttachmentList.dialogShow"
+			v-model="uploadAttachmentList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="uploadAttachmentCss"
+			@close="qualificationClose"
+		>
+			<uploadAttachment :condobj="uploadAttachmentList" />
+		</ZDialog>
 	</div>
 </template>
 <script setup>

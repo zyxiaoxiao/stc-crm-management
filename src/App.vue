@@ -85,13 +85,19 @@ const assemblySize = computed(() => {
 });
 
 const bodyHeightStore = BodyHeightStore();
-let dialogHeight = computed(() => bodyHeightStore.dialogHeight + "px");
+let dialogHeight = computed(() => {
+	let dialogHeight = bodyHeightStore.dialogHeight + "px";
+	document.documentElement.style.setProperty("--zy-dialog-height", dialogHeight); //浏览器窗体高度
+	return dialogHeight;
+});
 </script>
 <style lang="scss">
 .main-dialog {
-	height: v-bind(dialogHeight);
+	// height: v-bind(dialogHeight);
+	height: $zy-dialog-height;
 }
 .main-dialogHeight {
-	max-height: v-bind(dialogHeight);
+	// max-height: v-bind(dialogHeight);
+	max-height: $zy-dialog-height;
 }
 </style>

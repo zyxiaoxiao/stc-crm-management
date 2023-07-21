@@ -505,37 +505,40 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectcorpcontactaddressinformationList.dialogShow"
-				width="95%"
-				@close="selectcorpcontactaddressinformationClose"
-			>
-				<selectcorpcontactaddressinformation
-					:condobj="selectcorpcontactaddressinformationList"
-				></selectcorpcontactaddressinformation>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectcorpcontactaddressinformationList.dialogShow"
+			v-model="selectcorpcontactaddressinformationList.dialogShow"
+			width="95%"
+			@close="selectcorpcontactaddressinformationClose"
+		>
+			<selectcorpcontactaddressinformation
+				:condobj="selectcorpcontactaddressinformationList"
+			></selectcorpcontactaddressinformation>
+		</ZDialog>
+
 		<!-- 选择联系人 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
-				<selectcontact :condobj="selectcontactList"></selectcontact>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="selectcontactList.dialogShow" v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
+			<selectcontact :condobj="selectcontactList"></selectcontact>
+		</ZDialog>
+
 		<!-- 选择地址 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectAddressbycorpandcontactList.dialogShow" width="85%" @close="selectAddressbycorpandcontactClose">
-				<selectAddressbycorpandcontact :condobj="selectAddressbycorpandcontactList"></selectAddressbycorpandcontact>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectAddressbycorpandcontactList.dialogShow"
+			v-model="selectAddressbycorpandcontactList.dialogShow"
+			width="85%"
+			@close="selectAddressbycorpandcontactClose"
+		>
+			<selectAddressbycorpandcontact :condobj="selectAddressbycorpandcontactList"></selectAddressbycorpandcontact>
+		</ZDialog>
+
 		<!-- 选择联系人 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
-				<selectUser :condobj="selectUserList"></selectUser>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="selectUserList.dialogShow" v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
+			<selectUser :condobj="selectUserList"></selectUser>
+		</ZDialog>
+
 		<!-- 条码标签弹出层 -->
 		<el-dialog
+			v-if="barcodeLabelList.dialogShow"
 			ref="barcodeLabelDialog"
 			v-model="barcodeLabelList.dialogShow"
 			width="500px"

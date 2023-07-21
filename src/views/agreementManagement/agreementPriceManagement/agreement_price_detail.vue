@@ -278,39 +278,38 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="selectCustomerList.dialogShow"
-				:title="$t('panelSelectcustomer')"
-				width="75%"
-				@close="selectCustomerClose"
-			>
-				<selectCustomer :condobj="selectCustomerList"></selectCustomer>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectCustomerList.dialogShow"
+			v-model="selectCustomerList.dialogShow"
+			:title="$t('panelSelectcustomer')"
+			width="75%"
+			@close="selectCustomerClose"
+		>
+			<selectCustomer :condobj="selectCustomerList"></selectCustomer>
+		</ZDialog>
+
 		<!-- 选择检测项目 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="contractNewTestItemList.dialogShow"
-				:title="$t('panelcolumnselecttestitems')"
-				width="75%"
-				@close="contractNewTestItemClose"
-			>
-				<contractNewTestItem :condobj="contractNewTestItemList"></contractNewTestItem>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contractNewTestItemList.dialogShow"
+			v-model="contractNewTestItemList.dialogShow"
+			:title="$t('panelcolumnselecttestitems')"
+			width="75%"
+			@close="contractNewTestItemClose"
+		>
+			<contractNewTestItem :condobj="contractNewTestItemList"></contractNewTestItem>
+		</ZDialog>
+
 		<!-- 上传附件弹出 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="uploadAttachmentList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="selectAgentCss"
-				@close="qualificationClose"
-			>
-				<uploadAttachment :condobj="uploadAttachmentList"></uploadAttachment>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="uploadAttachmentList.dialogShow"
+			v-model="uploadAttachmentList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="selectAgentCss"
+			@close="qualificationClose"
+		>
+			<uploadAttachment :condobj="uploadAttachmentList"></uploadAttachment>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

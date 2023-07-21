@@ -52,35 +52,51 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
+
 		<!-- 新增变更数据 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="companyList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%" @close="companyListClose">
-				<companylistselect :condobj="companyList" />
-			</ZDialog>
-		</div>
+
+		<ZDialog
+			v-if="companyList.dialogShow"
+			v-model="companyList.dialogShow"
+			:title="$t('corpinfopanelckxxcxtitle')"
+			width="95%"
+			@close="companyListClose"
+		>
+			<companylistselect :condobj="companyList" />
+		</ZDialog>
+
 		<!-- 编辑变更客户信息 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerbgList.dialogShow" title="" width="95%" @close="customerbgListClose">
-				<companydetailbg :condobj="customerbgList" />
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
-				<companyDetailbgReadonly :condobj="customerbgReadonly" />
-			</ZDialog>
-		</div>
+
+		<ZDialog
+			v-if="customerbgList.dialogShow"
+			v-model="customerbgList.dialogShow"
+			title=""
+			width="95%"
+			@close="customerbgListClose"
+		>
+			<companydetailbg :condobj="customerbgList" />
+		</ZDialog>
+
+		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+			<companyDetailbgReadonly :condobj="customerbgReadonly" />
+		</ZDialog>
+
 		<!-- 高级查询 -->
-		<el-dialog v-model="advanceSearch_dialogVisible" :title="$t('Search_AdvanceSearch')" width="40%" draggable>
+		<el-dialog
+			v-if="advanceSearch_dialogVisible"
+			v-model="advanceSearch_dialogVisible"
+			:title="$t('Search_AdvanceSearch')"
+			width="40%"
+			draggable
+		>
 			<div style="padding: 20px">
 				<el-row :gutter="15" class="main-align-items-center">
 					<el-col :span="12">

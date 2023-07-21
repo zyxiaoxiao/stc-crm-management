@@ -54,16 +54,15 @@
 			</template>
 		</zTable>
 		<!-- 填写追踪历史记录 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="addTrackingRecordList.dialogShow"
-				:title="$t('corpinfoTrackrecordtitle')"
-				width="90%"
-				@close="addTrackingRecordClose"
-			>
-				<potentialtrackdetailnew :condobj="addTrackingRecordList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="addTrackingRecordList.dialogShow"
+			v-model="addTrackingRecordList.dialogShow"
+			:title="$t('corpinfoTrackrecordtitle')"
+			width="90%"
+			@close="addTrackingRecordClose"
+		>
+			<potentialtrackdetailnew :condobj="addTrackingRecordList" />
+		</ZDialog>
 	</div>
 </template>
 

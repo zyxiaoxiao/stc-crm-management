@@ -571,102 +571,102 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择代理商 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="agentList.dialogShow"
-				:title="$t('selectbase1agent')"
-				width="50%"
-				customclass="selectAgentCss"
-				@close="selectAgentClose"
-			>
-				<selectagentview :condobj="agentList"></selectagentview>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="agentList.dialogShow"
+			v-model="agentList.dialogShow"
+			:title="$t('selectbase1agent')"
+			width="50%"
+			customclass="selectAgentCss"
+			@close="selectAgentClose"
+		>
+			<selectagentview :condobj="agentList"></selectagentview>
+		</ZDialog>
+
 		<!-- 查询客户 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
+
 		<!-- 上传资质文件 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="qualificationList.dialogShow"
-				:title="$t('UPLOAD_uploadFile')"
-				width="40%"
-				customclass="selectAgentCss"
-				@close="qualificationClose"
-			>
-				<qualificationsUpload :condobj="qualificationList"></qualificationsUpload>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="qualificationList.dialogShow"
+			v-model="qualificationList.dialogShow"
+			:title="$t('UPLOAD_uploadFile')"
+			width="40%"
+			customclass="selectAgentCss"
+			@close="qualificationClose"
+		>
+			<qualificationsUpload :condobj="qualificationList"></qualificationsUpload>
+		</ZDialog>
 
 		<!-- 添加联系人 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="contactList.dialogShow"
-				:title="$t('companypanelCustomerContactInformationtitle')"
-				width="95%"
-				customclass="selectAgentCss"
-				@close="contactClose"
-			>
-				<customercontactnew :condobj="contactList"></customercontactnew>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contactList.dialogShow"
+			v-model="contactList.dialogShow"
+			:title="$t('companypanelCustomerContactInformationtitle')"
+			width="95%"
+			customclass="selectAgentCss"
+			@close="contactClose"
+		>
+			<customercontactnew :condobj="contactList"></customercontactnew>
+		</ZDialog>
+
 		<!-- 联系人选择对应地址 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="contactAddressList.dialogShow"
-				:title="$t('titlebaseAddressinformation')"
-				width="80%"
-				customclass="selectAgentCss"
-				@close="contactAddressClose"
-			>
-				<customeraddressselect :condobj="contactAddressList"></customeraddressselect>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contactAddressList.dialogShow"
+			v-model="contactAddressList.dialogShow"
+			:title="$t('titlebaseAddressinformation')"
+			width="80%"
+			customclass="selectAgentCss"
+			@close="contactAddressClose"
+		>
+			<customeraddressselect :condobj="contactAddressList"></customeraddressselect>
+		</ZDialog>
+
 		<!-- 地址信息 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="addressList.dialogShow"
-				:title="$t('titlebaseAddressinformation')"
-				width="80%"
-				customclass="selectAgentCss"
-				@close="addressClose"
-			>
-				<customeraddress :condobj="addressList"></customeraddress>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="addressList.dialogShow"
+			v-model="addressList.dialogShow"
+			:title="$t('titlebaseAddressinformation')"
+			width="80%"
+			customclass="selectAgentCss"
+			@close="addressClose"
+		>
+			<customeraddress :condobj="addressList"></customeraddress>
+		</ZDialog>
 
 		<!-- 账户信息选择文件 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="accountFilesList.dialogShow"
-				:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
-				width="95%"
-				@close="accountFilesClose"
-			>
-				<customerfileselect :condobj="accountFilesList"></customerfileselect>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="accountFilesList.dialogShow"
+			v-model="accountFilesList.dialogShow"
+			:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
+			width="95%"
+			@close="accountFilesClose"
+		>
+			<customerfileselect :condobj="accountFilesList"></customerfileselect>
+		</ZDialog>
+
 		<!-- 账户信息新增 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="accountNewList.dialogShow"
-				:title="$t('menhuAccountInformation')"
-				width="80%"
-				customclass="selectAgentCss"
-				@close="accountNewListClose"
-			>
-				<customerAccountNew :condobj="accountNewList"></customerAccountNew>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="accountNewList.dialogShow"
+			v-model="accountNewList.dialogShow"
+			:title="$t('menhuAccountInformation')"
+			width="80%"
+			customclass="selectAgentCss"
+			@close="accountNewListClose"
+		>
+			<customerAccountNew :condobj="accountNewList"></customerAccountNew>
+		</ZDialog>
 		<!-- 填写追踪历史记录 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="addTrackingRecordList.dialogShow" title="" width="90%" @close="addTrackingRecordClose">
-				<potentialtrackdetail :condobj="addTrackingRecordList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="addTrackingRecordList.dialogShow"
+			v-model="addTrackingRecordList.dialogShow"
+			title=""
+			width="90%"
+			@close="addTrackingRecordClose"
+		>
+			<potentialtrackdetail :condobj="addTrackingRecordList" />
+		</ZDialog>
 	</div>
 </template>
 

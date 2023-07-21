@@ -63,28 +63,27 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
-				<customerListQuery :condobj="customerList"></customerListQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerNew.dialogShow" title="" width="95%" @close="customerNewClose">
-				<companyDetailNew :condobj="customerNew"></companyDetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
-				<companyDetailNewReadonly :condobj="customerNewReadonly"></companyDetailNewReadonly>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+			<customerListQuery :condobj="customerList"></customerListQuery>
+		</ZDialog>
+		<ZDialog v-if="customerNew.dialogShow" v-model="customerNew.dialogShow" title="" width="95%" @close="customerNewClose">
+			<companyDetailNew :condobj="customerNew"></companyDetailNew>
+		</ZDialog>
+		<ZDialog v-if="customerNewReadonly.dialogShow" v-model="customerNewReadonly.dialogShow" title="" width="95%">
+			<companyDetailNewReadonly :condobj="customerNewReadonly"></companyDetailNewReadonly>
+		</ZDialog>
 		<!-- 高级查询 -->
-		<el-dialog v-model="advanceSearch_dialogVisible" :title="$t('Search_AdvanceSearch')" width="40%" draggable>
+		<el-dialog
+			v-if="advanceSearch_dialogVisible"
+			v-model="advanceSearch_dialogVisible"
+			:title="$t('Search_AdvanceSearch')"
+			width="40%"
+			draggable
+			:append-to-body="true"
+		>
 			<div style="padding: 20px">
 				<el-row :gutter="15" class="main-align-items-center">
 					<el-col :span="12">
@@ -331,7 +330,7 @@ const advanceSearchQuery = () => {
 };
 
 //当表格的当前行发生变化的时候会触发该事件
-const tableCurrentChange1 = (currentRow, oldCurrentRow) => {};
+// const tableCurrentChange1 = (currentRow, oldCurrentRow) => {};
 
 //批量删除数据
 const batchDelete = ids => {

@@ -17,9 +17,6 @@
 					</transition>
 				</router-view>
 			</el-main>
-			<el-footer v-if="themeConfig.footer">
-				<Footer></Footer>
-			</el-footer>
 		</el-container>
 	</el-container>
 </template>
@@ -28,9 +25,7 @@
 import Menu from "./Menu/index.vue";
 import Header from "./Header/index.vue";
 import Tabs from "./Tabs/index.vue";
-import Footer from "./Footer/index.vue";
 import cacheRouter from "/src/routers/cacheRouter.js";
-
 import { computed } from "vue";
 import { GlobalStore } from "/src/store/globalStore.js";
 // import { useRouter } from "vue-router";

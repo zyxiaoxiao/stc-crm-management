@@ -1,4 +1,5 @@
 import router from "../routers/router.js";
+import { isNavigationFailure } from "vue-router"
 import NProgress from "../config/nprogress.js";
 import {
 	HOME_URL
@@ -50,8 +51,11 @@ router.beforeEach((to, from, next) => {
 	});
 });
 
-router.afterEach(() => {
+router.afterEach((to, from, failure) => {
 	NProgress.done();
-});
+	if (isNavigationFailure(failure)) {
+		//console.log('failed navigation', failure)
+	}
+})
 
 export default router;

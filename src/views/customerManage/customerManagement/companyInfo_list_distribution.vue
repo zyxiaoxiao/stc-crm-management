@@ -53,40 +53,51 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核记录 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
 		<!-- 新增变更数据 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="companyList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%" @close="companyListClose">
-				<companylistselect :condobj="companyList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="companyList.dialogShow"
+			v-model="companyList.dialogShow"
+			:title="$t('corpinfopanelckxxcxtitle')"
+			width="95%"
+			@close="companyListClose"
+		>
+			<companylistselect :condobj="companyList" />
+		</ZDialog>
+
 		<!-- 编辑 批量修改 -->
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="batchDeptanduserList.dialogShow"
-				width="85%"
-				@close="batchDeptanduserClose"
-				customclass="selectbatchdeptanduserClass"
-			>
-				<selectbatchdeptanduser :condobj="batchDeptanduserList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="batchDeptanduserList.dialogShow"
+			v-model="batchDeptanduserList.dialogShow"
+			width="85%"
+			@close="batchDeptanduserClose"
+			customclass="selectbatchdeptanduserClass"
+		>
+			<selectbatchdeptanduser :condobj="batchDeptanduserList" />
+		</ZDialog>
+
 		<!-- 编辑信息 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="customerdistributiondetailList.dialogShow" width="95%" @close="customerdistributiondetailClose">
-				<customerdistributiondetail :condobj="customerdistributiondetailList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="customerdistributiondetailList.dialogShow"
+			v-model="customerdistributiondetailList.dialogShow"
+			width="95%"
+			@close="customerdistributiondetailClose"
+		>
+			<customerdistributiondetail :condobj="customerdistributiondetailList" />
+		</ZDialog>
+
 		<!-- 销售归属批量替换 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectattributivesubstitutionList.dialogShow" width="95%" @close="selectattributivesubstitutionClose">
-				<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="selectattributivesubstitutionList.dialogShow"
+			v-model="selectattributivesubstitutionList.dialogShow"
+			width="95%"
+			@close="selectattributivesubstitutionClose"
+		>
+			<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
+		</ZDialog>
 	</div>
 </template>
 

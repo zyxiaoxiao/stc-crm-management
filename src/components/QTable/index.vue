@@ -3,14 +3,7 @@
 		<div v-if="props.tableList.tableToolbar.whole" class="flex-row flx-center" style="margin-bottom: 10px; margin-top: 10px">
 			<div class="flex-1">
 				<div v-if="props.tableList.tableToolbar.left" style="text-align: left">
-					<slot
-						name="tableHeaderLleft"
-						:ids="selectListIds"
-						:selectList="selectList"
-						:getEditSelectList="getEditSelectList"
-						:isSelected="isSelected"
-					>
-					</slot>
+					<slot name="tableHeaderLleft" :ids="selectListIds" :selectList="selectList" :isSelected="isSelected"> </slot>
 				</div>
 			</div>
 			<div v-if="props.tableList.tableToolbar.right" class="flx-center" style="margin-right: 2px">
@@ -46,14 +39,6 @@
 				>
 					<el-button @click="tableResetSearch" class="main-table-header-ri-button" size="small" icon="ZoomOut" />
 				</el-tooltip>
-				<el-tooltip
-					v-if="props.tableList.tableToolbar.right_advanceSearch"
-					:content="$t('Search_AdvanceSearch')"
-					placement="top"
-					:show-after="500"
-				>
-					<el-button @click="advancedSearch" class="main-table-header-ri-button" size="small" icon="ZoomIn" />
-				</el-tooltip>
 				<slot name="tableHeaderRight"></slot>
 			</div>
 		</div>
@@ -79,7 +64,6 @@
 		>
 			<template v-for="(item, index) in props.tableList.tableColumns" :key="item.type + item.prop + index">
 				<!-- selection || index -->
-
 				<el-table-column
 					v-if="item.type == 'selection' || item.type == 'index'"
 					:type="item.type"
@@ -190,7 +174,6 @@
 					<template #header>
 						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
-							<el-icon v-if="props.tableList.edit && item.edit"><Edit /> </el-icon>
 							<span class="caret-wrapper">
 								<i class="sort-caret ascending"></i>
 								<i class="sort-caret descending"></i>
@@ -281,7 +264,6 @@
 					<template #header>
 						<div class="columnDrop" style="white-space: nowrap" @click="tableSor(item.prop)">
 							<label>{{ item.label ? $t(item.label) : item.title }}</label>
-							<el-icon v-if="props.tableList.edit && item.edit"><Edit /> </el-icon>
 							<span class="caret-wrapper">
 								<i class="sort-caret ascending"></i>
 								<i class="sort-caret descending"></i>
@@ -356,100 +338,7 @@
 						</div>
 					</template>
 					<!-- 数据行 -->
-					<template v-if="props.tableList.edit && item.edit" #default="scope">
-						<span v-if="!scope.row.editShow[item.prop]">
-							<template v-if="item.type == 'Select'">{{
-								item.label != "i18nCustomerapplicationCustomerCreateInformationArea" &&
-								item.label != "i18nCustomerapplicationCustomerCreateInformationProvince" &&
-								item.label != "i18nCustomerapplicationCustomerCreateInformationCityCenter" &&
-								scope.row[item.prop]
-									? $t(selectText(scope.row[item.prop], item.typeData))
-									: selectText(scope.row[item.prop], item.typeData)
-							}}</template>
-							<template v-else-if="item.type == 'Number'">
-								{{ isNumber(item?.precision) ? parseFloat(scope.row[item.prop]).toFixed(item?.precision) : scope.row[item.prop] }}
-							</template>
-							<template v-else>{{ scope.row[item.prop] }}</template>
-						</span>
-						<!-- 表单组件  -->
-						<div v-if="scope.row.editShow[item.prop]">
-							<el-select
-								v-if="item.type == 'Select'"
-								v-model="scope.row[item.prop]"
-								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-							>
-								<template v-for="item1 in item.typeData" :key="item">
-									<el-option
-										:label="
-											item.label != 'i18nCustomerapplicationCustomerCreateInformationArea' &&
-											item.label != 'i18nCustomerapplicationCustomerCreateInformationProvince' &&
-											item.label != 'i18nCustomerapplicationCustomerCreateInformationCityCenter' &&
-											item1.label
-												? $t(item1.label)
-												: item1.label
-										"
-										:value="item1.value"
-									/>
-								</template>
-							</el-select>
-							<el-date-picker
-								v-else-if="item.type == 'Date'"
-								v-model="scope.row[item.prop]"
-								type="date"
-								format="YYYY-MM-DD"
-								value-format="YYYY-MM-DD"
-								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-							/>
-							<el-date-picker
-								v-else-if="item.type == 'DateTime'"
-								v-model="scope.row[item.prop]"
-								type="datetime"
-								format="YYYY-MM-DD hh:mm:ss"
-								value-format="YYYY-MM-DD hh:mm:ss"
-								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-							/>
-							<template v-else-if="item.type == 'Number'">
-								<el-input-number
-									v-if="isNumber(item?.min) && isNumber(item?.precision)"
-									controls-position="right"
-									style="width: 100%"
-									v-model.number="scope.row[item.prop]"
-									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-									:min="item.min"
-									:precision="item.precision"
-								/>
-								<el-input-number
-									v-else-if="isNumber(item?.min) && !isNumber(item?.precision)"
-									controls-position="right"
-									style="width: 100%"
-									v-model.number="scope.row[item.prop]"
-									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-									:min="item.min"
-								/>
-								<el-input-number
-									v-else-if="!isNumber(item?.min) && isNumber(item?.precision)"
-									controls-position="right"
-									style="width: 100%"
-									v-model.number="scope.row[item.prop]"
-									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-									:precision="item.precision"
-								/>
-								<el-input-number
-									v-else-if="!isNumber(item?.min) && !isNumber(item?.precision)"
-									controls-position="right"
-									style="width: 100%"
-									v-model.number="scope.row[item.prop]"
-									:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-								/>
-							</template>
-							<el-input
-								v-else
-								v-model.trim="scope.row[item.prop]"
-								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
-							/>
-						</div>
-					</template>
-					<template v-else #default="scope">
+					<template #default="scope">
 						<span>
 							<template v-if="item.type == 'Select'">{{
 								item.label != "i18nCustomerapplicationCustomerCreateInformationArea" &&
@@ -475,7 +364,6 @@
 				:currentPage="params.page"
 				:page-size="params.limit"
 				:page-sizes="[25, 50, 100]"
-				:pager-count="5"
 				:background="true"
 				layout="total, sizes, prev, pager, next, jumper"
 				:total="params.total"
@@ -486,9 +374,9 @@
 	</div>
 </template>
 
-<script setup name="zTable">
+<script setup name="qTable">
 import { exportDataSourceToExcel } from "/src/utils/exportExcel.js";
-import { onMounted, ref, computed, reactive, nextTick, onUnmounted } from "vue";
+import { onMounted, ref, computed, reactive, nextTick } from "vue";
 import qs from "qs";
 import http from "@/api/index.js";
 import { useI18n } from "vue-i18n";
@@ -556,11 +444,6 @@ const props = defineProps({
 				type: Boolean,
 				default: true
 			},
-			edit: {
-				//当前表格是否可编辑
-				type: Boolean,
-				default: false
-			},
 			noLoading: {
 				//true为 隐藏加载
 				type: Boolean,
@@ -612,11 +495,6 @@ const props = defineProps({
 					},
 					right_empty: {
 						//显示右清空
-						type: Boolean,
-						default: true
-					},
-					right_advanceSearch: {
-						//显示右高级查询
 						type: Boolean,
 						default: true
 					}
@@ -790,9 +668,6 @@ if (props.tableList.tableToolbar) {
 	typeof props.tableList.tableToolbar.right_filter == "undefined" ? (props.tableList.tableToolbar.right_filter = true) : false;
 	typeof props.tableList.tableToolbar.right_query == "undefined" ? (props.tableList.tableToolbar.right_query = true) : false;
 	typeof props.tableList.tableToolbar.right_empty == "undefined" ? (props.tableList.tableToolbar.right_empty = true) : false;
-	typeof props.tableList.tableToolbar.right_advanceSearch == "undefined"
-		? (props.tableList.tableToolbar.right_advanceSearch = false)
-		: true;
 } else {
 	props.tableList.tableToolbar = {
 		whole: true,
@@ -801,8 +676,7 @@ if (props.tableList.tableToolbar) {
 		right_download: true,
 		right_filter: true,
 		right_query: true,
-		right_empty: true,
-		right_advanceSearch: false
+		right_empty: true
 	};
 }
 
@@ -824,9 +698,6 @@ let tableHanderArr = ["submitcorp", "auditflag", "workflowid"];
 //获取列类型为 Number、Date 字段名
 let typeFieldName = {};
 
-//获取表头可编辑字段
-let tableHanderEditArr = [];
-
 props?.tableList?.tableColumns?.forEach(item => {
 	//获取id
 	if (item.type == "id") {
@@ -835,10 +706,6 @@ props?.tableList?.tableColumns?.forEach(item => {
 	//获取选中时需要的表头字段
 	if (item.type != "workflowStatus" && item.type != "selection" && item.type != "index" && item.type != "operation") {
 		tableHanderArr.push(item.prop);
-	}
-	//可编辑的列
-	if (item.edit) {
-		tableHanderEditArr.push(item.prop);
 	}
 
 	if (item.type == "Number") {
@@ -921,24 +788,19 @@ const getTableList = async () => {
 
 //baseParams发生变化重新调用
 const reuseTableList = async () => {
-	//判断请求属性是否为空
-	if (props.tableList.httpAttribute) {
-		if (props.tableList.httpAttribute.baseParams) {
-			let newBaseParams = props.tableList.httpAttribute.baseParams;
-			for (let key in newBaseParams) {
-				params[key] = newBaseParams[key];
-			}
+	let newBaseParams = props.tableList.httpAttribute.baseParams;
+	for (let key in newBaseParams) {
+		params[key] = newBaseParams[key];
+	}
+	try {
+		loading.value = true;
+		const res = await http.post(props.tableList.httpAttribute.url, qs.stringify(params), config); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
+		if (res) {
+			//对数据源进行处理
+			handleTableData(res);
 		}
-		try {
-			loading.value = true;
-			const res = await http.post(props.tableList.httpAttribute.url, qs.stringify(params), config); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
-			if (res) {
-				//对数据源进行处理
-				handleTableData(res);
-			}
-		} finally {
-			loading.value = false;
-		}
+	} finally {
+		loading.value = false;
 	}
 };
 
@@ -956,18 +818,6 @@ const handleTableData = res => {
 					item.processflag = -1;
 				} else {
 					item.processflag = item.auditflag;
-				}
-				if (props.tableList.edit) {
-					item.isEdit = {}; //可编辑字段
-					item.editShow = {}; //可编辑字段显示隐藏
-					item.rowIndex = i; //每行的索引
-					item.editShowOriginal = {}; //数据源的原始值
-					item.isOriginalChanged = {}; //数据是否被编辑改变
-					tableHanderEditArr.forEach(item1 => {
-						item.editShowOriginal[item1] = item[item1];
-						item.isOriginalChanged[item1] = false;
-						item.isEdit[item1] = true; //行的列设置可编辑
-					});
 				}
 			}
 			params.total = res[props.tableList.httpAttribute.root + "_num"];
@@ -1049,15 +899,6 @@ const select = async (selection, row) => {
 
 //当表格的当前行发生变化的时候会触发该事件
 const currentChange = (currentRow, oldCurrentRow) => {
-	//当前是编辑表格时,隐藏掉上一行的所有编辑项
-	if (props.tableList.edit) {
-		tableHanderEditArr.forEach(item => {
-			if (oldCurrentRow) {
-				oldCurrentRow.editShow[item] = false;
-			}
-		});
-	}
-
 	emits("currentChange", currentRow, oldCurrentRow);
 
 	if (currentRow) {
@@ -1092,49 +933,11 @@ const setFormComponentRef = (el, key) => {
 
 //当某个单元格被点击时会触发该事件
 const cellClick = (row, column, cell, event) => {
-	//当前是编辑表格时,
-	if (props.tableList.edit) {
-		tableHanderEditArr.forEach(item => {
-			if (column.property != item) {
-				//隐藏掉其他编辑项
-				row.editShow[item] = false;
-			}
-		});
-	}
 	emits("cellClick", row, column, cell, event);
-	//表格是否可编辑、列是否可编辑，当前行的当前列是否可编辑，当前行的当前列是否隐藏
-
-	if (
-		props.tableList.edit &&
-		tableHanderEditArr.includes(column.property) &&
-		row.isEdit[column.property] &&
-		!row.editShow[column.property]
-	) {
-		editShowOperation(row, column);
-	}
-};
-
-// 改为可编辑时，操作
-const editShowOperation = (row, column) => {
-	row.editShow[column.property] = true;
-	nextTick(() => {
-		if (formComponentRef[row.rowIndex + column.property]) formComponentRef[row.rowIndex + column.property].focus();
-	});
 };
 
 //单元格的 className 的回调方法，也可以使用字符串为所有单元格设置一个固定的 className。
 const cellClassName = ({ row, column, rowIndex, columnIndex }) => {
-	//当前是编辑表格时,
-	if (props.tableList.edit && tableHanderEditArr.includes(column.property)) {
-		//新值与原始值不一样时改变边框颜色
-		if (row[column.property] != row.editShowOriginal[column.property]) {
-			row.isOriginalChanged[column.property] = true; //标检为当前行改变了值
-			return "edit-table-column-class"; // class名称
-		} else {
-			row.isOriginalChanged[column.property] = false;
-		}
-	}
-
 	//当单元格是操作列的时候，修改样式
 	// if (column.property == "operation") {
 	// 	return "table-operationColumn-class"; // class名称
@@ -1168,29 +971,6 @@ const headerDragend = async (newWidth, oldWidth, column, event) => {
 	if (props?.tableList?.id) {
 		await saveColumnDrop();
 	}
-};
-
-// 如果当前表格为编辑表格，该方法为编辑后选中的数据源，一般用于保存
-//返回数据改变后的行数据
-const getEditSelectList = () => {
-	//根据 表头的列字段，把改变后的行数据源进行封装
-	//编辑改变值的数据列表
-	const selecteditList = [];
-	props.tableList.tableData.forEach(item => {
-		let obj = {};
-		for (let itemkey in item.isOriginalChanged) {
-			if (item.isOriginalChanged[itemkey]) {
-				tableHanderArr.forEach(key => {
-					obj[key] = item[key];
-				});
-				break;
-			}
-		}
-		if (Object.keys(obj).length > 0) {
-			selecteditList.push(obj);
-		}
-	});
-	return selecteditList;
 };
 
 //过滤
@@ -1249,11 +1029,6 @@ const quickQuery = () => {
 	getTableList();
 };
 
-//高级查询
-const advancedSearch = () => {
-	emits("advancedSearch");
-};
-
 //链接详细信息
 const linkDetailbg = (column, row) => {
 	emits("linkDetailbg", column, row);
@@ -1267,24 +1042,6 @@ const workflowStatus = (column, row) => {
 //返回Table 的 refs
 const getTablerefs = () => {
 	return tableRef;
-};
-
-//添加行数据
-const addRowData = srtrow => {
-	let row = { rowIndex: props.tableList.tableData.length, editShow: {}, editShowOriginal: {}, isOriginalChanged: {}, isEdit: {} };
-	for (let Columns of props.tableList.tableColumns) {
-		if (Columns.prop) {
-			if (srtrow && Object.keys(srtrow).length > 0 && (srtrow[Columns.prop] || String(srtrow[Columns.prop]) == "0")) {
-				row[Columns.prop] = srtrow[Columns.prop];
-			} else {
-				row[Columns.prop] = "";
-			}
-			row.editShowOriginal[Columns.prop] = "";
-			row.isOriginalChanged[Columns.prop] = false;
-			row.isEdit[Columns.prop] = true;
-		}
-	}
-	props.tableList.tableData.unshift(row);
 };
 
 // 操作列 高度
@@ -1302,21 +1059,19 @@ const operationColumnHeight = computed(() => {
 const columnDrop = () => {
 	nextTick(() => {
 		const wrapper = tableRef.value.$el.querySelector(".el-table__body thead tr ");
-		if (wrapper) {
-			Sortable.create(wrapper, {
-				handle: ".columnDrop",
-				animation: 300,
-				delay: 0,
-				onEnd: async ({ newIndex, oldIndex }) => {
-					const oldItem = props.tableList.tableColumns[oldIndex];
-					props.tableList.tableColumns.splice(oldIndex, 1);
-					props.tableList.tableColumns.splice(newIndex, 0, oldItem);
-					if (props?.tableList?.id) {
-						await saveColumnDrop();
-					}
+		Sortable.create(wrapper, {
+			handle: ".columnDrop",
+			animation: 300,
+			delay: 0,
+			onEnd: async ({ newIndex, oldIndex }) => {
+				const oldItem = props.tableList.tableColumns[oldIndex];
+				props.tableList.tableColumns.splice(oldIndex, 1);
+				props.tableList.tableColumns.splice(newIndex, 0, oldItem);
+				if (props?.tableList?.id) {
+					await saveColumnDrop();
 				}
-			});
-		}
+			}
+		});
 	});
 };
 
@@ -1324,21 +1079,19 @@ const columnDrop = () => {
 const columnDrop1 = () => {
 	nextTick(() => {
 		const wrapper = tableRef.value.$el.querySelector(" .el-table .el-table__header thead tr ");
-		if (wrapper) {
-			Sortable.create(wrapper, {
-				handle: ".columnDrop",
-				animation: 300,
-				delay: 0,
-				onEnd: async ({ newIndex, oldIndex }) => {
-					const oldItem = props.tableList.tableColumns[oldIndex];
-					props.tableList.tableColumns.splice(oldIndex, 1);
-					props.tableList.tableColumns.splice(newIndex, 0, oldItem);
-					if (props?.tableList?.id) {
-						await saveColumnDrop();
-					}
+		Sortable.create(wrapper, {
+			handle: ".columnDrop",
+			animation: 300,
+			delay: 0,
+			onEnd: async ({ newIndex, oldIndex }) => {
+				const oldItem = props.tableList.tableColumns[oldIndex];
+				props.tableList.tableColumns.splice(oldIndex, 1);
+				props.tableList.tableColumns.splice(newIndex, 0, oldItem);
+				if (props?.tableList?.id) {
+					await saveColumnDrop();
 				}
-			});
-		}
+			}
+		});
 	});
 };
 
@@ -1370,27 +1123,14 @@ onMounted(() => {
 		columnDrop1();
 	});
 });
-//页面卸载时
-onUnmounted(() => {});
 
 //注册emit // 抛出事件
-const emits = defineEmits([
-	"currentChange",
-	"linkDetailbg",
-	"workflowStatus",
-	"rowClick",
-	"cellClick",
-	"selectionChange",
-	"advancedSearch"
-]);
+const emits = defineEmits(["currentChange", "linkDetailbg", "workflowStatus", "rowClick", "cellClick", "selectionChange"]);
 // 暴露给父组件的参数和方法
 defineExpose({
 	getTableList, //调用接口
 	getTablerefs, // ref
-	addRowData, //添加行数据
-	tableHanderEditArr, //获取表头可编辑字段
 	formComponentRef, //可编辑时，表单组件ref数组
-	getEditSelectList, //获取编辑后的数据行
 	selectListIds, // 获取选中的id
 	selectList, //获取选中的数据行
 	selectRowArr, // 获取选中的原始数据
@@ -1409,12 +1149,6 @@ defineExpose({
 }
 </style>
 <style lang="scss">
-.edit-table-column-class {
-	border-left-style: solid;
-	border-left-width: 3px;
-	border-left-color: #f56c6c !important;
-}
-
 .table-operationColumn-class {
 	padding: 0px 0 !important;
 }

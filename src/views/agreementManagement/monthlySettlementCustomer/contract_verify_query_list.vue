@@ -50,16 +50,17 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="contractdetailList.dialogShow" width="95%" @close="contractdetailClose">
-				<contractdetail :condobj="contractdetailList"></contractdetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog
+			v-if="contractdetailList.dialogShow"
+			v-model="contractdetailList.dialogShow"
+			width="95%"
+			@close="contractdetailClose"
+		>
+			<contractdetail :condobj="contractdetailList"></contractdetail>
+		</ZDialog>
+		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
 	</div>
 </template>
 
