@@ -87,7 +87,6 @@
 		</el-form>
 		<!-- 账户信息选择文件 -->
 		<ZDialog
-			v-if="accountFilesList.dialogShow"
 			v-model="accountFilesList.dialogShow"
 			:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
 			width="95%"

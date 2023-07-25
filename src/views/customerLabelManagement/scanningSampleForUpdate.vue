@@ -31,7 +31,7 @@
 			<el-button type="primary" icon="Check" @click="Submit(ruleFormRef)"> {{ $t("menu_receive") }}</el-button>
 		</div>
 		<!-- 选择领样人 -->
-		<ZDialog v-if="selectUserList.dialogShow" v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
+		<ZDialog v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
 			<selectUser :condobj="selectUserList"></selectUser>
 		</ZDialog>
 	</div>

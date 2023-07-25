@@ -52,12 +52,12 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核记录 -->
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 
 		<!-- 查看信息 -->
-		<ZDialog v-if="customerdistributiondetailList.dialogShow" v-model="customerdistributiondetailList.dialogShow" width="95%">
+		<ZDialog v-model="customerdistributiondetailList.dialogShow" width="95%">
 			<customerdistributiondetail :condobj="customerdistributiondetailList" />
 		</ZDialog>
 	</div>

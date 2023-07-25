@@ -145,13 +145,7 @@
 			<barcodeLabel :condobj="barcodeLabelList" />
 		</el-dialog>
 		<!-- 地址标签弹出层 -->
-		<ZDialog
-			v-if="addressLabelList.dialogShow"
-			v-model="addressLabelList.dialogShow"
-			title1="已有标签地址"
-			:title="$t('columnexistingAddressLabel')"
-			width="95%"
-		>
+		<ZDialog v-model="addressLabelList.dialogShow" title1="已有标签地址" :title="$t('columnexistingAddressLabel')" width="95%">
 			<addressLabel :condobj="addressLabelList"></addressLabel>
 		</ZDialog>
 
@@ -181,12 +175,7 @@
 		</el-dialog>
 		<!-- 新增弹出 -->
 
-		<ZDialog
-			v-if="newCustomerLabelList.dialogShow"
-			v-model="newCustomerLabelList.dialogShow"
-			width="95%"
-			@close="newCustomerLabelClose"
-		>
+		<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
 			<samplepackageworkflowdetail :condobj="newCustomerLabelList"></samplepackageworkflowdetail>
 		</ZDialog>
 

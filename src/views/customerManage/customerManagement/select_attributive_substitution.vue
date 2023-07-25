@@ -138,7 +138,6 @@
 		</el-auto-resizer>
 		<!-- 选择部门 -->
 		<ZDialog
-			v-if="selectattributivesubstitutionList.dialogShow"
 			v-model="selectattributivesubstitutionList.dialogShow"
 			:title="$t('corpinfopaneldepartmentdesctitle')"
 			width="40%"
@@ -149,7 +148,6 @@
 
 		<!-- 选择销售 -->
 		<ZDialog
-			v-if="selectsalesuserList.dialogShow"
 			v-model="selectsalesuserList.dialogShow"
 			:title="$t('tabtitlemdmselectconnuser')"
 			width="40%"
@@ -160,7 +158,6 @@
 
 		<!-- 编辑 批量修改 -->
 		<ZDialog
-			v-if="selectsalescutomerList.dialogShow"
 			v-model="selectsalescutomerList.dialogShow"
 			:title="$t('menubaseCustomerlist')"
 			width="85%"

@@ -159,7 +159,6 @@
 		</div>
 		<!-- 选择发票 -->
 		<ZDialog
-			v-if="selectinvoiceList.dialogShow"
 			v-model="selectinvoiceList.dialogShow"
 			:title="$t('columnwriteoff_paymentconfirmation')"
 			width="75%"

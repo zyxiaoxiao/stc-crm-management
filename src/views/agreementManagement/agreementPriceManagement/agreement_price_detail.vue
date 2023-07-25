@@ -278,19 +278,12 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户 -->
-		<ZDialog
-			v-if="selectCustomerList.dialogShow"
-			v-model="selectCustomerList.dialogShow"
-			:title="$t('panelSelectcustomer')"
-			width="75%"
-			@close="selectCustomerClose"
-		>
+		<ZDialog v-model="selectCustomerList.dialogShow" :title="$t('panelSelectcustomer')" width="75%" @close="selectCustomerClose">
 			<selectCustomer :condobj="selectCustomerList"></selectCustomer>
 		</ZDialog>
 
 		<!-- 选择检测项目 -->
 		<ZDialog
-			v-if="contractNewTestItemList.dialogShow"
 			v-model="contractNewTestItemList.dialogShow"
 			:title="$t('panelcolumnselecttestitems')"
 			width="75%"
@@ -301,7 +294,6 @@
 
 		<!-- 上传附件弹出 -->
 		<ZDialog
-			v-if="uploadAttachmentList.dialogShow"
 			v-model="uploadAttachmentList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"

@@ -184,7 +184,6 @@
 		</el-tabs>
 		<!-- 上传附件弹出 -->
 		<ZDialog
-			v-if="uploadAttachmentList.dialogShow"
 			v-model="uploadAttachmentList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"

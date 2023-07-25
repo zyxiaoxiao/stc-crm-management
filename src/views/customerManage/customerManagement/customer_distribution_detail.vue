@@ -72,7 +72,6 @@
 
 		<!-- 选择部门 -->
 		<ZDialog
-			v-if="selectDistributionCorpList.dialogShow"
 			v-model="selectDistributionCorpList.dialogShow"
 			:title="$t('corpinfopaneldepartmentdesctitle')"
 			width="40%"
@@ -83,7 +82,6 @@
 
 		<!-- 编辑 批量修改 -->
 		<ZDialog
-			v-if="batchDeptanduserList.dialogShow"
 			v-model="batchDeptanduserList.dialogShow"
 			width="85%"
 			@close="batchDeptanduserClose"

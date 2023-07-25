@@ -63,16 +63,16 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
-		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+		<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
 			<customerListQuery :condobj="customerList"></customerListQuery>
 		</ZDialog>
-		<ZDialog v-if="customerNew.dialogShow" v-model="customerNew.dialogShow" title="" width="95%" @close="customerNewClose">
+		<ZDialog v-model="customerNew.dialogShow" title="" width="95%" @close="customerNewClose">
 			<companyDetailNew :condobj="customerNew"></companyDetailNew>
 		</ZDialog>
-		<ZDialog v-if="customerNewReadonly.dialogShow" v-model="customerNewReadonly.dialogShow" title="" width="95%">
+		<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
 			<companyDetailNewReadonly :condobj="customerNewReadonly"></companyDetailNewReadonly>
 		</ZDialog>
 		<!-- 高级查询 -->

@@ -50,17 +50,12 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核记录 -->
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 
 		<!-- 新增数据 -->
-		<ZDialog
-			v-if="enterpriselockdetailnewList.dialogShow"
-			v-model="enterpriselockdetailnewList.dialogShow"
-			width="95%"
-			@close="enterpriselockdetailnewClose"
-		>
+		<ZDialog v-model="enterpriselockdetailnewList.dialogShow" width="95%" @close="enterpriselockdetailnewClose">
 			<enterpriselockdetailnew :condobj="enterpriselockdetailnewList" />
 		</ZDialog>
 	</div>

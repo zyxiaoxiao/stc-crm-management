@@ -466,7 +466,6 @@
 		</el-tabs>
 		<!-- 选择客户 -->
 		<ZDialog
-			v-if="selectcorpcontactaddressinformationList.dialogShow"
 			v-model="selectcorpcontactaddressinformationList.dialogShow"
 			width="95%"
 			@close="selectcorpcontactaddressinformationClose"
@@ -477,23 +476,17 @@
 		</ZDialog>
 
 		<!-- 选择联系人 -->
-		<ZDialog v-if="selectcontactList.dialogShow" v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
+		<ZDialog v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
 			<selectcontact :condobj="selectcontactList"></selectcontact>
 		</ZDialog>
 
 		<!-- 选择地址 -->
-		<ZDialog
-			v-if="selectAddressbycorpandcontactList.dialogShow"
-			v-model="selectAddressbycorpandcontactList.dialogShow"
-			width="85%"
-			@close="selectAddressbycorpandcontactClose"
-		>
+		<ZDialog v-model="selectAddressbycorpandcontactList.dialogShow" width="85%" @close="selectAddressbycorpandcontactClose">
 			<selectAddressbycorpandcontact :condobj="selectAddressbycorpandcontactList"></selectAddressbycorpandcontact>
 		</ZDialog>
 
 		<!-- 条码标签弹出层 -->
 		<el-dialog
-			v-if="barcodeLabelList.dialogShow"
 			ref="barcodeLabelDialog"
 			v-model="barcodeLabelList.dialogShow"
 			width="500px"
@@ -517,7 +510,6 @@
 		</el-dialog>
 		<!-- 地址 标签弹出层 -->
 		<el-dialog
-			v-if="addressLabelList.dialogShow"
 			ref="addressLabelDialog"
 			v-model="addressLabelList.dialogShow"
 			width="500px"
@@ -542,7 +534,6 @@
 
 		<!-- 新增 编辑 发件人信息 -->
 		<ZDialog
-			v-if="samplepackageoutboxworkflowdetailList.dialogShow"
 			v-model="samplepackageoutboxworkflowdetailList.dialogShow"
 			width="95%"
 			@close="samplepackageoutboxworkflowdetailClose"
@@ -551,13 +542,12 @@
 		</ZDialog>
 
 		<!-- 添加关联申请单 -->
-		<ZDialog v-if="selectFordersList.dialogShow" v-model="selectFordersList.dialogShow" width="95%" @close="selectFordersClose">
+		<ZDialog v-model="selectFordersList.dialogShow" width="95%" @close="selectFordersClose">
 			<selectForders :condobj="selectFordersList"></selectForders>
 		</ZDialog>
 
 		<!-- 上传附件弹出 -->
 		<ZDialog
-			v-if="uploadAttachmentList.dialogShow"
 			v-model="uploadAttachmentList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"

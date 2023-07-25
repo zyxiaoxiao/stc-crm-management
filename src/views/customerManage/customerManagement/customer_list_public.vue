@@ -20,7 +20,7 @@
 			</template>
 		</zTable>
 
-		<ZDialog v-if="custInfoUser.dialogShow" v-model="custInfoUser.dialogShow" title="" width="95%">
+		<ZDialog v-model="custInfoUser.dialogShow" title="" width="95%">
 			<custInfouserpublic :condobj="custInfoUser" />
 		</ZDialog>
 	</div>

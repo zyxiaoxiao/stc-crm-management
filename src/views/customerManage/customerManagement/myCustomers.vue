@@ -58,17 +58,12 @@
 			</el-tab-pane>
 		</el-tabs>
 
-		<ZDialog v-if="custInfoUser.dialogShow" v-model="custInfoUser.dialogShow" title="" width="95%">
+		<ZDialog v-model="custInfoUser.dialogShow" title="" width="95%">
 			<custInfouser :condobj="custInfoUser" />
 		</ZDialog>
 
 		<!-- 移除到公共池弹出 -->
-		<ZDialog
-			v-if="customerattributioninformationList.dialogShow"
-			v-model="customerattributioninformationList.dialogShow"
-			width="95%"
-			@close="customerattributioninformationClose"
-		>
+		<ZDialog v-model="customerattributioninformationList.dialogShow" width="95%" @close="customerattributioninformationClose">
 			<customerattributioninformation :condobj="customerattributioninformationList" />
 		</ZDialog>
 	</div>

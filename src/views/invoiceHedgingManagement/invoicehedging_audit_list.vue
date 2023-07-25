@@ -50,16 +50,11 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 新增弹出 -->
-		<ZDialog
-			v-if="invoicehedgingdetailList.dialogShow"
-			v-model="invoicehedgingdetailList.dialogShow"
-			width="95%"
-			@close="invoicehedgingdetailClose"
-		>
+		<ZDialog v-model="invoicehedgingdetailList.dialogShow" width="95%" @close="invoicehedgingdetailClose">
 			<invoicehedgingdetail :condobj="invoicehedgingdetailList"></invoicehedgingdetail>
 		</ZDialog>
 
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 	</div>

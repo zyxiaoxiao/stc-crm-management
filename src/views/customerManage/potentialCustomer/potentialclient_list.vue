@@ -49,18 +49,12 @@
 			</template>
 		</zTable>
 		<!-- 查询客户 -->
-		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+		<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
 			<customerListQuery :condobj="customerList"></customerListQuery>
 		</ZDialog>
 
 		<!-- 详细信息 -->
-		<ZDialog
-			v-if="potentialclientdetailList.dialogShow"
-			v-model="potentialclientdetailList.dialogShow"
-			title=""
-			width="95%"
-			@close="potentialclientdetailClose"
-		>
+		<ZDialog v-model="potentialclientdetailList.dialogShow" title="" width="95%" @close="potentialclientdetailClose">
 			<potentialclientdetail :condobj="potentialclientdetailList" />
 		</ZDialog>
 	</div>

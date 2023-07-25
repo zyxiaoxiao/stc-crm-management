@@ -137,19 +137,12 @@
 			<barcodeLabel :condobj="barcodeLabelList" />
 		</el-dialog>
 		<!-- 地址标签弹出层 -->
-		<ZDialog
-			v-if="addressLabelList.dialogShow"
-			v-model="addressLabelList.dialogShow"
-			title1="已有标签地址"
-			:title="$t('columnexistingAddressLabel')"
-			width="95%"
-		>
+		<ZDialog v-model="addressLabelList.dialogShow" title1="已有标签地址" :title="$t('columnexistingAddressLabel')" width="95%">
 			<addressLabel :condobj="addressLabelList"></addressLabel>
 		</ZDialog>
 
 		<!-- 导入领样记录弹出层 -->
 		<el-dialog
-			v-if="importsamplerecordsList.dialogShow"
 			ref="importsamplerecordsDialog"
 			v-model="importsamplerecordsList.dialogShow"
 			width="500px"
@@ -173,18 +166,12 @@
 			<uploadAttachment :condobj="importsamplerecordsList" />
 		</el-dialog>
 		<!-- 新增弹出 -->
-		<ZDialog
-			v-if="newCustomerLabelList.dialogShow"
-			v-model="newCustomerLabelList.dialogShow"
-			width="95%"
-			@close="newCustomerLabelClose"
-		>
+		<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
 			<samplepackageworkflowdetail :condobj="newCustomerLabelList"></samplepackageworkflowdetail>
 		</ZDialog>
 
 		<!-- 地址 标签弹出层 -->
 		<el-dialog
-			v-if="addressLabelPrintList.dialogShow"
 			ref="addressLabelDialog"
 			v-model="addressLabelPrintList.dialogShow"
 			width="500px"
@@ -209,7 +196,6 @@
 
 		<!-- 扫描领样弹出层 -->
 		<el-dialog
-			v-if="scanningSampleForUpdateList.dialogShow"
 			ref="scanningSampleForUpdateDialog"
 			v-model="scanningSampleForUpdateList.dialogShow"
 			width="600px"

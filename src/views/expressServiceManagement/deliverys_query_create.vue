@@ -90,29 +90,17 @@
 		</el-tabs>
 
 		<!-- 地址标签弹出层 -->
-		<ZDialog
-			v-if="addressLabelList.dialogShow"
-			v-model="addressLabelList.dialogShow"
-			title1="已有标签地址"
-			:title="$t('columnexistingAddressLabel')"
-			width="95%"
-		>
+		<ZDialog v-model="addressLabelList.dialogShow" title1="已有标签地址" :title="$t('columnexistingAddressLabel')" width="95%">
 			<addressLabel :condobj="addressLabelList"></addressLabel>
 		</ZDialog>
 
 		<!-- 新增弹出 -->
-		<ZDialog
-			v-if="deliverysworkflowdetailList.dialogShow"
-			v-model="deliverysworkflowdetailList.dialogShow"
-			width="95%"
-			@close="deliverysworkflowdetailClose"
-		>
+		<ZDialog v-model="deliverysworkflowdetailList.dialogShow" width="95%" @close="deliverysworkflowdetailClose">
 			<deliverysworkflowdetail :condobj="deliverysworkflowdetailList"></deliverysworkflowdetail>
 		</ZDialog>
 
 		<!-- 地址 标签弹出层 -->
 		<el-dialog
-			v-if="addressLabelPrintList.dialogShow"
 			ref="addressLabelDialog"
 			v-model="addressLabelPrintList.dialogShow"
 			width="500px"
@@ -135,7 +123,7 @@
 			<addressLabelPrint :condobj="addressLabelPrintList" />
 		</el-dialog>
 
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 	</div>

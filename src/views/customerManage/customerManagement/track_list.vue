@@ -55,7 +55,6 @@
 		</zTable>
 		<!-- 填写追踪历史记录 -->
 		<ZDialog
-			v-if="addTrackingRecordList.dialogShow"
 			v-model="addTrackingRecordList.dialogShow"
 			:title="$t('corpinfoTrackrecordtitle')"
 			width="90%"

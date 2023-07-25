@@ -53,39 +53,27 @@
 			</el-tab-pane>
 		</el-tabs>
 
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 
-		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+		<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
 			<customerListQuery :condobj="customerList"></customerListQuery>
 		</ZDialog>
 
 		<!-- 新增变更数据 -->
 
-		<ZDialog
-			v-if="companyList.dialogShow"
-			v-model="companyList.dialogShow"
-			:title="$t('corpinfopanelckxxcxtitle')"
-			width="95%"
-			@close="companyListClose"
-		>
+		<ZDialog v-model="companyList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%" @close="companyListClose">
 			<companylistselect :condobj="companyList" />
 		</ZDialog>
 
 		<!-- 编辑变更客户信息 -->
 
-		<ZDialog
-			v-if="customerbgList.dialogShow"
-			v-model="customerbgList.dialogShow"
-			title=""
-			width="95%"
-			@close="customerbgListClose"
-		>
+		<ZDialog v-model="customerbgList.dialogShow" title="" width="95%" @close="customerbgListClose">
 			<companydetailbg :condobj="customerbgList" />
 		</ZDialog>
 
-		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+		<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
 			<companyDetailbgReadonly :condobj="customerbgReadonly" />
 		</ZDialog>
 

@@ -79,7 +79,6 @@ const getTreeData = async () => {
 
 //确认
 const confirmClick = () => {
-	console.log(treeRef.value.getCurrentKey(), treeRef.value.getCurrentNode());
 	let nodeData = treeRef.value.getCurrentNode();
 	if (nodeData && !nodeData?.children) {
 		props.condobj.objectParameter = { corpcode: nodeData.corpcode, corpdesc: nodeData.corpdesc };

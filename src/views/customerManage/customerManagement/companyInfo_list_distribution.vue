@@ -53,24 +53,17 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核记录 -->
-		<ZDialog v-if="auditList.dialogShow" v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
 			<audit :auditList="auditList"></audit>
 		</ZDialog>
 
 		<!-- 新增变更数据 -->
-		<ZDialog
-			v-if="companyList.dialogShow"
-			v-model="companyList.dialogShow"
-			:title="$t('corpinfopanelckxxcxtitle')"
-			width="95%"
-			@close="companyListClose"
-		>
+		<ZDialog v-model="companyList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%" @close="companyListClose">
 			<companylistselect :condobj="companyList" />
 		</ZDialog>
 
 		<!-- 编辑 批量修改 -->
 		<ZDialog
-			v-if="batchDeptanduserList.dialogShow"
 			v-model="batchDeptanduserList.dialogShow"
 			width="85%"
 			@close="batchDeptanduserClose"
@@ -80,22 +73,12 @@
 		</ZDialog>
 
 		<!-- 编辑信息 -->
-		<ZDialog
-			v-if="customerdistributiondetailList.dialogShow"
-			v-model="customerdistributiondetailList.dialogShow"
-			width="95%"
-			@close="customerdistributiondetailClose"
-		>
+		<ZDialog v-model="customerdistributiondetailList.dialogShow" width="95%" @close="customerdistributiondetailClose">
 			<customerdistributiondetail :condobj="customerdistributiondetailList" />
 		</ZDialog>
 
 		<!-- 销售归属批量替换 -->
-		<ZDialog
-			v-if="selectattributivesubstitutionList.dialogShow"
-			v-model="selectattributivesubstitutionList.dialogShow"
-			width="95%"
-			@close="selectattributivesubstitutionClose"
-		>
+		<ZDialog v-model="selectattributivesubstitutionList.dialogShow" width="95%" @close="selectattributivesubstitutionClose">
 			<selectattributivesubstitution :condobj="selectattributivesubstitutionList" />
 		</ZDialog>
 	</div>

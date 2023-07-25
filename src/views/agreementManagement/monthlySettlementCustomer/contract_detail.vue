@@ -367,29 +367,22 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 选择客户 -->
-		<ZDialog
-			v-if="selectCustomerList.dialogShow"
-			v-model="selectCustomerList.dialogShow"
-			:title="$t('panelSelectcustomer')"
-			width="75%"
-			@close="selectCustomerClose"
-		>
+		<ZDialog v-model="selectCustomerList.dialogShow" :title="$t('panelSelectcustomer')" width="75%" @close="selectCustomerClose">
 			<selectCustomer :condobj="selectCustomerList"></selectCustomer>
 		</ZDialog>
 
 		<!-- 选择联系人 -->
-		<ZDialog v-if="selectcontactList.dialogShow" v-model="selectcontactList.dialogShow" width="75%" @close="selectcontactClose">
+		<ZDialog v-model="selectcontactList.dialogShow" width="75%" @close="selectcontactClose">
 			<selectcontact :condobj="selectcontactList"></selectcontact>
 		</ZDialog>
 
 		<!-- 选择账户 -->
-		<ZDialog v-if="selectAccountList.dialogShow" v-model="selectAccountList.dialogShow" width="70%" @close="selectAccountClose">
+		<ZDialog v-model="selectAccountList.dialogShow" width="70%" @close="selectAccountClose">
 			<selectAccount :condobj="selectAccountList"></selectAccount>
 		</ZDialog>
 
 		<!-- 上传附件弹出 -->
 		<ZDialog
-			v-if="uploadAttachmentList.dialogShow"
 			v-model="uploadAttachmentList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"

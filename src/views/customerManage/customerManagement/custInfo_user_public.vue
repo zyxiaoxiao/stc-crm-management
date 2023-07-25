@@ -494,34 +494,22 @@
 		</el-tabs>
 
 		<!-- 历史变更记录弹出 -->
-		<ZDialog v-if="customerbgReadonly.dialogShow" v-model="customerbgReadonly.dialogShow" title="" width="95%">
+		<ZDialog v-model="customerbgReadonly.dialogShow" title="" width="95%">
 			<companydetailbgreadonly :condobj="customerbgReadonly" />
 		</ZDialog>
 
 		<!-- 历史变更记录弹出 -->
-		<ZDialog v-if="customerNewReadonly.dialogShow" v-model="customerNewReadonly.dialogShow" title="" width="95%">
+		<ZDialog v-model="customerNewReadonly.dialogShow" title="" width="95%">
 			<companydetailnewhistoryreadonly :condobj="customerNewReadonly" />
 		</ZDialog>
 
 		<!-- 查看检测结果弹出 -->
-		<ZDialog
-			v-if="testresultsList.dialogShow"
-			v-model="testresultsList.dialogShow"
-			title=""
-			width="60%"
-			customclass="selectAgentCss"
-		>
+		<ZDialog v-model="testresultsList.dialogShow" title="" width="60%" customclass="selectAgentCss">
 			<selectResults :condobj="testresultsList" />
 		</ZDialog>
 
 		<!-- 填写追踪历史记录 -->
-		<ZDialog
-			v-if="addTrackingRecordList.dialogShow"
-			v-model="addTrackingRecordList.dialogShow"
-			title=""
-			width="90%"
-			@close="addTrackingRecordClose"
-		>
+		<ZDialog v-model="addTrackingRecordList.dialogShow" title="" width="90%" @close="addTrackingRecordClose">
 			<trackdetail :condobj="addTrackingRecordList" />
 		</ZDialog>
 	</div>

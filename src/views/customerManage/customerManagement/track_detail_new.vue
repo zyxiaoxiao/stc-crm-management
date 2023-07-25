@@ -188,7 +188,6 @@
 		</el-tabs>
 		<!-- 选择客户弹出 -->
 		<ZDialog
-			v-if="selectCorpForTrackList.dialogShow"
 			v-model="selectCorpForTrackList.dialogShow"
 			:title="$t('i18nTrackRecordChooseTrackCustomer')"
 			width="70%"
@@ -200,7 +199,6 @@
 
 		<!-- 上传附件弹出 -->
 		<ZDialog
-			v-if="uploadAttachmentList.dialogShow"
 			v-model="uploadAttachmentList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"

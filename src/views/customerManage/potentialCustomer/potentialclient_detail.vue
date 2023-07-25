@@ -572,7 +572,6 @@
 		</el-tabs>
 		<!-- 选择代理商 -->
 		<ZDialog
-			v-if="agentList.dialogShow"
 			v-model="agentList.dialogShow"
 			:title="$t('selectbase1agent')"
 			width="50%"
@@ -583,13 +582,12 @@
 		</ZDialog>
 
 		<!-- 查询客户 -->
-		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+		<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
 			<customerListQuery :condobj="customerList"></customerListQuery>
 		</ZDialog>
 
 		<!-- 上传资质文件 -->
 		<ZDialog
-			v-if="qualificationList.dialogShow"
 			v-model="qualificationList.dialogShow"
 			:title="$t('UPLOAD_uploadFile')"
 			width="40%"
@@ -601,7 +599,6 @@
 
 		<!-- 添加联系人 -->
 		<ZDialog
-			v-if="contactList.dialogShow"
 			v-model="contactList.dialogShow"
 			:title="$t('companypanelCustomerContactInformationtitle')"
 			width="95%"
@@ -613,7 +610,6 @@
 
 		<!-- 联系人选择对应地址 -->
 		<ZDialog
-			v-if="contactAddressList.dialogShow"
 			v-model="contactAddressList.dialogShow"
 			:title="$t('titlebaseAddressinformation')"
 			width="80%"
@@ -625,7 +621,6 @@
 
 		<!-- 地址信息 -->
 		<ZDialog
-			v-if="addressList.dialogShow"
 			v-model="addressList.dialogShow"
 			:title="$t('titlebaseAddressinformation')"
 			width="80%"
@@ -637,7 +632,6 @@
 
 		<!-- 账户信息选择文件 -->
 		<ZDialog
-			v-if="accountFilesList.dialogShow"
 			v-model="accountFilesList.dialogShow"
 			:title="$t('companypanel3CustomerQualificationFileInformationtitle')"
 			width="95%"
@@ -648,7 +642,6 @@
 
 		<!-- 账户信息新增 -->
 		<ZDialog
-			v-if="accountNewList.dialogShow"
 			v-model="accountNewList.dialogShow"
 			:title="$t('menhuAccountInformation')"
 			width="80%"
@@ -658,13 +651,7 @@
 			<customerAccountNew :condobj="accountNewList"></customerAccountNew>
 		</ZDialog>
 		<!-- 填写追踪历史记录 -->
-		<ZDialog
-			v-if="addTrackingRecordList.dialogShow"
-			v-model="addTrackingRecordList.dialogShow"
-			title=""
-			width="90%"
-			@close="addTrackingRecordClose"
-		>
+		<ZDialog v-model="addTrackingRecordList.dialogShow" title="" width="90%" @close="addTrackingRecordClose">
 			<potentialtrackdetail :condobj="addTrackingRecordList" />
 		</ZDialog>
 	</div>

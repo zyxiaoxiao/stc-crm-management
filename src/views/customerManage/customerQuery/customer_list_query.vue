@@ -112,7 +112,6 @@
 		</div>
 
 		<ZDialog
-			v-if="dialogShow_Folders"
 			v-model="dialogShow_Folders"
 			:title="$t('menubaseapplicationorderquery')"
 			width="50%"
@@ -122,7 +121,6 @@
 		</ZDialog>
 
 		<ZDialog
-			v-if="dialogShow_ChangeRecord"
 			v-model="dialogShow_ChangeRecord"
 			:title="$t('menubaseOwnershipChangeRecord')"
 			width="90%"
@@ -132,7 +130,6 @@
 		</ZDialog>
 
 		<ZDialog
-			v-if="dialogShow_mycustomer"
 			v-model="dialogShow_mycustomer"
 			:title="$t('corpinfopanelgsxxtitle')"
 			width="55%"

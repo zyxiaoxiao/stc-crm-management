@@ -462,7 +462,7 @@
 			</el-tab-pane>
 		</el-tabs>
 
-		<ZDialog v-if="customerList.dialogShow" v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
+		<ZDialog v-model="customerList.dialogShow" :title="$t('corpinfopanelckxxcxtitle')" width="95%">
 			<customerListQuery :condobj="customerList"></customerListQuery>
 		</ZDialog>
 	</div>

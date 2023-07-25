@@ -506,7 +506,6 @@
 		</el-tabs>
 		<!-- 选择客户 -->
 		<ZDialog
-			v-if="selectcorpcontactaddressinformationList.dialogShow"
 			v-model="selectcorpcontactaddressinformationList.dialogShow"
 			width="95%"
 			@close="selectcorpcontactaddressinformationClose"
@@ -517,28 +516,22 @@
 		</ZDialog>
 
 		<!-- 选择联系人 -->
-		<ZDialog v-if="selectcontactList.dialogShow" v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
+		<ZDialog v-model="selectcontactList.dialogShow" width="85%" @close="selectcontactClose">
 			<selectcontact :condobj="selectcontactList"></selectcontact>
 		</ZDialog>
 
 		<!-- 选择地址 -->
-		<ZDialog
-			v-if="selectAddressbycorpandcontactList.dialogShow"
-			v-model="selectAddressbycorpandcontactList.dialogShow"
-			width="85%"
-			@close="selectAddressbycorpandcontactClose"
-		>
+		<ZDialog v-model="selectAddressbycorpandcontactList.dialogShow" width="85%" @close="selectAddressbycorpandcontactClose">
 			<selectAddressbycorpandcontact :condobj="selectAddressbycorpandcontactList"></selectAddressbycorpandcontact>
 		</ZDialog>
 
 		<!-- 选择联系人 -->
-		<ZDialog v-if="selectUserList.dialogShow" v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
+		<ZDialog v-model="selectUserList.dialogShow" width="55%" @close="selectUserClose">
 			<selectUser :condobj="selectUserList"></selectUser>
 		</ZDialog>
 
 		<!-- 条码标签弹出层 -->
 		<el-dialog
-			v-if="barcodeLabelList.dialogShow"
 			ref="barcodeLabelDialog"
 			v-model="barcodeLabelList.dialogShow"
 			width="500px"
