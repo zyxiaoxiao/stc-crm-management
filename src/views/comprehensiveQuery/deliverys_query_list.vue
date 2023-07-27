@@ -3,18 +3,15 @@
 		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbgQuery" @workflow-status="workflowStatus"> </zTable>
 
 		<!-- 地址标签弹出层 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="addressLabelList.dialogShow" title1="已有标签地址" :title="$t('columnexistingAddressLabel')" width="95%">
-				<addressLabel :condobj="addressLabelList"></addressLabel>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="addressLabelList.dialogShow" title1="已有标签地址" :title="$t('columnexistingAddressLabel')" width="95%">
+			<addressLabel :condobj="addressLabelList"></addressLabel>
+		</ZDialog>
 
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="deliverysworkflowdetailList.dialogShow" width="95%" @close="deliverysworkflowdetailClose">
-				<deliverysworkflowdetail :condobj="deliverysworkflowdetailList"></deliverysworkflowdetail>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="deliverysworkflowdetailList.dialogShow" width="95%" @close="deliverysworkflowdetailClose">
+			<deliverysworkflowdetail :condobj="deliverysworkflowdetailList"></deliverysworkflowdetail>
+		</ZDialog>
+
 		<!-- 地址 标签弹出层 -->
 		<el-dialog
 			ref="addressLabelDialog"
@@ -39,11 +36,9 @@
 			<addressLabelPrint :condobj="addressLabelPrintList" />
 		</el-dialog>
 
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
 	</div>
 </template>
 

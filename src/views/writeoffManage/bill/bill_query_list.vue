@@ -107,55 +107,49 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billdetailNew" @close="closebilldetail" width="95%">
-				<billdetailNew :condobj="condobj"></billdetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.uploadnewDialogShow"
-				:title="$t('menubaseUploadAttachment')"
-				width="40%"
-				@close="closeExcelUploadnew"
-				customclass="selectAgentCss"
-			>
-				<uploadnewQuery :condobj="condobj"></uploadnewQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
-				<billdetailNew :condobj="condobj"></billdetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billdetailConfirm" @close="closebillDetailConfirm" width="95%">
-				<billdetailConfirm :condobj="condobj"></billdetailConfirm>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
-				<el-form :model="excelform" style="margin: 25px 15px">
-					<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
-						<el-radio-group v-model="excelform.eradio" class="ml-4">
-							<el-radio label="2003">excel 2003</el-radio>
-							<el-radio label="2007">excel 2007</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogExcelRadio = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadExcelfiles(excelform)"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_billdetailNew" @close="closebilldetail" width="95%">
+			<billdetailNew :condobj="condobj"></billdetailNew>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.uploadnewDialogShow"
+			:title="$t('menubaseUploadAttachment')"
+			width="40%"
+			@close="closeExcelUploadnew"
+			customclass="selectAgentCss"
+		>
+			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
+			<billdetailNew :condobj="condobj"></billdetailNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_billdetailConfirm" @close="closebillDetailConfirm" width="95%">
+			<billdetailConfirm :condobj="condobj"></billdetailConfirm>
+		</ZDialog>
+
+		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+			<el-form :model="excelform" style="margin: 25px 15px">
+				<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
+					<el-radio-group v-model="excelform.eradio" class="ml-4">
+						<el-radio label="2003">excel 2003</el-radio>
+						<el-radio label="2007">excel 2007</el-radio>
+					</el-radio-group>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogExcelRadio = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadExcelfiles(excelform)"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 

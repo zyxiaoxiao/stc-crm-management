@@ -93,11 +93,9 @@
 			</div>
 		</div>
 		<!-- 选择申请单 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="selectapplicationList.dialogShow" width="75%" @close="selectapplicationClose">
-				<selectapplication :condobj="selectapplicationList" @subFeedbackClick="subFeedbackClick"></selectapplication>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="selectapplicationList.dialogShow" width="75%" @close="selectapplicationClose">
+			<selectapplication :condobj="selectapplicationList" @subFeedbackClick="subFeedbackClick"></selectapplication>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

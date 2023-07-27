@@ -32,28 +32,20 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 审核历史 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
 		<!-- 拆分 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="appointmentsplitdetailList.dialogShow" width="98%" @close="split_handlerClose">
-				<appointmentsplitdetail :condobj="appointmentsplitdetailList"></appointmentsplitdetail>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="appointmentsplitdetailList.dialogShow" width="98%" @close="split_handlerClose">
+			<appointmentsplitdetail :condobj="appointmentsplitdetailList"></appointmentsplitdetail>
+		</ZDialog>
 		<!-- 查看报价单信息 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="appointmentdetailReadonlyList.dialogShow" title="" width="95%">
-				<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
-				<appointmentReadonly :condobj="condobj"></appointmentReadonly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="appointmentdetailReadonlyList.dialogShow" title="" width="95%">
+			<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
+		</ZDialog>
+		<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
+			<appointmentReadonly :condobj="condobj"></appointmentReadonly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -525,10 +517,10 @@ const appointmentdetailReadonlyList = reactive({
 const linkDetailbg = (column, row) => {
 	//报价只读查看页面
 	condobj.cond = {
-			businesstype: "10",
-			readonly: "true",
-			reservnum: row.reservnum
-		};
+		businesstype: "10",
+		readonly: "true",
+		reservnum: row.reservnum
+	};
 	condobj.dialogShow_appointmentNew = true;
 	//appointmentdetailReadonlyList.reservnum = row.reservnum;
 	//appointmentdetailReadonlyList.dialogShow = true;
@@ -543,11 +535,10 @@ const linkDetailbgQuery = (column, row) => {
 			reservnum: row.parentid
 		};
 		condobj.dialogShow_appointmentNew = true;
-	}else{
-        appointmentdetailReadonlyList.reservnum = row.reservnum;
-        appointmentdetailReadonlyList.dialogShow = true;
+	} else {
+		appointmentdetailReadonlyList.reservnum = row.reservnum;
+		appointmentdetailReadonlyList.dialogShow = true;
 	}
-	
 };
 
 const tabPaneName = ref("0");

@@ -153,11 +153,10 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesCommissionReadOnly" @close="closeSalesCommissionReadOnly" width="95%">
-				<salesCommissionReadOnly :condobj="condobj"></salesCommissionReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow_salesCommissionReadOnly" @close="closeSalesCommissionReadOnly" width="95%">
+			<salesCommissionReadOnly :condobj="condobj"></salesCommissionReadOnly>
+		</ZDialog>
 	</div>
 </template>
 

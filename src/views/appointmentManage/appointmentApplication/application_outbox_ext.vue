@@ -11,18 +11,18 @@
 				<div style="margin-top: 10px"></div>
 				<zTable ref="selectoutboxInfosQuery" :tableList="outboxtableList" @link-detailbg="outboxlinkDetail">
 					<template #tableHeaderLleft="scope">
-						<el-button size="small" class="button_show" @click="sendOutbox(scope.selectList)" type="primary" icon="Message" plain>{{
-							$t("menu_sendemails")
-						}}</el-button>
 						<el-button
 							size="small"
 							class="button_show"
+							@click="sendOutbox(scope.selectList)"
 							type="primary"
-							icon="Document"
+							icon="Message"
 							plain
-							@click="newOutboxInfo()"
-							>{{ $t("SRM_new") }}</el-button
+							>{{ $t("menu_sendemails") }}</el-button
 						>
+						<el-button size="small" class="button_show" type="primary" icon="Document" plain @click="newOutboxInfo()">{{
+							$t("SRM_new")
+						}}</el-button>
 						<el-button
 							size="small"
 							class="button_show"
@@ -135,27 +135,24 @@
 			</el-tab-pane>
 		</el-tabs>
 	</div>
-	<div v-dialogStretching>
-		<ZDialog
-			v-model="condobj.uploadnewDialogShow"
-			@close="uploadnewDialogclose"
-			:title="$t('companypanelreportstitle')"
-			width="40%"
-			customclass="selectAgentCss"
-		>
-			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
-		</ZDialog>
-	</div>
-	<div v-dialogStretching>
-		<ZDialog
-			v-model="condobj.showdetailDialogShow"
-			:title="$t('companypanelreportstitle')"
-			width="80%"
-			customclass="selectAgentCss"
-		>
-			<showdetailQuery :condobj="condobj"></showdetailQuery>
-		</ZDialog>
-	</div>
+
+	<ZDialog
+		v-model="condobj.uploadnewDialogShow"
+		@close="uploadnewDialogclose"
+		:title="$t('companypanelreportstitle')"
+		width="40%"
+		customclass="selectAgentCss"
+	>
+		<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+	</ZDialog>
+	<ZDialog
+		v-model="condobj.showdetailDialogShow"
+		:title="$t('companypanelreportstitle')"
+		width="80%"
+		customclass="selectAgentCss"
+	>
+		<showdetailQuery :condobj="condobj"></showdetailQuery>
+	</ZDialog>
 </template>
 
 <script setup>
@@ -222,13 +219,13 @@ const outboxlinkDetail = (column, row) => {
 //新增发件信息
 const newOutboxInfo = () => {
 	for (let key in formData1) {
-			//formData1置空
-			if (key == "sendtype") {
-				formData1[key] = "1";
-			} else {
-				formData1[key] = "";
-			}
+		//formData1置空
+		if (key == "sendtype") {
+			formData1[key] = "1";
+		} else {
+			formData1[key] = "";
 		}
+	}
 	ftableList.tableData = [];
 	tableTabsValue.value = "message"; //切换到邮件编辑信息
 };
@@ -250,7 +247,6 @@ const historylinkDetail = (column, row) => {
 //默认需要传入的参数
 const params = {};
 let fileList = ref(); //附件信息
-
 
 //下载资质文件
 const downloadfiles = (column, row) => {

@@ -180,32 +180,28 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billappointmentdetail" @close="dialogclose" width="95%">
-				<billappointmentdetail :condobj="condobj"></billappointmentdetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_selectBillappointmentQuery" @close="billdialogclose" width="95%">
-				<billappointmentQuery :condobj="condobj"></billappointmentQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billappointmentdetailreadonly" @close="dialogclose" width="95%">
-				<billappointmentdetailreadonly :condobj="condobj"></billappointmentdetailreadonly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.uploadnewDialogShow"
-				@close="uploadnewDialogclose"
-				:title="$t('companypanelreportstitle')"
-				width="40%"
-				customclass="selectAgentCss"
-			>
-				<uploadnewQuery :condobj="condobj"></uploadnewQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow_billappointmentdetail" @close="dialogclose" width="95%">
+			<billappointmentdetail :condobj="condobj"></billappointmentdetail>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_selectBillappointmentQuery" @close="billdialogclose" width="95%">
+			<billappointmentQuery :condobj="condobj"></billappointmentQuery>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_billappointmentdetailreadonly" @close="dialogclose" width="95%">
+			<billappointmentdetailreadonly :condobj="condobj"></billappointmentdetailreadonly>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.uploadnewDialogShow"
+			@close="uploadnewDialogclose"
+			:title="$t('companypanelreportstitle')"
+			width="40%"
+			customclass="selectAgentCss"
+		>
+			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+		</ZDialog>
 	</div>
 </template>
 
@@ -219,6 +215,7 @@ import http from "@/api/index.js";
 import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
+import { getdropSownSelection } from "/src/utils/util.js";
 import ZDialog from "/src/components/ZDialog.vue";
 //到账信息选择
 import billappointmentQuery from "@/views/writeoffManage/writeoff_dgbj/bill_query_list.vue";
@@ -243,15 +240,15 @@ let saveShow = ref(false); //保存
 let isdisabled = ref(false); //可编辑
 let isCurrency = ref(false); //币种可编辑
 let writeoffidto = ""; //销账id
-
+let crm_skfs = getdropSownSelection("CRM_skfs"); //收款方式下拉
 let costtype = [
-	{
-		value: "1",
-		label: i18n.t("billinfoisbaddebtpanel1")
-	},
 	{
 		value: "0",
 		label: i18n.t("billinfoisbaddebtpanel0")
+	},
+	{
+		value: "1",
+		label: i18n.t("billinfoisbaddebtpanel1")
 	}
 ];
 //销账信息初始化信息
@@ -380,12 +377,22 @@ const uploadnewDialogclose = () => {
 };
 
 const itemViewCellClick = (row, column, cell, event) => {
-	if ((column.property == "currencycostnum" && row.isedit == "1") || sformData.isbad == "1" || sformData.isbad == "是") {
-		row.isEdit[column.property] = false;
-		return;
-	} else {
-		row.isEdit[column.property] = true;
+	if (column.property == "currencywriteoffmoney") {
+		if (sformData.isbad == "1" || sformData.isbad == "是") {
+			row.isEdit[column.property] = true;
+		} else {
+			row.isEdit[column.property] = false;
+		}
 	}
+	if (column.property == "currencycostnum") {
+		if (row.isedit == "1" || sformData.isbad == "是" || sformData.isbad == "1") {
+			row.isEdit[column.property] = false;
+			return;
+		} else {
+			row.isEdit[column.property] = true;
+		}
+	}
+	return;
 };
 
 //是否坏账切换
@@ -399,7 +406,6 @@ const selectIsbaddebt = val => {
 		});
 		return;
 	}
-	console.log(sformData);
 	let isbad_old = sformData.isbad_old;
 	if (isbad_old == "是") {
 		isbad_old = "1";
@@ -539,7 +545,7 @@ const submitWriteoffInfo = () => {
 		) {
 			if (
 				parseFloat(wainfo.totalmoney) ==
-				(parseFloat(wainfo.currencywriteoffmoney) + parseFloat(wainfo.currencycostnum)).toFixed(2)
+				parseFloat((parseFloat(wainfo.currencywriteoffmoney) + parseFloat(wainfo.currencycostnum)).toFixed(2))
 			) {
 			} else {
 				ElMessage.warning(i18n.t("Message_OutOfRangMoney"));
@@ -574,7 +580,7 @@ const submitWriteoffInfo = () => {
 //判断是否是数字,是就返回true
 const isNOWNumber = val => {
 	if (!isNaN(parseFloat(val)) && isFinite(val)) {
-		return parseFloat(val).toFixed(2);
+		return parseFloat(val);
 	} else {
 		return 0;
 	}
@@ -666,7 +672,7 @@ const billdialogclose = async () => {
 								currencies: currencies, //币种
 								exchangerate: exchangerate, //汇率
 								billetoappoint: billetoappoint, //港币可冲销金额
-								foldertotalmoney: parseFloat(currencyamount).toFixed(2), //到账币种不同时，显示的申请为准的总金额
+								foldertotalmoney: parseFloat(parseFloat(currencyamount).toFixed(2)), //到账币种不同时，显示的申请为准的总金额
 								currencybillmoney: currencyamount, //到账金额（外币）
 								currencybillwritesum: currencywritesum, //到账单已冲销金额（外币）
 								currencyretreatmoney: currencyretreatmoney, //外币退款金额
@@ -731,7 +737,7 @@ const billdialogclose = async () => {
 							let currencycanwriteoffsnuma = "0.00";
 							//若币种相同，则汇率不用再重新计算
 							if (foldscurrencies == currencies) {
-								currencycanwriteoffsnuma = parseFloat(currencytotalCanwriteoffsnum).toFixed(2); //汇总后本次可冲销金额
+								currencycanwriteoffsnuma = parseFloat(parseFloat(currencytotalCanwriteoffsnum).toFixed(2)); //汇总后本次可冲销金额
 							} else {
 								if (billRemark != null && billRemark != "") {
 									let number = billRemark.indexOf("_");
@@ -741,11 +747,10 @@ const billdialogclose = async () => {
 									}
 								}
 								//本次冲销港币价格
-								currencycanwriteoffsnuma = parseFloat((currencytotalCanwriteoffsnum * foldscurrencyrate) / exchangerate).toFixed(
-									2
+								currencycanwriteoffsnuma = parseFloat(
+									parseFloat((currencytotalCanwriteoffsnum * foldscurrencyrate) / exchangerate).toFixed(2)
 								);
 							}
-
 							if (isNOWNumber(currencybillappointbalancetrs) < isNOWNumber(currencycanwriteoffsnuma)) {
 								ElMessage.warning(i18n.t("Message_selectbillinfo"));
 								return;
@@ -782,8 +787,8 @@ const billdialogclose = async () => {
 										}
 									}
 									//把到账可冲销金额币种转成到账折算申请单可冲销金额
-									let billcurrencybalanceExchange = parseFloat((billcurrencybalance * exchangerate) / foldscurrencyrate).toFixed(
-										2
+									let billcurrencybalanceExchange = parseFloat(
+										parseFloat((billcurrencybalance * exchangerate) / foldscurrencyrate).toFixed(2)
 									);
 									//可冲销金额不能小于本次冲销总金额
 									if (isNOWNumber(billcurrencybalanceExchange) < isNOWNumber(currencytotalCanwriteoffsnum)) {
@@ -820,7 +825,7 @@ const billdialogclose = async () => {
 										let message = mess
 											.replace(",", billcurrencybalance + ";")
 											.replace(",", currencytotalCanwriteoffsnum + ",")
-											.replace(".", difference + ".")
+											.replace(".", differenceto + ".")
 											.replace("，", billcurrencybalance + "；")
 											.replace("，", currencytotalCanwriteoffsnum + "，")
 											.replace("。", differenceto + "。");
@@ -839,8 +844,8 @@ const billdialogclose = async () => {
 									}
 									//把可冲销余额币种转成到账折算申请单可冲销金额币种
 									let currencybillappointbalancetrsExchange = parseFloat(
-										(currencybillappointbalancetrs * exchangerate) / foldscurrencyrate
-									).toFixed(2);
+										parseFloat((currencybillappointbalancetrs * exchangerate) / foldscurrencyrate).toFixed(2)
+									);
 									//可冲销金额不能小于本次冲销总金额
 									if (isNOWNumber(currencybillappointbalancetrsExchange) < isNOWNumber(currencytotalCanwriteoffsnum)) {
 										//差值 本次冲销总金额-到账折算申请单可冲销金额=差值
@@ -852,7 +857,7 @@ const billdialogclose = async () => {
 										let message = mess
 											.replace(",", billcurrencybalance + ";")
 											.replace(",", currencytotalCanwriteoffsnum + ",")
-											.replace(".", difference + ".")
+											.replace(".", differenceto + ".")
 											.replace("，", billcurrencybalance + "；")
 											.replace("，", currencytotalCanwriteoffsnum + "，")
 											.replace("。", differenceto + "。");
@@ -875,7 +880,6 @@ const billdialogclose = async () => {
 							billcurrencybillbalance = currencybillbalance;
 						}
 						//如果当前可冲销金额存在已对应的销账未提交那么就比较可冲销余额，余额小则作为最小可冲销余额
-
 						let billinsertList = [];
 						if (billappointments != null && billappointments.length > 0) {
 							billinsertList = billappointments;
@@ -917,7 +921,6 @@ const billdialogclose = async () => {
 							if (billa) {
 								let writecurrencybillbalance = currencybillbalance;
 								//如果当前可冲销金额存在已对应的销账未提交那么就比较可冲销余额，余额小则作为最小可冲销余额
-
 								for (let j = 0; j < v_records.length; j++) {
 									for (let u of billinsertList) {
 										if (v_records[j].wbid == u.wbid) {
@@ -1119,14 +1122,14 @@ const tableListInvoices = reactive({
 			label: "columnwriteoff_invoiceno",
 			prop: "INVOICENO",
 			type: "Input",
-			width: "160"
+			width: "120"
 		},
 		{
 			title: "账单日期",
 			label: "columnwriteoff_invoicedate",
 			prop: "INVOICEDATE",
-			type: "Input",
-			width: "160"
+			type: "Date",
+			width: "120"
 		},
 		{
 			title: "打印日期",
@@ -1140,7 +1143,7 @@ const tableListInvoices = reactive({
 			label: "columnwriteoff_sendclientno",
 			prop: "SENDCLIENTNO",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "发往客户名称",
@@ -1154,49 +1157,49 @@ const tableListInvoices = reactive({
 			label: "columnwriteoff_sendclientcontactor",
 			prop: "SENDCLIENTCONTACTOR",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "部门",
 			label: "corpinfopaneldepartmentcodetitle",
 			prop: "DEPT",
 			type: "Input",
-			width: "160"
+			width: "100"
 		},
 		{
 			title: "货币类型",
 			label: "itemtitleinvoicecurrencies",
 			prop: "CURRENCYTYPE",
 			type: "Input",
-			width: "140"
+			width: "100"
 		},
 		{
 			title: "账单合计",
 			label: "columnwriteoff_invoicetotaldetail",
 			prop: "INVOICETOTAL",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "港币总额",
 			label: "columnwriteoff_hktotalmoneydetail",
 			prop: "HKTOTALMONEY",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "已冲销金额",
 			label: "columnbillsscurrencyhavawriteoffs",
 			prop: "currencywriteoffsnum",
 			type: "Input",
-			width: "160"
+			width: "120"
 		},
 		{
 			title: "本次可冲销金额",
 			label: "columnwriteoffcurrencyCanWriteOffs",
 			prop: "currencycanwriteoffsnum",
 			type: "Input",
-			width: "160"
+			width: "120"
 		},
 		{
 			title: "已冲销金额",
@@ -1278,14 +1281,14 @@ const tableListFolders = reactive({
 			label: "columnwriteoff_application_listApplicationNo",
 			prop: "appointmentid",
 			type: "Input",
-			width: "160"
+			width: "120"
 		},
 		{
 			title: "发票编号",
 			label: "columnwriteoff_invoiceno",
 			prop: "invoiceno",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "关联到账信息",
@@ -1306,21 +1309,21 @@ const tableListFolders = reactive({
 			label: "itemtitleinvoicecurrencies",
 			prop: "currencyname",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "汇率",
 			label: "columnappointmentdesc54",
 			prop: "currencyrate",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "外币已冲销金额",
 			label: "columnbillcurrencyhavawriteoffs",
 			prop: "currencywriteoffsnum",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "外币成本费",
@@ -1336,14 +1339,16 @@ const tableListFolders = reactive({
 			label: "columncurrencywriteoff_application_listCanWriteOffsdetail",
 			prop: "currencycanwriteoffsnum",
 			type: "Input",
-			width: "140"
+			width: "120"
 		},
 		{
 			title: "外币本次冲销总金额",
 			label: "columncurrencywriteoff_application_listTotalAmountdetail",
 			prop: "currencywriteoffmoney",
-			type: "Input",
-			width: "140"
+			type: "Number",
+			precision: 2,
+			width: "140",
+			edit: true
 		},
 		{
 			title: "SE名称",
@@ -1357,7 +1362,7 @@ const tableListFolders = reactive({
 			label: "billinfoamountofmoneypanelhkd",
 			prop: "hktotalmoney",
 			type: "Input",
-			width: "160"
+			width: "120"
 		},
 		{
 			title: "外币退款金额",
@@ -1521,7 +1526,7 @@ const tableListBillInfos = reactive({
 			prop: "paymentmethod",
 			type: "Select",
 			width: "160",
-			typeData: costtype
+			typeData: crm_skfs
 		},
 		{
 			title: "客户名称",

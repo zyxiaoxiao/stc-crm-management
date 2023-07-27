@@ -37,7 +37,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { genFileId, ElMessage } from "element-plus";
+import { genFileId, ElMessage, ElLoading } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
 const globalStore = GlobalStore();
 
@@ -50,13 +50,23 @@ const props = defineProps({
 
 const upload_data = reactive({});
 const upload = ref();
-
+let loading = ref({});
 //当超出限制时，执行的钩子函数，在这里就是当触发了limit后执行
 const handleExceed = files => {
 	upload.value.clearFiles();
 	const file = files[0];
 	file.uid = genFileId();
 	upload.value.handleStart(file);
+};
+
+//调用加载框、阴影遮盖
+const openFullScreen2 = () => {
+	loading = ElLoading.service({
+		lock: true,
+		text: "Loading",
+		background: "rgba(0, 0, 0, 0.7)"
+	});
+	//loading.close()
 };
 
 //上传
@@ -79,11 +89,14 @@ const handleBeforeUpload = file => {
 		"', businessobjectid:'" +
 		props.condobj.cond.businessobjectid +
 		"'}}";
+	openFullScreen2();
 	return true;
 };
 
 //请求成功后执行的函数，相当于axios的then
 const handleSuccess = response => {
+	//关闭加载框
+	loading.close();
 	if (response.success) {
 		props.condobj.uploadnewDialogShow = false;
 		props.condobj.objlist.success = true;

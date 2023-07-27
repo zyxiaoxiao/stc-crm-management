@@ -27,16 +27,14 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" width="95%">
-				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" width="95%">
+			<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -99,12 +97,11 @@ const writeoffInfosBack = async selectList => {
 						return;
 					}
 				}
-                grid_writeoffInfosquery.value.getTableList(); //刷新销账退回
+				grid_writeoffInfosquery.value.getTableList(); //刷新销账退回
 			}
 		})
 		.catch(() => {});
 };
-
 
 //页面初始化渲染完成执行
 onMounted(() => {
@@ -354,8 +351,7 @@ const qtableList = reactive({
 });
 
 // 显示dialogdialogShow_FormVisibleNew
-const dialogShow = data => {
-};
+const dialogShow = data => {};
 
 //工作流审核历史记录
 const workflowStatus = (column, row) => {

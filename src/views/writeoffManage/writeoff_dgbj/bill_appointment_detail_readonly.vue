@@ -30,7 +30,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item :label="$t('billinfoamountofmoneypanel') + ':'" title1="委托检测总费用">
+								<el-form-item :label="$t('paymentnoticemoneypanel') + ':'" title1="委托检测总费用">
 									<el-input type="text" clearable v-model="sformData.totalmoney" class="input-with-select" readonly> </el-input>
 								</el-form-item>
 							</el-col>
@@ -74,11 +74,6 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_selectBillappointmentdetailQuery" @close="billdialogclose" width="95%">
-				<billappointmentdetailQuery :condobj="condobj"></billappointmentdetailQuery>
-			</ZDialog>
-		</div>
 	</div>
 </template>
 
@@ -91,9 +86,6 @@ import http from "@/api/index.js";
 import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
-import ZDialog from "/src/components/ZDialog.vue";
-//到账信息选择
-import billappointmentdetailQuery from "@/views/writeoffManage/writeoff_dgbj/bill_query_list.vue";
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
@@ -126,52 +118,6 @@ const sformData = reactive({
 
 const tableTabsValue = ref("writeoffInfo");
 
-
-//保存税票申请单信息
-const saveBillAppointment_handler = async () => {
-	if (tableListbills.tableData.length < 1) {
-		return;
-	}
-	let currencybilltotalmoney=0;
-	for(let b of tableListbills.tableData){
-        if(!b.currencybilletoappoint || isNaN(b.currencybilletoappoint)){
-			ElMessage.warning(i18n.t("Message_TaxTicketTnformation"));
-		    return;
-		}
-		if(parseFloat(b.currencybilletoappoint) < 0){
-            ElMessage.warning(i18n.t("Message_EnterMoney"));
-		    return;
-		}
-		currencybilltotalmoney =  currencybilltotalmoney + parseFloat(b.currencybilletoappoint);
-	}
-	let jsonString = {
-		currencybilltotalmoney: currencybilltotalmoney,
-		billappointmentInfos: tableListbills.tableData
-	};
-	let params = {
-		jsonString: JSON.stringify(jsonString)
-	};
-	const res = await http.post("/crm/billappointment/billappointment!updateBillappointmentInfos.action", qs.stringify(params));
-	if (res) {
-		grid_billappointmentInfos.value.getTableList();
-		getappointmentInfo({ wbid: v_wbid });
-	}
-};
-
-//删除到账信息
-const billappointmentInfosDelete = async selectList => {
-	let jsonString = {
-		billappointmentInfos: selectList
-	};
-	let params = {
-		jsonString: JSON.stringify(jsonString)
-	};
-	const res = await http.post("/crm/billappointment/billappointment!deleteBillappointmentInfo.action", qs.stringify(params));
-	if (res) {
-		await grid_billappointmentInfos.value.getTableList();
-	}
-};
-
 //查询销账信息
 let getappointmentInfo = async obj => {
 	let params = {
@@ -189,130 +135,6 @@ let getappointmentInfo = async obj => {
 	}
 };
 
-// 显示
-const dialogShow = data => {
-	if (data == "dialogShow_selectBillappointmentdetailQuery") {
-		condobj.cond = {
-			html: "dialogShow_selectBillappointmentdetailQuery"
-		};
-		condobj.dialogShow_selectBillappointmentdetailQuery = true;
-	}
-};
-//子页面关闭后的方法可以给父页面赋值等操作
-const billdialogclose = async () => {
-	if (condobj && condobj.cond) {
-		//选择委托单位的关闭窗口后的事件
-		if (condobj.cond.html && condobj.objlist) {
-			if (condobj.cond.html == "dialogShow_selectBillappointmentdetailQuery") {
-				//选择到账信息
-				let obj = condobj.objlist;
-				if (obj.billid && sformData.currencyrate) {
-					let billdate = obj.billdate;
-					if (billdate) {
-						billdate = billdate.substring(0, billdate.indexOf(" "));
-					}
-					obj.billdate = billdate;
-					let billappointment = {
-						billid: obj.billid,
-						billmoney: obj.money,
-						billwritesum: obj.writesum,
-						retreatmoney: obj.retreatmoney,
-						billbalance: obj.balance,
-						currencies: obj.currencies,
-						exchangerate: obj.exchangerate,
-						currencybillmoney: obj.currencyamount,
-						foldertotalmoney: parseFloat(obj.currencyamount).toFixed(2),
-						currencybillwritesum: obj.currencywritesum,
-						currencyretreatmoney: obj.currencyretreatmoney,
-						currencybillbalance: obj.currencybalance,
-						writeoffid: v_writeoffid,
-						reservnum: v_reservnum,
-						wbid: v_wbid
-					};
-					let vdata = [];
-					vdata.push(billappointment);
-
-					if (sformData.currencyrate == obj.currencies) {
-						let params = {
-							jsonString: JSON.stringify({ billappointmentInfos: vdata })
-						};
-						const res = await http.post(
-							"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
-							qs.stringify(params)
-						);
-						if (res) {
-							let msg = res.errorMsg;
-							if (msg == "fail") {
-								//存在正在销账的到账单
-								ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));
-								return false;
-							}
-							//更新到账数据
-							grid_billappointmentInfos.value.getTableList();
-						}
-					} else {
-						let cond = {
-							foldscurrencyrate: sformData.currencyrate,
-							exchangerate: obj.exchangerate,
-							foldscurrencies: sformData.currencyname,
-							currencies: obj.currencies,
-							billdate: billdate
-						};
-						let params = {
-							jsonString: JSON.stringify({
-								billappointmentInfos: vdata,
-								cond: cond
-							})
-						};
-						const res = await http.post(
-							"/crm/billappointment/billappointment!calculatorExchangerate.action",
-							qs.stringify(params)
-						);
-						if (res.billappointmentInfos && res.billappointmentInfos.length > 0) {
-							let billappointmentInfo = res.billappointmentInfos[0];
-							let calculatorvdata = [];
-							let billappointmentc = {
-								billid: obj.billid,
-								billmoney: obj.money,
-								billwritesum: obj.writesum,
-								retreatmoney: obj.retreatmoney,
-								billbalance: obj.balance,
-								currencies: obj.currencies,
-								exchangerate: obj.exchangerate,
-								foldertotalmoney: parseFloat(obj.currencyamount).toFixed(2),
-								currencybillmoney: billappointmentInfo.currencybillmoney,
-								currencybillwritesum: billappointmentInfo.currencybillwritesum,
-								currencyretreatmoney: billappointmentInfo.currencyretreatmoney,
-								currencybillbalance: billappointmentInfo.currencybillbalance,
-								writeoffid: v_writeoffid,
-								reservnum: v_reservnum,
-								wbid: v_wbid
-							};
-							calculatorvdata.push(billappointmentc);
-							let paramsto = {
-								jsonString: JSON.stringify({ billappointmentInfos: calculatorvdata })
-							};
-							const resto = await http.post(
-								"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
-								qs.stringify(paramsto)
-							);
-							if (resto) {
-								let msg = resto.errorMsg;
-								if (msg == "fail") {
-									//存在正在销账的到账单
-									ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));
-									return false;
-								}
-								//更新到账数据
-								grid_billappointmentInfos.value.getTableList();
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-};
 
 //切换tab时触发
 const tabChange = TabPaneName => {};
@@ -357,14 +179,14 @@ const tableListbills = reactive({
 			label: "billinfoaccountcodepanel",
 			prop: "billcode",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "客户号",
 			label: "itemtitleinvoicecorpno",
 			prop: "corpcode",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "客户名称",
@@ -385,21 +207,21 @@ const tableListbills = reactive({
 			label: "billinfopayeraccountpanel",
 			prop: "payaccount",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账单总金额",
 			label: "columnbilldrawbackamountmoney",
 			prop: "foldertotalmoney",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "币种",
@@ -427,28 +249,28 @@ const tableListbills = reactive({
 			label: "columnbillcurrency1havawriteoffs",
 			prop: "currencybillwritesum",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种退款金额",
 			label: "columncurrency1drawbackrefundmoney",
 			prop: "currencyretreatmoney",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种可冲销金额",
 			label: "columnwriteoffcurrencyCanWriteOffs",
 			prop: "currencybillbalance",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种本次冲销总金额",
 			label: "columnwriteoffCanWriteOffstotal",
 			prop: "currencybilletoappointsum",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种本次冲销金额",
@@ -462,7 +284,8 @@ const tableListbills = reactive({
 			label: "satisfactioncolumnmstitle",
 			prop: "remark",
 			type: "Input",
-			width: "160"
+			width: "140",
+			edit: true
 		},
 		{
 			title: "到账单编码",

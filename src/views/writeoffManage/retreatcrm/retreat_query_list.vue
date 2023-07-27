@@ -16,7 +16,7 @@
 							icon="Close"
 							:disabled="!scope.isSelected"
 							plain
-							@click="deleteRetreatInfo( scope.selectList)"
+							@click="deleteRetreatInfo(scope.selectList)"
 							>{{ $t("SRM_delete") }}</el-button
 						>
 						<el-button
@@ -46,21 +46,18 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
-				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_retreatdetail" @close="closeretreatdetail" width="95%">
-				<retreatdetail :condobj="condobj"></retreatdetail>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+			<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_retreatdetail" @close="closeretreatdetail" width="95%">
+			<retreatdetail :condobj="condobj"></retreatdetail>
+		</ZDialog>
 	</div>
 </template>
 
@@ -105,7 +102,7 @@ const newRetreatInfo = () => {
 };
 
 //删除退款信息
-let deleteRetreatInfo = async (selectList) => {
+let deleteRetreatInfo = async selectList => {
 	if (selectList != null && selectList.length < 1) {
 		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
@@ -121,7 +118,7 @@ let deleteRetreatInfo = async (selectList) => {
 };
 
 //提交退款信息
-let submitRetreatInfo = async (selectList) => {
+let submitRetreatInfo = async selectList => {
 	let params = {
 		jsonString: JSON.stringify({ retreatInfos: selectList })
 	};

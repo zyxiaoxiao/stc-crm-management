@@ -37,7 +37,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useI18n } from "vue-i18n";
-import { genFileId, ElMessage } from "element-plus";
+import { genFileId, ElMessage, ElLoading } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
 const globalStore = GlobalStore();
 
@@ -50,6 +50,7 @@ const props = defineProps({
 
 const upload_data = reactive({});
 const upload = ref();
+let loading = ref({});
 
 //当超出限制时，执行的钩子函数，在这里就是当触发了limit后执行
 const handleExceed = files => {
@@ -58,10 +59,19 @@ const handleExceed = files => {
 	file.uid = genFileId();
 	upload.value.handleStart(file);
 };
+//调用加载框、阴影遮盖
+const openFullScreen2 = () => {
+	loading = ElLoading.service({
+		lock: true,
+		text: "Loading",
+		background: "rgba(0, 0, 0, 0.7)"
+	});
+	//loading.close()
+};
 
 //上传
 const submitUpload = () => {
-	if (props.condobj.cond.businessobjectid) {
+	if (props.condobj.cond.businessobjectid) {		
 		upload.value.submit();
 	} else {
 		ElMessage({
@@ -73,23 +83,24 @@ const submitUpload = () => {
 
 //发送请求前执行的函数，在这里可以做一些条件判断，配置参数等
 const handleBeforeUpload = file => {
-    let fileName = file.name;
-    let filetype = fileName.substring(fileName.indexOf(".")+1,fileName.length);
-	filetype =  filetype.toLowerCase();
-    if(!(filetype == "pdf" || filetype == "ofd") ){
-        ElMessage({
+	let fileName = file.name;
+	let filetype = fileName.substring(fileName.indexOf(".") + 1, fileName.length);
+	filetype = filetype.toLowerCase();
+	if (!(filetype == "pdf" || filetype == "ofd")) {
+		ElMessage({
 			type: i18n.t("Message_OperationTip"),
-			message: i18n.t("Statement_filetype")+" pdf 、ofd !"
+			message: i18n.t("Statement_filetype") + " pdf 、ofd !"
 		});
-	    return false;
+		return false;
 	}
-    if (fileName.length > 200){
-	    ElMessage({
+	if (fileName.length > 200) {
+		ElMessage({
 			type: i18n.t("Message_OperationTip"),
 			message: i18n.t("Statement_longname")
 		});
-	    return false;
+		return false;
 	}
+	openFullScreen2();
 	upload_data.jsonString =
 		"{uploadFile:{businesscode:'" +
 		props.condobj.cond.businesscode +
@@ -101,11 +112,14 @@ const handleBeforeUpload = file => {
 
 //请求成功后执行的函数，相当于axios的then
 const handleSuccess = response => {
-	if (response.success) {
+	//关闭加载框
+	loading.close();
+	if (response.success) {		
 		props.condobj.uploadnewDialogShow = false;
 		props.condobj.objlist.success = true;
 	}
 };
+
 //请求失败后执行的函数，相当于axios的catch
 const handleError = error => {
 	ElMessage.warning(i18n.t("Statement_failup") + error.errors + "！");

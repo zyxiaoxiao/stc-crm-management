@@ -222,11 +222,9 @@
 			</div>
 		</div>
 		<!-- 选择申请单 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="applicationorderqueryList.dialogShow" width="75%" @close="applicationorderqueryClose">
-				<applicationorderquery :condobj="applicationorderqueryList"></applicationorderquery>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="applicationorderqueryList.dialogShow" width="75%" @close="applicationorderqueryClose">
+			<applicationorderquery :condobj="applicationorderqueryList"></applicationorderquery>
+		</ZDialog>
 	</div>
 </template>
 <script setup>

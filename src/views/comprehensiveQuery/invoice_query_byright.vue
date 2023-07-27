@@ -21,29 +21,21 @@
 				title1="开票异常信息查询"
 				name="queryinvoiceinfo"
 			>
-				<zTable
-					ref="grid_invoiceInfosquery"
-					:tableList="htableList"
-                    @link-detailbg="linkDetailquery"
-				>
-				</zTable>
+				<zTable ref="grid_invoiceInfosquery" :tableList="htableList" @link-detailbg="linkDetailquery"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
-				<invoicedetailNew :condobj="condobj"></invoicedetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
-				<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
+			<invoicedetailNew :condobj="condobj"></invoicedetailNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
+			<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -405,35 +397,35 @@ const htableList = reactive({
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "发票日期",
 			label: "itemtitleinvoiceinvoicedate",
 			prop: "invoicedate",
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "lims申请单号",
 			label: "columninvoicelimsf_folderno",
 			prop: "f_folderno",
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "lims币种",
 			label: "columninvoicelimsf_currencyname",
 			prop: "f_currencyname",
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "lims金额",
 			label: "columninvoicelimsf_totalprice",
 			prop: "f_totalprice",
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "申请单税票总金额",
 			label: "columninvoicelimsf_i_value",
 			prop: "f_i_value",
@@ -602,8 +594,7 @@ const htableList = reactive({
 });
 
 // 显示dialogdialogShow_FormVisibleNew
-const dialogShow = data => {
-};
+const dialogShow = data => {};
 
 //工作流审核历史记录
 const workflowStatus = (column, row) => {

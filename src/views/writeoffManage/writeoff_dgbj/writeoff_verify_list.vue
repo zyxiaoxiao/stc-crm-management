@@ -54,21 +54,17 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
-				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
-				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+			<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
+			<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -104,7 +100,7 @@ const condobj = reactive({
 });
 
 //审核销账单信息
-const approveWriteoffInfos = ( code, selectList) => {
+const approveWriteoffInfos = (code, selectList) => {
 	if (selectList != null && selectList.length < 1) {
 		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
@@ -160,9 +156,9 @@ const approveWriteoffInfos = ( code, selectList) => {
 
 //销账信息页面关闭
 const closewiteoffdetailReadOnly = () => {
-    if(condobj.cond && condobj.cond.auditflag == "Y"){
-        grid_writeoffInfos.value.getTableList();
-    }	
+	if (condobj.cond && condobj.cond.auditflag == "Y") {
+		grid_writeoffInfos.value.getTableList();
+	}
 };
 
 //页面初始化渲染完成执行
@@ -687,7 +683,7 @@ const linkDetail = (column, row) => {
 		if (row.writeoffid) {
 			condobj.cond = {
 				writeoffid: row.writeoffid,
-                auditflag: "Y",
+				auditflag: "Y",
 				corpid: row.corpid
 			};
 			condobj.dialogShow_writeoffbatchdetailReadOnly = true;

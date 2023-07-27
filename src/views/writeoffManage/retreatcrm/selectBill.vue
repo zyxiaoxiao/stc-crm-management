@@ -8,8 +8,6 @@
 				</el-button>
 			</template>
 		</zTable>
-	</div>
-	<div v-dialogStretching>
 		<ZDialog v-model="condobj.dialogShow_billdetailNew" width="95%">
 			<billdetailNew :condobj="condobj"></billdetailNew>
 		</ZDialog>
@@ -40,7 +38,7 @@ const condobj = reactive({
 const selectBillInfos = list => {
 	if (list != null && list.length > 0) {
 		props.condobj.objlist = list; //传参
-		props.condobj.dialogShow_billQuery = false; //关闭窗口		
+		props.condobj.dialogShow_billQuery = false; //关闭窗口
 	} else {
 		ElMessage({
 			type: i18n.t("Message_OperationTip"),
@@ -49,10 +47,9 @@ const selectBillInfos = list => {
 	}
 };
 
-
 //页面初始化渲染完成执行
 onMounted(() => {
-    props.condobj.objlist = null;
+	props.condobj.objlist = null;
 	grid_billInfosquery.value.getTableList();
 });
 //表格表头
@@ -173,12 +170,12 @@ let tableColumns = [
 const billtableList = reactive({
 	id: "/writeoffManage/retreatcrm/selectBill.vue_grid_billInfosquery",
 	//设置 为单选
-	isRadio: false,   
+	isRadio: false,
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/bill/bill!selectBillInfoByCond.action",
 		root: "billInfos",
-		baseParams: { 'cond.auditflag':'2' }
+		baseParams: { "cond.auditflag": "2" }
 	},
 	//表格表头
 	tableColumns: tableColumns,

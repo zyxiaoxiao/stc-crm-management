@@ -1,13 +1,10 @@
 <template>
 	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
 		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbgQuery"> </zTable>
-
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="contractdetailList.dialogShow" width="95%" @close="contractdetailClose">
-				<contractdetail :condobj="contractdetailList"></contractdetail>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="contractdetailList.dialogShow" width="95%" @close="contractdetailClose">
+			<contractdetail :condobj="contractdetailList"></contractdetail>
+		</ZDialog>
 	</div>
 </template>
 

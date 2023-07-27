@@ -1,6 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="salesinfos"
@@ -47,65 +47,61 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageNew" @close="closeSalesAgentBrokerage" width="95%">
-				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageReadOnly" @close="closeSalesAgentBrokerageReadOnly" width="95%">
-				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
-			</ZDialog>
-		</div>
-		<div>
-			<el-dialog v-model="dialogFormVisible" :title="$t('Message_selectMessageto')">
-				<el-form ref="cEform" :model="dform" style="margin: 25px 15px" :rules="rules">
-					<el-form-item :label="$t('Consign_chooseMouthTime') + ':'" style="width: 90%;" title1="请选择提佣月份" prop="commission">
-						<el-date-picker
-							type="date"
-							v-model="dform.commission"
-							format="YYYY-MM"
-							value-format="YYYY-MM"
-							style="width: 100%"
-							:disabled-date="disabledDate"
-						></el-date-picker>
-					</el-form-item>
-					<el-form-item title1="销售代理编码" :label="$t('column_SalesAgentCode')+ ':'" style="width: 90%;" prop="usercode">
-						<el-select
-							v-model="dform.usercode"
-							class="full-width-input"
-							:placeholder="$t('PleaseSelect_AUser')"
-							clearable
-							filterable
-						>
-							<el-option v-for="item in agentData" :key="item.value" :label="$t(item.label)" :value="item.value"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item title1="部门" :label="$t('corpinfopaneldepartmentcodetitle')+ ':'" style="width: 90%;"  prop="corpdesc">
-						<el-select
-							v-model="dform.corpdesc"
-							:placeholder="$t('Message_pleaseselectthedeptinformation')"
-							class="full-width-input"
-							clearable
-							filterable
-						>
-							<el-option v-for="item in corpData" :key="item.value" :label="item.label" :value="item.value"></el-option>
-						</el-select>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="newSalesagentbrokerageInfo(cEform)"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_salesagentbrokerageNew" @close="closeSalesAgentBrokerage" width="95%">
+			<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_salesagentbrokerageReadOnly" @close="closeSalesAgentBrokerageReadOnly" width="95%">
+			<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
+		</ZDialog>
+
+		<el-dialog v-model="dialogFormVisible" :title="$t('Message_selectMessageto')">
+			<el-form ref="cEform" :model="dform" style="margin: 25px 15px" :rules="rules">
+				<el-form-item :label="$t('Consign_chooseMouthTime') + ':'" style="width: 90%" title1="请选择提佣月份" prop="commission">
+					<el-date-picker
+						type="date"
+						v-model="dform.commission"
+						format="YYYY-MM"
+						value-format="YYYY-MM"
+						style="width: 100%"
+						:disabled-date="disabledDate"
+					></el-date-picker>
+				</el-form-item>
+				<el-form-item title1="销售代理编码" :label="$t('column_SalesAgentCode') + ':'" style="width: 90%" prop="usercode">
+					<el-select
+						v-model="dform.usercode"
+						class="full-width-input"
+						:placeholder="$t('PleaseSelect_AUser')"
+						clearable
+						filterable
+					>
+						<el-option v-for="item in agentData" :key="item.value" :label="$t(item.label)" :value="item.value"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item title1="部门" :label="$t('corpinfopaneldepartmentcodetitle') + ':'" style="width: 90%" prop="corpdesc">
+					<el-select
+						v-model="dform.corpdesc"
+						:placeholder="$t('Message_pleaseselectthedeptinformation')"
+						class="full-width-input"
+						clearable
+						filterable
+					>
+						<el-option v-for="item in corpData" :key="item.value" :label="item.label" :value="item.value"></el-option>
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="newSalesagentbrokerageInfo(cEform)"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -151,25 +147,25 @@ let cd = new Date();
 let year = cd.getFullYear();
 let month = cd.getMonth();
 let mstr = "";
-if(month == 0){
+if (month == 0) {
 	mstr = "12";
-    year = year-1;
-}else if(month <= 9){
-    mstr = "0"+month;
-}else{
-    mstr = month+"";
-} 
-let date = moment(new Date(year+"-"+mstr)).format("YYYY-MM");
-const disabledDate = (time) => {
-  return time.getTime() >= new Date(year+"-"+mstr+"-01").getTime();
+	year = year - 1;
+} else if (month <= 9) {
+	mstr = "0" + month;
+} else {
+	mstr = month + "";
 }
+let date = moment(new Date(year + "-" + mstr)).format("YYYY-MM");
+const disabledDate = time => {
+	return time.getTime() >= new Date(year + "-" + mstr + "-01").getTime();
+};
 //销售代理提佣初始化
 const dform = reactive({
 	commission: date,
 	usercode: "",
 	corpdesc: "",
-	agentdesc:"",
-	agentcode:""
+	agentdesc: "",
+	agentcode: ""
 });
 
 const rules = reactive({
@@ -196,7 +192,7 @@ const getCommissionValue = async () => {
 			let m = {};
 			let a = [];
 			for (let u of userInfos) {
-				m = { value: u.usercode + "▁▁"+ u.userdesc, label: u.usercode + "▁▁"+ u.userdesc};
+				m = { value: u.usercode + "▁▁" + u.userdesc, label: u.usercode + "▁▁" + u.userdesc };
 				a.push(m);
 			}
 			agentData.value = a;
@@ -213,7 +209,7 @@ const getCommissionValue = async () => {
 	}
 };
 //保存代理提佣
-const saveSalesagentbrokerageInfo = async (dform) => {
+const saveSalesagentbrokerageInfo = async dform => {
 	let cond = {
 		commissiondate: dform.commission,
 		corpdesc: dform.corpdesc,
@@ -227,23 +223,25 @@ const saveSalesagentbrokerageInfo = async (dform) => {
 		jsonString: JSON.stringify(jsonString)
 	};
 
-	const res = await http.post("/crm/salesbrokerage/salesagentbrokerage!insertSalesagentbrokerageInfo.action", qs.stringify(params));
+	const res = await http.post(
+		"/crm/salesbrokerage/salesagentbrokerage!insertSalesagentbrokerageInfo.action",
+		qs.stringify(params)
+	);
 	if (res) {
-		if(res.salesagentbrokerageInfo){
-			let salesbrokerageid=res.salesagentbrokerageInfo[0].salesbrokerageid;
+		if (res.salesagentbrokerageInfo) {
+			let salesbrokerageid = res.salesagentbrokerageInfo[0].salesbrokerageid;
 			condobj.cond = {
 				salesbrokerageid: salesbrokerageid,
-				auditflag:"0"
+				auditflag: "0"
 			};
 			condobj.dialogShow_salesagentbrokerageNew = true;
 		}
-		
 	}
 };
 
 //删除代理提佣
-const salesAgentBrokerageDelete = async (selectList) => {
-    if (selectList.length < 1) {
+const salesAgentBrokerageDelete = async selectList => {
+	if (selectList.length < 1) {
 		ElMessage.warning(i18n.t("itemtitleloginSelecttherecordstodelete"));
 		return false;
 	}
@@ -254,7 +252,10 @@ const salesAgentBrokerageDelete = async (selectList) => {
 		jsonString: JSON.stringify(jsonString)
 	};
 
-	const res = await http.post("/crm/salesbrokerage/salesagentbrokerage!deleteSalesagentbrokerageInfo.action", qs.stringify(params));
+	const res = await http.post(
+		"/crm/salesbrokerage/salesagentbrokerage!deleteSalesagentbrokerageInfo.action",
+		qs.stringify(params)
+	);
 	if (res) {
 		grid_salesagentbrokerageInfos.value.getTableList();
 	}
@@ -262,7 +263,7 @@ const salesAgentBrokerageDelete = async (selectList) => {
 
 //提交代理提佣
 const submitSalesAgentBrokerages = selectList => {
-    if (selectList != null && selectList.length < 1) {
+	if (selectList != null && selectList.length < 1) {
 		ElMessage.warning(i18n.t("alertselectYourFirstToOperateOnline"));
 		return;
 	}
@@ -299,9 +300,9 @@ const newSalesagentbrokerageInfo = cEform => {
 				return;
 			}
 			let str = dform.usercode;
-			if(str){
-				dform.agentcode = str.substring(0,str.indexOf("▁"));
-				dform.agentdesc = str.substring(str.indexOf("▁")+2,str.length);
+			if (str) {
+				dform.agentcode = str.substring(0, str.indexOf("▁"));
+				dform.agentdesc = str.substring(str.indexOf("▁") + 2, str.length);
 				saveSalesagentbrokerageInfo(dform);
 				dialogFormVisible.value = false;
 			}
@@ -846,7 +847,7 @@ const linkDetail = (column, row) => {
 		if (row.salesbrokerageid) {
 			condobj.cond = {
 				salesbrokerageid: row.salesbrokerageid,
-				auditflag:"0"
+				auditflag: "0"
 			};
 			condobj.dialogShow_salesagentbrokerageNew = true;
 		}
@@ -858,7 +859,7 @@ const linkDetailquey = (column, row) => {
 		if (row.salesbrokerageid) {
 			condobj.cond = {
 				salesbrokerageid: row.salesbrokerageid,
-				readOnly:"1"
+				readOnly: "1"
 			};
 			condobj.dialogShow_salesagentbrokerageReadOnly = true;
 		}

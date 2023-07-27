@@ -1,92 +1,74 @@
 <template>
-	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card">
-			<el-tab-pane
-				class="main-tab-pane-content all-height flex-column"
-				name="cinfos"
-				:label="$t('menubasequotationtemplate')"
-				title1="报价模板"
-			>
-				<zTable
-					ref="grid_appointmentInfos"
-					:tableList="atableList"
-					@link-detailbg="linkDetailquey"
-					@workflow-status="workflowStatus"
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
+		<zTable ref="grid_appointmentInfos" :tableList="atableList" @link-detailbg="linkDetailquey" @workflow-status="workflowStatus">
+			<template #tableHeaderLleft="scope">
+				<el-button size="small" type="primary" icon="Edit" plain @click="dialogShow('dialogShow_appointmentTemplate')">{{
+					$t("SRM_add")
+				}}</el-button>
+				<el-button size="small" type="danger" icon="Delete" plain @click="templateDelete(scope.selectList)">{{
+					$t("SRM_delete")
+				}}</el-button>
+			</template>
+			<!-- 表格操作 -->
+			<template #operation="scope">
+				<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
+					{{ $t("menubasequotationorderdownload") }}
+				</el-button>
+			</template>
+		</zTable>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
+			<appointmentNew :condobj="condobj"></appointmentNew>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.dialogShow_appointmentTemplate"
+			:title="$t('menubasequotationtemplate')"
+			@close="appointmentNewclose"
+			width="95%"
+		>
+			<appointmentTemplate :condobj="condobj"></appointmentTemplate>
+		</ZDialog>
+
+		<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item
+					:label="$t('menubaseCertificationType') + ':'"
+					v-if="certificationshow"
+					title1="认证类型"
+					prop="attestation"
+					label-width="140px"
 				>
-					<template #tableHeaderLleft="scope">
-						<el-button size="small" type="primary" icon="Edit" plain @click="dialogShow('dialogShow_appointmentTemplate')">{{
-							$t("SRM_add")
-						}}</el-button>
-						<el-button
-							size="small"
-							type="danger"
-							icon="Delete"
-							plain
-							@click="templateDelete(scope.selectList)"
-							>{{ $t("SRM_delete") }}</el-button
-						>
-					</template>
-					<!-- 表格操作 -->
-					<template #operation="scope">
-						<el-button type="primary" link icon="Download" @click="editAddress(scope.row)">
-							{{ $t("menubasequotationorderdownload") }}
-						</el-button>
-					</template>
-				</zTable>
-			</el-tab-pane>
-		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
-				<appointmentNew :condobj="condobj"></appointmentNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentTemplate" :title="$t('menubasequotationtemplate')" @close="appointmentNewclose" width="95%">
-				<appointmentTemplate :condobj="condobj"></appointmentTemplate>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item
-						:label="$t('menubaseCertificationType') + ':'"
-						v-if="certificationshow"
-						title1="认证类型"
-						prop="attestation"
-						label-width="140px"
-					>
-						<el-select v-model="attestation" filterable placeholder="Select">
-							<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+					<el-select v-model="attestation" filterable placeholder="Select">
+						<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -107,7 +89,6 @@ import appointmentTemplate from "@/views/appointmentManage/appointmentApplicatio
 const i18n = useI18n();
 const grid_appointmentInfos = ref();
 
-const tableTabsValue = ref("cinfos");
 const globalStore = GlobalStore();
 let attestation = ref("01"); //下载报价单认证类型默认值
 let certificationshow = ref(false); //认证类型默认不显示
@@ -195,9 +176,6 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
-//dialog的是否显示
-const dialogShow_appointmentTemplate = ref(false);
-const dialogShow_appointmentNew = ref(false);
 
 //页面初始化渲染完成执行
 onMounted(() => {
@@ -508,17 +486,16 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
-const templateDelete = (selectList) => {
+const templateDelete = selectList => {
 	if (selectList.length > 0) {
-		addappointmentNow("1",selectList);
+		addappointmentNow("1", selectList);
 	}
 };
-
 
 const appointmentNewclose = () => {
 	if (condobj && condobj.objlist) {
 		if (condobj.objlist.length > 0) {
-			addappointmentNow("0",condobj.objlist);
+			addappointmentNow("0", condobj.objlist);
 		}
 	}
 };
@@ -588,10 +565,4 @@ const linkDetailquey = (column, row) => {
 };
 </script>
 
-<style scoped lang="scss">
-:deep(.el-tabs__content) {
-	flex: 1;
-	display: flex;
-	flex-direction: column;
-}
-</style>
+<style scoped lang="scss"></style>

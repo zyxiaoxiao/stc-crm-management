@@ -7,7 +7,13 @@
 			type="border-card"
 			@tab-change="tabChange"
 		>
-			<el-tab-pane class="flex-column" style="overflow: auto" title1="BM提佣申请" :label="$t('panelcolumnbm_commission_application')" name="infos">
+			<el-tab-pane
+				class="flex-column"
+				style="overflow: auto"
+				title1="BM提佣申请"
+				:label="$t('panelcolumnbm_commission_application')"
+				name="infos"
+			>
 				<div style="margin: 10px; text-align: left">
 					<el-button
 						size="small"
@@ -50,14 +56,8 @@
 						>{{ $t("menu_reject2Submitor") }}</el-button
 					>
 				</div>
-				<div style="overflow: auto;flex: 1.6;"  >
-					<el-form
-						style="margin: 0px 15px;"
-						label-position="right"
-						label-width="120px"
-						:model="sformData"
-						ref="ruleFormRef"
-					>
+				<div style="overflow: auto; flex: 1.6">
+					<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="ruleFormRef">
 						<el-divider title1="个人部分" content-position="left">{{ $t("panelcolumnpersonal_part") }}</el-divider>
 						<el-row class="main-align-items-center">
 							<el-col :span="6">
@@ -178,7 +178,7 @@
 					</el-form>
 				</div>
 				<el-divider style="margin: 1px 0"></el-divider>
-				<div class="flex-column" style="flex: 1; overflow: auto; ">
+				<div class="flex-column" style="flex: 1; overflow: auto">
 					<zTable ref="grid_gradeInfos" width="700px" :tableList="tableListSales" @link-detailbg="linkDetail"> </zTable>
 				</div>
 			</el-tab-pane>
@@ -193,11 +193,10 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesCommissionReadOnly" @close="closeSalesCommissionReadOnly" width="95%">
-				<salesCommissionReadOnly :condobj="condobj"></salesCommissionReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow_salesCommissionReadOnly" @close="closeSalesCommissionReadOnly" width="95%">
+			<salesCommissionReadOnly :condobj="condobj"></salesCommissionReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -685,5 +684,4 @@ const tableListCertification = reactive({
 		font-weight: bold;
 	}
 }
-
 </style>

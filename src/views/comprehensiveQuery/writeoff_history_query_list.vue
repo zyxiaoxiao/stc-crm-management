@@ -16,16 +16,13 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" width="95%">
-				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" width="95%">
+			<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -92,7 +89,7 @@ const qtableList = reactive({
 			type: "Link",
 			width: "160"
 		},
-        {
+		{
 			title: "发票编号",
 			label: "itemtitleinvoiceinvoicecode",
 			prop: "invoiceno",
@@ -214,7 +211,7 @@ const qtableList = reactive({
 			label: "auditcommontime",
 			prop: "audittime",
 			type: "Date",
-            format:"YYYY-MM-DD",
+			format: "YYYY-MM-DD",
 			width: "160"
 		},
 		{
@@ -250,7 +247,7 @@ const qtableList = reactive({
 			label: "i18ncrmcontractReturnedTime",
 			prop: "retrievetime",
 			type: "Date",
-            format:"YYYY-MM-DD",
+			format: "YYYY-MM-DD",
 			width: "160"
 		},
 		{
@@ -280,7 +277,7 @@ const qtableList = reactive({
 			label: "i18ncrmcontractSubmitTime",
 			prop: "submittime",
 			type: "Date",
-            format:"YYYY-MM-DD",
+			format: "YYYY-MM-DD",
 			width: "150"
 		},
 		{
@@ -327,8 +324,7 @@ const linkDetailquey = (column, row) => {
 };
 
 //切换tab时触发
-const tabChange = targetName => {
-};
+const tabChange = targetName => {};
 </script>
 
 <style scoped lang="scss">

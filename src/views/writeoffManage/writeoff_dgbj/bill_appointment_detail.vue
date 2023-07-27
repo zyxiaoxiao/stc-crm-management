@@ -30,7 +30,7 @@
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
-								<el-form-item :label="$t('billinfoamountofmoneypanel') + ':'" title1="委托检测总费用">
+								<el-form-item :label="$t('paymentnoticemoneypanel') + ':'" title1="委托检测总费用">
 									<el-input type="text" clearable v-model="sformData.totalmoney" class="input-with-select" readonly> </el-input>
 								</el-form-item>
 							</el-col>
@@ -79,9 +79,15 @@
 								@click="dialogShow('dialogShow_selectBillappointmentdetailQuery')"
 								>{{ $t("SRM_add") }}</el-button
 							>
-							<el-button size="small" class="button_show" type="primary" icon="Document" plain @click="saveBillAppointment_handler">{{
-								$t("menu_save")
-							}}</el-button>
+							<el-button
+								size="small"
+								class="button_show"
+								type="primary"
+								icon="Document"
+								plain
+								@click="saveBillAppointment_handler"
+								>{{ $t("menu_save") }}</el-button
+							>
 							<el-button
 								size="small"
 								type="danger"
@@ -96,11 +102,9 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_selectBillappointmentdetailQuery" @close="billdialogclose" width="95%">
-				<billappointmentdetailQuery :condobj="condobj"></billappointmentdetailQuery>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="condobj.dialogShow_selectBillappointmentdetailQuery" @close="billdialogclose" width="95%">
+			<billappointmentdetailQuery :condobj="condobj"></billappointmentdetailQuery>
+		</ZDialog>
 	</div>
 </template>
 
@@ -148,29 +152,28 @@ const sformData = reactive({
 
 const tableTabsValue = ref("writeoffInfo");
 
-
 //保存税票申请单信息
 const saveBillAppointment_handler = async () => {
 	if (tableListbills.tableData.length < 1) {
 		return;
 	}
-	let currencybilltotalmoney=0;
-	for(let b of tableListbills.tableData){
-        if(!b.currencybilletoappoint || isNaN(b.currencybilletoappoint)){
-			ElMessage.warning(i18n.t("Message_TaxTicketTnformation"));
-		    return;
+	let currencybilltotalmoney = 0;
+	for (let b of tableListbills.tableData) {
+		if (!b.currencybilletoappoint || isNaN(b.currencybilletoappoint)) {
+			ElMessage.warning(i18n.t("Message_CorrectMoney"));
+			return;
 		}
-		if(parseFloat(b.currencybilletoappoint) < 0){
-            ElMessage.warning(i18n.t("Message_EnterMoney"));
-		    return;
+		if (parseFloat(b.currencybilletoappoint) < 0) {
+			ElMessage.warning(i18n.t("Message_EnterMoney"));
+			return;
 		}
-		currencybilltotalmoney =  currencybilltotalmoney + parseFloat(b.currencybilletoappoint);
+		currencybilltotalmoney = currencybilltotalmoney + parseFloat(b.currencybilletoappoint);
 	}
 	let jsonString = {
-		currencybilltotalmoney: currencybilltotalmoney,
 		billappointmentInfos: tableListbills.tableData
 	};
 	let params = {
+		currencybilltotalmoney: currencybilltotalmoney,
 		jsonString: JSON.stringify(jsonString)
 	};
 	const res = await http.post("/crm/billappointment/billappointment!updateBillappointmentInfos.action", qs.stringify(params));
@@ -183,12 +186,12 @@ const saveBillAppointment_handler = async () => {
 //删除到账信息
 const billappointmentInfosDelete = async selectList => {
 	let editList = grid_billappointmentInfos.value.getEditSelectList(); //编辑后的数据
-	if(editList != null && editList.length > 0){
-        for(let e of editList){
-            for(let s of selectList){
-				if(e.billid == s.billid){
+	if (editList != null && editList.length > 0) {
+		for (let e of editList) {
+			for (let s of selectList) {
+				if (e.billid == s.billid) {
 					ElMessage.warning(i18n.t("Message_SaveCurrenInfo"));
-		            return;
+					return;
 				}
 			}
 		}
@@ -201,6 +204,7 @@ const billappointmentInfosDelete = async selectList => {
 	};
 	const res = await http.post("/crm/billappointment/billappointment!deleteBillappointmentInfo.action", qs.stringify(params));
 	if (res) {
+		getappointmentInfo({ wbid: v_wbid });
 		await grid_billappointmentInfos.value.getTableList();
 	}
 };
@@ -254,7 +258,7 @@ const billdialogclose = async () => {
 						currencies: obj.currencies,
 						exchangerate: obj.exchangerate,
 						currencybillmoney: obj.currencyamount,
-						foldertotalmoney: parseFloat(obj.currencyamount).toFixed(2),
+						foldertotalmoney: parseFloat(parseFloat(obj.currencyamount).toFixed(2)),
 						currencybillwritesum: obj.currencywritesum,
 						currencyretreatmoney: obj.currencyretreatmoney,
 						currencybillbalance: obj.currencybalance,
@@ -269,19 +273,32 @@ const billdialogclose = async () => {
 						let params = {
 							jsonString: JSON.stringify({ billappointmentInfos: vdata })
 						};
-						const res = await http.post(
-							"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
-							qs.stringify(params)
-						);
-						if (res) {
-							let msg = res.errorMsg;
-							if (msg == "fail") {
-								//存在正在销账的到账单
-								ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));
-								return false;
+						try {
+							const res = await http.post(
+								"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
+								qs.stringify(params)
+							);
+							if (res) {
+								getappointmentInfo({ wbid: v_wbid });
+								//更新到账数据
+								grid_billappointmentInfos.value.getTableList();
 							}
-							//更新到账数据
-							grid_billappointmentInfos.value.getTableList();
+						} catch (error) {
+							if (error.response) {
+								let data = error.response.data;
+								if (data) {
+									if (data.indexOf("fail") >= 0) {
+										ElMessage.warning(i18n.t("Message_Samebillnotaudit"));
+										return;
+									} else if (data.indexOf("many") >= 0) {
+										ElMessage.warning(i18n.t("Message_OutOfRangMoney"));
+										return;
+									} else {
+										ElMessage.warning(i18n.t("Message_OperationFailure"));
+										return;
+									}
+								}
+							}
 						}
 					} else {
 						let cond = {
@@ -312,7 +329,7 @@ const billdialogclose = async () => {
 								billbalance: obj.balance,
 								currencies: obj.currencies,
 								exchangerate: obj.exchangerate,
-								foldertotalmoney: parseFloat(obj.currencyamount).toFixed(2),
+								foldertotalmoney: parseFloat(parseFloat(obj.currencyamount).toFixed(2)),
 								currencybillmoney: billappointmentInfo.currencybillmoney,
 								currencybillwritesum: billappointmentInfo.currencybillwritesum,
 								currencyretreatmoney: billappointmentInfo.currencyretreatmoney,
@@ -325,19 +342,32 @@ const billdialogclose = async () => {
 							let paramsto = {
 								jsonString: JSON.stringify({ billappointmentInfos: calculatorvdata })
 							};
-							const resto = await http.post(
-								"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
-								qs.stringify(paramsto)
-							);
-							if (resto) {
-								let msg = resto.errorMsg;
-								if (msg == "fail") {
-									//存在正在销账的到账单
-									ElMessage.warning(i18n.t("i18nmsg_bgfailureforbill"));
-									return false;
+							try {
+								const resto = await http.post(
+									"/crm/billappointment/billappointment!insertBillappointmentInfos.action",
+									qs.stringify(paramsto)
+								);
+								if (resto) {
+									getappointmentInfo({ wbid: v_wbid });
+									//更新到账数据
+									grid_billappointmentInfos.value.getTableList();
 								}
-								//更新到账数据
-								grid_billappointmentInfos.value.getTableList();
+							} catch (error) {
+								if (error.response) {
+									let data = error.response.data;
+									if (data) {
+										if (data.indexOf("fail") >= 0) {
+											ElMessage.warning(i18n.t("Message_Samebillnotaudit"));
+											return;
+										} else if (data.indexOf("many") >= 0) {
+											ElMessage.warning(i18n.t("Message_OutOfRangMoney"));
+											return;
+										} else {
+											ElMessage.warning(i18n.t("Message_OperationFailure"));
+											return;
+										}
+									}
+								}
 							}
 						}
 					}
@@ -393,14 +423,14 @@ const tableListbills = reactive({
 			label: "billinfoaccountcodepanel",
 			prop: "billcode",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "客户号",
 			label: "itemtitleinvoicecorpno",
 			prop: "corpcode",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "客户名称",
@@ -428,14 +458,14 @@ const tableListbills = reactive({
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账单总金额",
 			label: "columnbilldrawbackamountmoney",
 			prop: "foldertotalmoney",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "币种",
@@ -463,14 +493,14 @@ const tableListbills = reactive({
 			label: "columnbillcurrency1havawriteoffs",
 			prop: "currencybillwritesum",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种退款金额",
 			label: "columncurrency1drawbackrefundmoney",
 			prop: "currencyretreatmoney",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种可冲销金额",
@@ -484,7 +514,7 @@ const tableListbills = reactive({
 			label: "columnwriteoffCanWriteOffstotal",
 			prop: "currencybilletoappointsum",
 			type: "Input",
-			width: "160"
+			width: "140"
 		},
 		{
 			title: "到账转申请单币种本次冲销金额",
@@ -501,7 +531,8 @@ const tableListbills = reactive({
 			label: "satisfactioncolumnmstitle",
 			prop: "remark",
 			type: "Input",
-			width: "160"
+			width: "140",
+			edit: true
 		},
 		{
 			title: "到账单编码",

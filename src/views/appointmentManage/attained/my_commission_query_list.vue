@@ -1,6 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="cinfos"
@@ -44,16 +44,14 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_commissionreadOnly" width="95%">
-				<commissionreadOnly :condobj="condobj"></commissionreadOnly>
-			</ZDialog>
-		</div>		
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_commissionreadOnly" width="95%">
+			<commissionreadOnly :condobj="condobj"></commissionreadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -74,7 +72,6 @@ const globalStore = GlobalStore();
 let userInfo = globalStore.userInfo;
 const tableTabsValue = ref("cinfos");
 
-
 //审核记录
 const dialogShow_audit = ref(false);
 const auditList = reactive({
@@ -89,7 +86,6 @@ const condobj = reactive({
 	objlist: {}
 });
 
-
 //页面初始化渲染完成执行
 onMounted(() => {
 	grid_brokerageInfos.value.getTableList();
@@ -103,8 +99,8 @@ const atableList = reactive({
 		url: "/crm/brokerage/brokerage!selectBrokerageInfoByCond.action",
 		root: "brokerageInfos",
 		baseParams: {
-			'cond.auditflag':'0',
-			'cond.recordercode':userInfo.usercode
+			"cond.auditflag": "0",
+			"cond.recordercode": userInfo.usercode
 		}
 	},
 	//快捷查询
@@ -346,7 +342,7 @@ const htableList = reactive({
 		root: "brokerageInfos",
 		baseParams: {
 			"cond.auditflag": "1,2",
-            'cond.recordercode':userInfo.usercode
+			"cond.recordercode": userInfo.usercode
 		}
 	},
 	//快捷查询
@@ -587,10 +583,10 @@ const automatictableList = reactive({
 		url: "/crm/folders/folders!selectFoldersInfoByBrokerage.action",
 		root: "foldersInfos",
 		baseParams: {
-			'cond.salesmancode':userInfo.usercode,
-			'cond.automatic':'Y',
-			'cond.rightFlag':'1',
-			'cond.autobrokerageflag':'1'
+			"cond.salesmancode": userInfo.usercode,
+			"cond.automatic": "Y",
+			"cond.rightFlag": "1",
+			"cond.autobrokerageflag": "1"
 		}
 	},
 	//快捷查询
@@ -765,7 +761,6 @@ const workflowStatus = (column, row) => {
 	auditList.dialogShow_audit = true;
 };
 
-
 //链接详细信息
 const linkDetailquey = (column, row) => {
 	if (column == "brokerageid" && row.brokerageid) {
@@ -775,7 +770,7 @@ const linkDetailquey = (column, row) => {
 				brokerageid: brokerageid
 			};
 			condobj.dialogShow_commissionreadOnly = true;
-		} 				
+		}
 	}
 };
 

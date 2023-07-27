@@ -108,12 +108,12 @@
 								<el-input type="textarea" v-model="sformData.remark" :disabled="isdisabled"></el-input>
 							</el-form-item>
 						</el-col>
-					</el-row>					
+					</el-row>
 				</el-form>
-                <el-divider style="margin: 1px 0;"></el-divider>
-				<div class="flex-column" style="flex: 1; overflow: auto;height: 350px;">
-					<zTable ref="grid_gradeInfos" width="700px" :tableList="tableListSales" > </zTable>
-				</div>                
+				<el-divider style="margin: 1px 0"></el-divider>
+				<div class="flex-column" style="flex: 1; overflow: auto; height: 350px">
+					<zTable ref="grid_gradeInfos" width="700px" :tableList="tableListSales"> </zTable>
+				</div>
 			</el-tab-pane>
 			<el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="query">
 				<div class="flex-column" style="flex: 1; overflow: auto">
@@ -121,15 +121,11 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		
-	</div>
-	<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" :title="$t('titleExpenditureInformation')" width="95%">
-				<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
-			</ZDialog>
+		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" :title="$t('titleExpenditureInformation')" width="95%">
+			<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
+		</ZDialog>
 	</div>
 </template>
-
 
 <script setup>
 import { h, ref, reactive, onMounted } from "vue";
@@ -142,7 +138,6 @@ import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
 import expendituredetailReadonly from "@/views/appointmentManage/attained/expenditure_detail_readonly.vue";
-
 
 const i18n = useI18n();
 // 父组件传入的参数
@@ -167,7 +162,7 @@ const sformData = reactive({
 	salesexpenses: "",
 	taxmoney: "",
 	badmoney: "",
-    dept: "",
+	dept: "",
 	remark: "",
 	recordercode: "",
 	recorderdesc: "",
@@ -175,7 +170,7 @@ const sformData = reactive({
 	brokeragemonth: "",
 
 	agentno: "",
-    auditorcode: "",
+	auditorcode: "",
 	auditordesc: "",
 	audittime: "",
 	submitcorp: "",
@@ -189,7 +184,7 @@ const sformData = reactive({
 	errormsg: "",
 	submittime: "",
 	workflowid: "",
-	auditflag: "",
+	auditflag: ""
 });
 
 const tableTabsValue = ref("infos");
@@ -198,17 +193,20 @@ const tableTabsValue = ref("infos");
 const linkDetailquey = (column, row) => {
 	if (column == "folderno" && row.id) {
 		condobj.cond = {
-				id: row.id
-			};
-		condobj.dialogShow_appointmentReadonly = true;		
+			id: row.id
+		};
+		condobj.dialogShow_appointmentReadonly = true;
 	}
 };
 //保存销售代理佣金
-let saveSalesAgentBrokerage = async ()=> {
+let saveSalesAgentBrokerage = async () => {
 	let params = {
-		jsonString: JSON.stringify({salesagentbrokerageInfo:sformData})
+		jsonString: JSON.stringify({ salesagentbrokerageInfo: sformData })
 	};
-	const res = await http.post("/crm/salesbrokerage/salesagentbrokerage!updateSalesagentbrokerageInfo.action", qs.stringify(params));
+	const res = await http.post(
+		"/crm/salesbrokerage/salesagentbrokerage!updateSalesagentbrokerageInfo.action",
+		qs.stringify(params)
+	);
 	if (res) {
 		for (let key in res.salesagentbrokerageInfo[0]) {
 			//判定 salesagentbrokerageInfo 的key 是否存在 sformData 的key
@@ -218,15 +216,15 @@ let saveSalesAgentBrokerage = async ()=> {
 };
 
 //提交销售代理佣金
-let submitSalesAgentBrokerage = async ()=> {
-	if(!sformData.salesbrokerageid){
+let submitSalesAgentBrokerage = async () => {
+	if (!sformData.salesbrokerageid) {
 		ElMessage.warning(i18n.t("Message_SaveCurrenInfo"));
 		return;
 	}
 	let salesagentbrokerageInfos = [];
 	salesagentbrokerageInfos.push(sformData);
 	let params = {
-		jsonString: JSON.stringify({salesagentbrokerageInfos:salesagentbrokerageInfos})
+		jsonString: JSON.stringify({ salesagentbrokerageInfos: salesagentbrokerageInfos })
 	};
 	const res = await http.post("/crm/salesbrokerage/salesagentbrokerage!submit.action", qs.stringify(params));
 	if (res) {
@@ -261,22 +259,22 @@ const approveSalesAgentBrokerageInfo = code => {
 		confirmButtonText: i18n.t("menu_ok"),
 		cancelButtonText: i18n.t("menu_cancel")
 	}).then(async () => {
-		let cond = {'opinion':approveValue.value};
+		let cond = { opinion: approveValue.value };
 		let salesagentbrokerageInfos = [];
 		salesagentbrokerageInfos.push(sformData);
 		let jsonString = {
-			"salesagentbrokerageInfos":salesagentbrokerageInfos,
-			'cond':cond
+			salesagentbrokerageInfos: salesagentbrokerageInfos,
+			cond: cond
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
 		let url = "";
-		if(code == "-1"){
+		if (code == "-1") {
 			url = "/crm/salesbrokerage/salesagentbrokerage!reject.action";
-		}else if(code == "-2"){
+		} else if (code == "-2") {
 			url = "/crm/salesbrokerage/salesagentbrokerage!reject2Submitor.action";
-		}else{
+		} else {
 			url = "/crm/salesbrokerage/salesagentbrokerage!approve.action";
 		}
 		const res = await http.post(url, qs.stringify(params)); // post 请求携带 表单 参数  ==>  application/x-www-form-urlencoded
@@ -292,9 +290,12 @@ const approveSalesAgentBrokerageInfo = code => {
 //查询销售代理佣金
 let getbrokerageInfo = async obj => {
 	let params = {
-		jsonString: JSON.stringify({salesagentbrokerageInfo:obj})
+		jsonString: JSON.stringify({ salesagentbrokerageInfo: obj })
 	};
-	const res = await http.post("/crm/salesbrokerage/salesagentbrokerage!selectSalesagentbrokerageInfoById.action", qs.stringify(params));
+	const res = await http.post(
+		"/crm/salesbrokerage/salesagentbrokerage!selectSalesagentbrokerageInfoById.action",
+		qs.stringify(params)
+	);
 	if (res) {
 		for (let key in res.salesagentbrokerageInfo[0]) {
 			//判定 salesagentbrokerageInfo 的key 是否存在 sformData 的key
@@ -304,24 +305,24 @@ let getbrokerageInfo = async obj => {
 };
 //切换tab时触发
 const tabChange = TabPaneName => {
-    let salesbrokerageid = sformData.salesbrokerageid;
+	let salesbrokerageid = sformData.salesbrokerageid;
 	if (TabPaneName == "infos") {
 		//提佣申请子页面
-        if(salesbrokerageid){
-            getbrokerageInfo({"salesbrokerageid":salesbrokerageid});
-            //传参后会自动调用接口刷新
+		if (salesbrokerageid) {
+			getbrokerageInfo({ salesbrokerageid: salesbrokerageid });
+			//传参后会自动调用接口刷新
 			tableListSales.httpAttribute.baseParams["cond.salesbrokerageid"] = salesbrokerageid;
 			grid_gradeInfos.value.reuseTableList();
-        }
+		}
 	} else if (TabPaneName == "query") {
 		//销售开支查询子页面
-        if(salesbrokerageid){
-            //传参后会自动调用接口刷新
+		if (salesbrokerageid) {
+			//传参后会自动调用接口刷新
 			tableListExpenditure.httpAttribute.baseParams["cond.sbrid"] = salesbrokerageid;
-            tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = sformData.brokeragemonth;
+			tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = sformData.brokeragemonth;
 			grid_expenditureInfos.value.reuseTableList();
-        }
-	} 
+		}
+	}
 };
 
 //页面跳转
@@ -329,40 +330,39 @@ const dialogShow = data => {
 	if (data == "dialogShow_customerListQuery") {
 		dialogShow_customerListQuery.value = true;
 	}
-
 };
 onMounted(() => {
 	//getValue();
 	if (props.condobj) {
 		let salesbrokerageid = props.condobj.cond.salesbrokerageid; //提佣编号
-        let auditflag = props.condobj.cond.auditflag; //审核状态
+		let auditflag = props.condobj.cond.auditflag; //审核状态
 		let v_readOnly = props.condobj.cond.readOnly; //只读状态
-		if(auditflag=='0'){
-            saveShow.value = true;
+		if (auditflag == "0") {
+			saveShow.value = true;
 			submitShow.value = true;
 			isdisabled.value = false;
-		}else{
+		} else {
 			approveShow.value = true;
 		}
-		if(v_readOnly == "1"){
+		if (v_readOnly == "1") {
 			saveShow.value = false;
 			submitShow.value = false;
-            approveShow.value = false;
+			approveShow.value = false;
 		}
-        if(salesbrokerageid){
-            getbrokerageInfo({"salesbrokerageid":salesbrokerageid});
-            //传参后会自动调用接口刷新
+		if (salesbrokerageid) {
+			getbrokerageInfo({ salesbrokerageid: salesbrokerageid });
+			//传参后会自动调用接口刷新
 			tableListSales.httpAttribute.baseParams["cond.sbrid"] = salesbrokerageid;
 			grid_gradeInfos.value.reuseTableList();
-        }
-    }
+		}
+	}
 });
 
 //表格销售提佣申请单
 const grid_gradeInfos = ref();
 const tableListSales = reactive({
 	id: "/appointmentManage/attained/sales_agent_commission_detail.vue_grid_gradeInfos",
-    tableToolbar: {
+	tableToolbar: {
 		right: false
 	},
 	//请求属性设置
@@ -390,7 +390,7 @@ const tableListSales = reactive({
 			prop: "folderno",
 			type: "Input",
 			width: "140"
-		},		
+		},
 		{
 			title: "客户号",
 			label: "fieldcolumncustomercode",
@@ -481,7 +481,7 @@ const tableListExpenditure = reactive({
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectExpenditureInfoForBrokerage.action",
 		root: "expenditureInfos",
-		baseParams: {'cond.auditflag':'2'}
+		baseParams: { "cond.auditflag": "2" }
 	},
 	//表格表头
 	tableColumns: [
@@ -567,7 +567,7 @@ const tableListExpenditure = reactive({
 			prop: "recorderdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "创建时间",
 			label: "itemtitlewlbmdesc10",
@@ -588,14 +588,14 @@ const tableListExpenditure = reactive({
 			prop: "applicantdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "申请日期",
 			label: "i18ncrmcontractApplicationDate",
 			prop: "applicanttime",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "部门编码",
 			label: "部门编码",
@@ -744,8 +744,6 @@ const tableListExpenditure = reactive({
 	// 表格数据
 	tableData: []
 });
-
-
 </script>
 
 <style lang="scss">
@@ -755,4 +753,3 @@ const tableListExpenditure = reactive({
 	transition: 0.3s;
 }
 </style>
-

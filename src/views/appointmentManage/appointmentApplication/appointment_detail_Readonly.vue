@@ -300,11 +300,9 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 查看报价单信息 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="appointmentdetailReadonlyList.dialogShow" title="" width="95%">
-				<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="appointmentdetailReadonlyList.dialogShow" title="" width="95%">
+			<appointmentdetailReadonly :condobj="appointmentdetailReadonlyList"></appointmentdetailReadonly>
+		</ZDialog>
 	</div>
 </template>
 

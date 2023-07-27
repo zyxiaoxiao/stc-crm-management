@@ -171,16 +171,18 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
-				<customerQuery :condobj="condobj"></customerQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_accountQuery" :title="$t('columnmonthlyClientselectAccount')" @close="dialogclose" width="95%">
-				<accountQuery :condobj="condobj"></accountQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
+			<customerQuery :condobj="condobj"></customerQuery>
+		</ZDialog>
+		<ZDialog
+			v-model="condobj.dialogShow_accountQuery"
+			:title="$t('columnmonthlyClientselectAccount')"
+			@close="dialogclose"
+			width="95%"
+		>
+			<accountQuery :condobj="condobj"></accountQuery>
+		</ZDialog>
 	</div>
 </template>
 

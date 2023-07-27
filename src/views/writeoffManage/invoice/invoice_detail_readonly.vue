@@ -25,10 +25,16 @@
 					<el-button size="small" type="danger" icon="Close" v-show="buttonShow" plain @click="approveInvoiceInfos('-2')">{{
 						$t("menu_reject2Submitor")
 					}}</el-button>
-					<el-button size="small" v-show="fileShow" type="primary" icon="UploadFilled" plain @click="dialogShow('dialogShow_invoiceUploadNew')">{{
-						$t("UPLOAD_uploadFile")
-					}}</el-button>
-					<el-button size="small" type="danger" icon="Close" v-show="fileShow" plain @click="approveInvoiceInfos('-2')">{{
+					<el-button
+						size="small"
+						v-show="fileShow"
+						type="primary"
+						icon="UploadFilled"
+						plain
+						@click="dialogShow('dialogShow_invoiceUploadNew')"
+						>{{ $t("UPLOAD_uploadFile") }}</el-button
+					>
+					<el-button size="small" type="danger" icon="Close" v-show="fileShow" plain @click="deleteInvoiceUpload()">{{
 						$t("UPLOAD_deleteFile")
 					}}</el-button>
 				</div>
@@ -154,19 +160,11 @@
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-	</div>
-	<div v-dialogStretching>
 		<el-dialog v-model="condobj.dialogShow_invoicePDFDownloadFile" width="85%" :title="$t('DOWNLOAD_download')">
 			<iframe :src="downloadUrl" style="width: 100%; height: 440px"></iframe>
 		</el-dialog>
-	</div>
-	<div v-dialogStretching>
-		<ZDialog
-			v-model="condobj.uploadnewDialogShow"
-			@close="dialogclose"
-			:title="$t('itemtitleyingjiupfile')"
-			width="50%"
-		>
+
+		<ZDialog v-model="condobj.uploadnewDialogShow" @close="dialogclose" :title="$t('itemtitleyingjiupfile')" width="50%">
 			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
 		</ZDialog>
 	</div>
@@ -186,7 +184,6 @@ import { GlobalStore } from "/src/store/globalStore.js";
 import ZDialog from "/src/components/ZDialog.vue";
 //附件上传页面
 import uploadnewQuery from "@/views/writeoffManage/invoice/selectUploadnew.vue";
-import moment from "moment";
 const i18n = useI18n();
 // 父组件传入的参数
 const props = defineProps({
@@ -202,10 +199,6 @@ let fileShow = ref(false); //上传删除附件按钮不可显示
 let downloadUrl = ref(""); //文件路径
 const globalStore = GlobalStore();
 let userInfo = globalStore.userInfo;
-//let data = new Date().toLocaleString();
-//data = data.substring(0, data.indexOf(" "));
-
-//let idate = moment(new Date(data)).format("YYYY-MM-DD");
 //税票信息初始化信息
 const sformData = reactive({
 	taxinvoicecode: "",
@@ -259,7 +252,23 @@ const downloadfiles = (column, row) => {
 
 const tableTabsValue = ref("invoiceinfo");
 
-let uploadFileInfo = () => {};
+//删除上传的电子税票
+let deleteInvoiceUpload = async () => {
+	let businessobjectid = sformData.invoiceid; //主键id
+	let filepath = sformData.filepath; //税票上传地址
+	//税票主键id不为空且电子税票有上传记录
+	if (businessobjectid && filepath) {
+		//删除上传的电子税票，保留上传记录。
+		let cond = { businessobjectid: businessobjectid, invoiceid: businessobjectid };
+		let par = {
+			jsonString: JSON.stringify({ cond: cond })
+		};
+		const res = await http.post("/core/uploadnew/upload!deleteUploadFile.action", qs.stringify(par));
+		if (res) {
+			getinvoiceInfo({ invoiceid: businessobjectid });
+		}
+	}
+};
 
 //保存税票信息
 let saveInvoiceInfo = async () => {
@@ -289,18 +298,16 @@ let getInvoiceRoleInfo = async () => {
 	//查询用户是否有权限上传电子水单
 	let cond = { exactrolecode: "m_tax_upload", usercode: userInfo.usercode };
 	let par = {
-		jsonString: JSON.stringify({cond:cond})
+		jsonString: JSON.stringify({ cond: cond })
 	};
 	const res = await http.post("/core/user/user!selectUserRoleInfoByCond.action", qs.stringify(par));
 	if (res && res.userRoleInfos) {
 		//有权限显示上传按钮
-		if(res.userRoleInfos.length > 0){
+		if (res.userRoleInfos.length > 0) {
 			fileShow.value = true;
-		}		
+		}
 	}
 };
-
-//getInvoiceInfo();
 
 //审核税票信息
 const approveInvoiceInfos = code => {
@@ -364,7 +371,7 @@ const approveInvoiceInfos = code => {
 let invoicedownload_renderer = () => {
 	let filename = sformData.invoicefilename; //文件名
 	let filepath = sformData.filepath; //文件路径
-	let serverUrl = globalStore.serverUrl;
+	let serverUrl = globalStore.serverUrl; //服务器地址
 	if (filename == "" || filename == "" || filepath == "" || filepath == "") {
 	} else {
 		downloadUrl.value = serverUrl + "/" + filepath;
@@ -419,28 +426,9 @@ const dialogShow = data => {
 const dialogclose = () => {
 	if (condobj && condobj.cond) {
 		if (condobj.cond.html && condobj.objlist) {
-			if (condobj.cond.html == "dialogShow_customerBuyerQuery") {
-				//选择买家单位名称
-				let obj = condobj.objlist;
-				if (obj.CORPID) {
-					formData.desc2 = obj.CORPID; //客户id
-					formData.desc3 = obj.CORPNO; //客户编码
-					formData.desc1 = obj.CORPDESC; //客户名称
-					if (obj.ISDISCOUNT == "1") {
-						discount = obj.DISCOUNT;
-					} else {
-						discount = "";
-					}
-					formData.desc4 = discount; //折扣
-					formData.desc5 = obj.PAYCONDITION; //付款方式
-					paycondition_rendererto(obj.PAYCONDITION); //付款方式的下拉值从新定义
-				}
-			} else if (condobj.cond.html == "reportDialogShow") {
-				//选择报告抬头
-				let obj = condobj.objlist;
-				if (obj.CORPID) {
-					formData.desc2 = obj.CORPID; //客户id
-				}
+			if (condobj.cond.html == "dialogShow_invoiceUploadNew") {
+				//附件信息上传后关闭
+				getinvoiceInfo({ invoiceid: sformData.invoiceid });
 			}
 		}
 	}
@@ -470,14 +458,19 @@ const tabChange = TabPaneName => {
 onMounted(() => {
 	if (props.condobj) {
 		let invoiceid = props.condobj.cond.invoiceid; //税票主键
-		let rasclientid = props.condobj.cond.rasclientid; //客户编码
+		//let rasclientid = props.condobj.cond.rasclientid; //客户编码
 		let workflowflag = props.condobj.cond.workflowflag; //状态
+		let iauditflag = props.condobj.cond.iauditflag; //显示上传状态
 		if (workflowflag == "5") {
 			isdisabled.value = false;
 			buttonShow.value = true;
 		}
 		if (invoiceid) {
-			getInvoiceRoleInfo();
+			//是否能上传
+			if (iauditflag && iauditflag == "Y") {
+				//是否有上传附件和删除附件的按钮
+				getInvoiceRoleInfo();
+			}
 			getinvoiceInfo({ invoiceid: invoiceid });
 			//传参后会自动调用接口刷新
 			tableListFolders.httpAttribute.baseParams["cond.invoiceid"] = invoiceid;

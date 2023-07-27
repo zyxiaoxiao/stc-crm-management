@@ -1,17 +1,17 @@
 <template>
 	<div class="all-height flex-column">
-		<el-tabs class="all-height flex-column" style="overflow: auto" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs
+			class="all-height flex-column"
+			style="overflow: auto"
+			v-model="tableTabsValue"
+			type="border-card"
+			@tab-change="tabChange"
+		>
 			<el-tab-pane title1="到账信息" :label="$t('billinfoaccountinformationtitle')" name="einfos">
 				<div style="margin: 10px; text-align: left">
-					<el-button
-						size="small"
-						class="button_show"
-						type="primary"
-						icon="Document"
-						plain
-						@click="saveConfirmBillInfo()"
-						>{{ $t("menu_save") }}</el-button
-					>
+					<el-button size="small" class="button_show" type="primary" icon="Document" plain @click="saveConfirmBillInfo()">{{
+						$t("menu_save")
+					}}</el-button>
 				</div>
 				<el-form
 					style="margin: 0px 15px"
@@ -128,25 +128,18 @@
 			<el-tab-pane title1="Invoice" label="Invoice" class="all-height flex-column" name="einvoice">
 				<zTable ref="grid_billInfo2" :tableList="tableListbillInfo2"> </zTable>
 			</el-tab-pane>
-			<el-tab-pane
-				title1="申请单查询"
-				:label="$t('menubaseapplicationorderquery')"
-				class="all-height flex-column"
-				name="efolder"
-			>
+			<el-tab-pane title1="申请单查询" :label="$t('menubaseapplicationorderquery')" class="all-height flex-column" name="efolder">
 				<zTable ref="grid_billInfo3" :tableList="tableListbillInfo3"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
-				<customerQuery :condobj="condobj"></customerQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_accountQuery" @close="dialogclose" width="95%">
-				<accountQuery :condobj="condobj"></accountQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
+			<customerQuery :condobj="condobj"></customerQuery>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_accountQuery" @close="dialogclose" width="95%">
+			<accountQuery :condobj="condobj"></accountQuery>
+		</ZDialog>
 	</div>
 </template>
 
@@ -182,7 +175,7 @@ data = data.substring(0, data.indexOf(" "));
 //到账确认信息初始化信息
 const sformData = reactive({
 	billcode: "",
-	billid:"",
+	billid: "",
 	confirmid: "",
 	currency: "",
 	payer: "",

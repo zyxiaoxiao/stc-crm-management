@@ -11,22 +11,22 @@
 				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="ruleFormRef">
 					<el-divider title1="提佣申请" content-position="left">{{ $t("panelcolumnbrokerageapply") }}</el-divider>
 					<el-row class="main-align-items-center">
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('panelcolumnbrokerageno') + ':'" title1="提佣申请单号">
 								<el-input type="text" v-model="sformData.commissionid" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('columnbasemonth') + ':'" title1="月份">
 								<el-input type="text" v-model="sformData.brokeragemonth" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('basecolumnAR_Total_Amount') + ':'" title1="呆账总金额">
 								<el-input type="text" v-model="sformData.arprice" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('basecolumnTotal_Bad_Amount') + ':'" title1="坏账总金额">
 								<el-input type="text" v-model="sformData.badmoney" readonly></el-input>
 							</el-form-item>
@@ -36,12 +36,12 @@
 								<el-input type="text" v-model="sformData.totalmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('columnwriteoff_application_listCost') + ':'" title1="成本费">
 								<el-input type="text" v-model="sformData.costnum" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('columnbasesalesexpenses_hkd') + ':'" title1="销售开支">
 								<el-input type="text" v-model="sformData.salesexpenses" readonly></el-input>
 							</el-form-item>
@@ -51,7 +51,7 @@
 								<el-input type="text" v-model="sformData.taxmoney" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('panelcolumnbrokeragebase') + ':'" title1="佣金基数">
 								<el-input type="text" v-model="sformData.basemoney" readonly></el-input>
 							</el-form-item>
@@ -91,17 +91,17 @@
 								<el-input type="text" v-model="sformData.brokeragetotal" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('basecolumnis_the_minimum_guaranteed') + ':'" title1="是否保底(Y/N)">
 								<el-input type="text" v-model="sformData.ismonthfloors" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('basecolumncan_i_withdraw_commission') + ':'" title1="单月是否可提佣(Y/N)">
 								<el-input type="text" v-model="sformData.ismonthreach" readonly></el-input>
 							</el-form-item>
 						</el-col>
-                        <el-col :span="6">
+						<el-col :span="6">
 							<el-form-item :label="$t('panelcolumnno_agency_commission_base') + ':'" title1="无代理佣金基数">
 								<el-input type="text" v-model="sformData.noagenttotalprice" readonly></el-input>
 							</el-form-item>
@@ -118,21 +118,33 @@
 					<zTable ref="grid_BaddebtsInfos" :tableList="tableListBaddebts"> </zTable>
 				</div>
 			</el-tab-pane>
-            <el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="expenditure">
+			<el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="expenditure">
 				<div class="flex-column" style="flex: 1; overflow: auto">
 					<zTable ref="grid_expenditureInfos" :tableList="tableListExpenditure" @link-detailbg="linkDetailquey"> </zTable>
 				</div>
 			</el-tab-pane>
-            <el-tab-pane title1="内分包单查询" :label="$t('menuselectInternalSubcontractingOrderQuery')" class="all-height flex-column" name="subcontracting">
+			<el-tab-pane
+				title1="内分包单查询"
+				:label="$t('menuselectInternalSubcontractingOrderQuery')"
+				class="all-height flex-column"
+				name="subcontracting"
+			>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing" > </zTable>
+					<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing"> </zTable>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane title1="呆账追回扣减佣金查询" :label="$t('menubaseBadDebtRecoveryDeductionCommissionInquiry')" class="all-height flex-column" name="baddebt">
+			<el-tab-pane
+				title1="呆账追回扣减佣金查询"
+				:label="$t('menubaseBadDebtRecoveryDeductionCommissionInquiry')"
+				class="all-height flex-column"
+				name="baddebt"
+			>
 				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" model="badformData" ref="badDebtFormRef">
-					<el-divider title1="计算规则" content-position="left">{{ $t("columnwriteoff_application_listCalculationrules") }}</el-divider>
-					<el-row class="main-align-items-center">                        
-                        <el-col :span="24">
+					<el-divider title1="计算规则" content-position="left">{{
+						$t("columnwriteoff_application_listCalculationrules")
+					}}</el-divider>
+					<el-row class="main-align-items-center">
+						<el-col :span="24">
 							<el-form-item :label="$t('basecolumnactual_commission') + ':'" title1="实际佣金">
 								<el-input type="textarea" v-model="badformData.baddebtremark" readonly></el-input>
 							</el-form-item>
@@ -141,12 +153,10 @@
 				</el-form>
 				<el-divider style="margin: 1px 0"></el-divider>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="grid_badDebtCalculationRules" :tableList="tableListBadDebt" > </zTable>
+					<zTable ref="grid_badDebtCalculationRules" :tableList="tableListBadDebt"> </zTable>
 				</div>
 			</el-tab-pane>
-		</el-tabs>		
-	</div>
-	<div v-dialogStretching>
+		</el-tabs>
 		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" :title="$t('titleExpenditureInformation')" width="95%">
 			<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
 		</ZDialog>
@@ -176,7 +186,7 @@ const condobj = reactive({
 
 let stype = getdropSownSelection("sales_type"); //开支类型下拉
 //销售提佣申请初始化信息
-const sformData = reactive({	
+const sformData = reactive({
 	commissionid: "",
 	brokeragemonth: "",
 	arprice: "",
@@ -188,17 +198,17 @@ const sformData = reactive({
 	basemoney: "",
 	taskmoney: "",
 	attainedbonus: "",
-    combinationaward: "",
-    brokerage: "",
-    total_bad_debts: "",
-    badprice: "",
-    brokeragetotal: "",
-    
-    ismonthfloors: "",
+	combinationaward: "",
+	brokerage: "",
+	total_bad_debts: "",
+	badprice: "",
+	brokeragetotal: "",
+
+	ismonthfloors: "",
 	ismonthreach: "",
-    noagenttotalprice: "",
-    refundnum: "",
-    cid: "",
+	noagenttotalprice: "",
+	refundnum: "",
+	cid: "",
 	recordercode: "",
 	recorderdesc: "",
 	recordtime: "",
@@ -208,18 +218,18 @@ const sformData = reactive({
 });
 
 //呆账计算公式
-const badformData = reactive({	
-	baddebtremark: "追回单笔佣金 = ((总价-成本费-坏账-销售开支-增值税)*((总价-呆账)/总价)*佣金点/100)+((总价-成本费-坏账-销售开支-增值税)*(50%呆账收回)*(呆账/总价)*佣金点/100)"
+const badformData = reactive({
+	baddebtremark:
+		"追回单笔佣金 = ((总价-成本费-坏账-销售开支-增值税)*((总价-呆账)/总价)*佣金点/100)+((总价-成本费-坏账-销售开支-增值税)*(50%呆账收回)*(呆账/总价)*佣金点/100)"
 });
 
 const tableTabsValue = ref("infos");
 
-
 //链接详细信息
 const linkDetailquey = (column, row) => {
 	if (column == "folderno" && row.id) {
-		condobj.cond = { id: row.id };//销售开支ID
-		condobj.dialogShow_appointmentReadonly = true;		
+		condobj.cond = { id: row.id }; //销售开支ID
+		condobj.dialogShow_appointmentReadonly = true;
 	}
 };
 
@@ -228,10 +238,7 @@ let getbrokerageInfo = async obj => {
 	let params = {
 		jsonString: JSON.stringify({ commissionInfo: obj })
 	};
-	const res = await http.post(
-		"/crm/commission/commission!selectCommissionInfoById.action",
-		qs.stringify(params)
-	);
+	const res = await http.post("/crm/commission/commission!selectCommissionInfoById.action", qs.stringify(params));
 	if (res) {
 		for (let key in res.commissionInfo[0]) {
 			//判定 commissionInfo 的key 是否存在 sformData 的key
@@ -259,29 +266,28 @@ const tabChange = TabPaneName => {
 		}
 	} else if (TabPaneName == "expenditure") {
 		//销售开支查询子页面
-        if(commissionid){
-            //传参后会自动调用接口刷新
+		if (commissionid) {
+			//传参后会自动调用接口刷新
 			tableListExpenditure.httpAttribute.baseParams["cond.commissionid"] = commissionid;
-            tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = sformData.brokeragemonth;
+			tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = sformData.brokeragemonth;
 			grid_expenditureInfos.value.reuseTableList();
-        }
+		}
 	} else if (TabPaneName == "subcontracting") {
 		//内分包页面
-        if(commissionid){
-            //传参后会自动调用接口刷新
+		if (commissionid) {
+			//传参后会自动调用接口刷新
 			tableListOutsourcing.httpAttribute.baseParams["cond.commissionid"] = commissionid;
 			grid_outsourcingInfos.value.reuseTableList();
-        }
+		}
 	} else if (TabPaneName == "baddebt") {
 		//呆账追回扣减佣金查询
-        if(commissionid){
-            //传参后会自动调用接口刷新
+		if (commissionid) {
+			//传参后会自动调用接口刷新
 			tableListBadDebt.httpAttribute.baseParams["cond.commissionid"] = commissionid;
 			grid_badDebtCalculationRules.value.reuseTableList();
-        }
+		}
 	}
 };
-
 
 onMounted(() => {
 	//getValue();
@@ -336,7 +342,7 @@ const tableListSales = reactive({
 			type: "Input",
 			width: "140"
 		},
-        {
+		{
 			title: "客户号",
 			label: "fieldcolumncustomercode",
 			prop: "rasclientid",
@@ -914,7 +920,7 @@ const tableListOutsourcing = reactive({
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "币种",
 			label: "itemtitleinvoicecurrencies",
 			prop: "modifyerdesc",
@@ -934,7 +940,7 @@ const tableListOutsourcing = reactive({
 			prop: "applicantdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "分包金额（HKD）",
 			label: "appointmentsubcontractingprice_hkd",
@@ -957,7 +963,7 @@ const tableListOutsourcing = reactive({
 			type: "Number",
 			precision: 2,
 			width: "160"
-		},        
+		},
 		{
 			title: "分摊佣金（HKD）",
 			label: "columnbaseApportionmentOfCommission",
@@ -1048,7 +1054,7 @@ const tableListBadDebt = reactive({
 			precision: 2,
 			width: "120"
 		},
-        {
+		{
 			title: "提佣点(%)",
 			label: "itemtitlefoldersbrokerage",
 			prop: "brokerage",
@@ -1070,7 +1076,7 @@ const tableListBadDebt = reactive({
 			prop: "quotationno",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "BM编号",
 			label: "basecolumnbm_code",
@@ -1091,7 +1097,7 @@ const tableListBadDebt = reactive({
 			prop: "compname",
 			type: "Input",
 			width: "140"
-		},        
+		},
 		{
 			title: "销账单号",
 			label: "columnwriteoff_application_listwriteoffNo",
@@ -1103,7 +1109,6 @@ const tableListBadDebt = reactive({
 	// 表格数据
 	tableData: []
 });
-
 </script>
 
 <style lang="scss">

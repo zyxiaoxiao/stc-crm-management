@@ -58,26 +58,22 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
-				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetail" @close="closewiteoffdetail" width="95%">
-				<writeoffbatchdetail :condobj="condobj"></writeoffbatchdetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
-				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+			<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetail" @close="closewiteoffdetail" width="95%">
+			<writeoffbatchdetail :condobj="condobj"></writeoffbatchdetail>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
+			<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -160,7 +156,7 @@ const newWriteoffInfos = async selectList => {
 		let writeoffid = writeoffInfo[0].writeoffid;
 		if (writeoffid) {
 			condobj.cond = {
-				writeoffid : writeoffid
+				writeoffid: writeoffid
 			};
 			condobj.dialogShow_writeoffbatchdetail = true;
 		}
@@ -220,7 +216,6 @@ const closewiteoffdetail = () => {
 onMounted(() => {
 	grid_appointmentInfos.value.getTableList();
 });
-
 
 //表格对象invoice
 const invoicetableList = reactive({

@@ -9,13 +9,28 @@
 		>
 			<el-tab-pane title1="退款申请" :label="$t('menubasedrawbackapplication')" name="infos">
 				<div style="margin: 10px; text-align: left">
-					<el-button size="small" type="primary" v-show="saveShow" icon="Edit" plain @click="dialogShow('dialogShow_billQuery')">{{
-						$t("menu_addbill")
+					<el-button
+						size="small"
+						type="primary"
+						v-show="saveShow"
+						icon="Edit"
+						plain
+						@click="dialogShow('dialogShow_billQuery')"
+						>{{ $t("menu_addbill") }}</el-button
+					>
+					<el-button size="small" type="danger" v-show="saveShow" icon="Close" plain @click="deleteRetreatInfo()">{{
+						$t("SRM_delete")
 					}}</el-button>
-					<el-button size="small" type="danger" v-show="saveShow" icon="Close" plain @click="deleteRetreatInfo()">{{ $t("SRM_delete") }}</el-button>
-					<el-button size="small" class="button_show" type="primary" v-show="saveShow" icon="Document" plain @click="saveRetreatInfo()">{{
-						$t("menu_save")
-					}}</el-button>
+					<el-button
+						size="small"
+						class="button_show"
+						type="primary"
+						v-show="saveShow"
+						icon="Document"
+						plain
+						@click="saveRetreatInfo()"
+						>{{ $t("menu_save") }}</el-button
+					>
 					<el-button size="small" type="success" v-show="saveShow" icon="Check" plain @click="submitRetreatInfo()">{{
 						$t("SRM_submit")
 					}}</el-button>
@@ -64,21 +79,17 @@
 				</el-form>
 				<el-divider style="margin: 1px 0"></el-divider>
 				<div class="flex-column" style="flex: 1; overflow: auto; height: 350px">
-					<zTable ref="grid_retreatbillInfo" width="700px" :tableList="tableListRetreat">
-					</zTable>
+					<zTable ref="grid_retreatbillInfo" width="700px" :tableList="tableListRetreat"> </zTable>
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
-				<customerQuery :condobj="condobj"></customerQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billQuery" @close="dialogclose" width="95%">
-				<billQuery :condobj="condobj"></billQuery>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
+			<customerQuery :condobj="condobj"></customerQuery>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_billQuery" @close="dialogclose" width="95%">
+			<billQuery :condobj="condobj"></billQuery>
+		</ZDialog>
 	</div>
 </template>
 
@@ -187,7 +198,7 @@ let saveRetreatInfo = async edit => {
 	let allcurrencyretreatmoney = 0;
 	let retreatmoney = 0;
 	let status = "0";
-	if(!sformData.retreatdate){
+	if (!sformData.retreatdate) {
 		ElMessage.warning("退款日期不能为空！");
 		return;
 	}

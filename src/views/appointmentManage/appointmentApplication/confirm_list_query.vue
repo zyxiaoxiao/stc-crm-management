@@ -1,6 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="cinfos"
@@ -57,71 +57,67 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
-				<appointmentNew :condobj="condobj"></appointmentNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item
-						:label="$t('menubaseCertificationType') + ':'"
-						v-if="certificationshow"
-						title1="认证类型"
-						prop="attestation"
-						label-width="140px"
-					>
-						<el-select v-model="attestation" filterable placeholder="Select">
-							<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogFormPaymentVisible" :title="$t('DOWNLOAD_download')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item label="Can Display :" title1="Can Display" label-width="140px">
-						<el-checkbox-group v-model="paymenttype">							
-							<el-checkbox :label="$t('columnappointmentCurrencyUnitPrice')" name="price" />
-							<el-checkbox :label="$t('columnappointmentdiscount')" name="payment" />
-						</el-checkbox-group>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormPaymentVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadFormPayment()"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_appointmentNew" width="95%">
+			<appointmentNew :condobj="condobj"></appointmentNew>
+		</ZDialog>
+
+		<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item
+					:label="$t('menubaseCertificationType') + ':'"
+					v-if="certificationshow"
+					title1="认证类型"
+					prop="attestation"
+					label-width="140px"
+				>
+					<el-select v-model="attestation" filterable placeholder="Select">
+						<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
+
+		<el-dialog v-model="dialogFormPaymentVisible" :title="$t('DOWNLOAD_download')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item label="Can Display :" title1="Can Display" label-width="140px">
+					<el-checkbox-group v-model="paymenttype">
+						<el-checkbox :label="$t('columnappointmentCurrencyUnitPrice')" name="price" />
+						<el-checkbox :label="$t('columnappointmentdiscount')" name="payment" />
+					</el-checkbox-group>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormPaymentVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadFormPayment()"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -143,7 +139,6 @@ const i18n = useI18n();
 const grid_confirmappointmentInfos = ref();
 const grid_queryAppointmentInfos = ref();
 
-
 let v_reservnum = ""; //报价单号
 let businesstype = "10"; //报价类型
 
@@ -152,7 +147,7 @@ const globalStore = GlobalStore();
 let attestation = ref("01"); //下载报价单认证类型默认值
 let certificationshow = ref(false); //认证类型默认不显示
 const plain = ref("CN"); //下载默认选中
-const paymenttype = ref([i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")]); //下载默认选中
+const paymenttype = ref([i18n.t("columnappointmentCurrencyUnitPrice"), i18n.t("columnappointmentdiscount")]); //下载默认选中
 //认证类型下拉值
 const attestationData = [
 	{
@@ -208,7 +203,6 @@ let p_row = null;
 const editPaymentAdvice = row => {
 	p_row = row;
 	dialogFormPaymentVisible.value = true;
-
 };
 
 const downloadFormPayment = () => {
@@ -217,18 +211,20 @@ const downloadFormPayment = () => {
 	let discount = i18n.t("columnappointmentdiscount");
 	let defaulttax = "N";
 	let isdefaulttax = "N";
-	for(let p of pList){
-        if(p == price){//外币单价
-            defaulttax = "Y";
+	for (let p of pList) {
+		if (p == price) {
+			//外币单价
+			defaulttax = "Y";
 		}
-		if(p == discount){//折扣率
+		if (p == discount) {
+			//折扣率
 			isdefaulttax = "Y";
 		}
 	}
-	downloadFile("/mylims/order/appointment!downloadPaymentaDvice.action", "WTDL-"+p_row.reservnum+".doc", {
-		"defaulttax": defaulttax,
-		"reservnum" : p_row.reservnum,
-		"isdefaulttax": isdefaulttax
+	downloadFile("/mylims/order/appointment!downloadPaymentaDvice.action", "WTDL-" + p_row.reservnum + ".doc", {
+		defaulttax: defaulttax,
+		reservnum: p_row.reservnum,
+		isdefaulttax: isdefaulttax
 	});
 
 	// window.location.href =
@@ -239,7 +235,7 @@ const downloadFormPayment = () => {
 	// 			defaulttax +
 	// 			"&isdefaulttax=" +
 	// 			isdefaulttax;
-    //paymenttype.value = [i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")];
+	//paymenttype.value = [i18n.t("columnappointmentCurrencyUnitPrice"),i18n.t("columnappointmentdiscount")];
 };
 
 //下载报价文件

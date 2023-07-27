@@ -19,9 +19,7 @@
 						@click="saveInvoiceInfo()"
 						>{{ $t("menu_save") }}</el-button
 					>
-					<el-button size="small" type="success" icon="Check" plain @click="submitInvoiceInfo">{{
-						$t("SRM_submit")
-					}}</el-button>
+					<el-button size="small" type="success" icon="Check" plain @click="submitInvoiceInfo">{{ $t("SRM_submit") }}</el-button>
 				</div>
 				<el-form style="margin: 0px 15px" label-position="right" label-width="120px" :model="sformData" ref="form_billInfo">
 					<el-divider title1="基本信息" content-position="left">{{ $t("fieldtitleyingjibasic_information") }}</el-divider>
@@ -35,7 +33,8 @@
 							<el-form-item :label="$t('itemtitleinvoicecorpno') + ':'" title1="客户号">
 								<el-input type="text" clearable v-model="sformData.corpno" class="input-with-select" readonly>
 									<template #append>
-										<el-button @click="dialogShow('dialogShow_selectCustomerQuery')" icon="Search" :disabled="isdisabled"> </el-button>
+										<el-button @click="dialogShow('dialogShow_selectCustomerQuery')" icon="Search" :disabled="isdisabled">
+										</el-button>
 									</template>
 								</el-input>
 							</el-form-item>
@@ -101,7 +100,7 @@
 							<el-form-item :label="$t('columnappointment_desc42') + ':'" title1="remark">
 								<el-input type="textarea" v-model="sformData.remark" :disabled="isdisabled"></el-input>
 							</el-form-item>
-						</el-col>						
+						</el-col>
 					</el-row>
 					<el-divider title1="创建人信息" content-position="left">{{ $t("corpinfopanelcjrxxtitle") }}</el-divider>
 					<el-row class="main-align-items-center">
@@ -155,22 +154,36 @@
 					</zTable>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane title1="税票信息" v-show="addbillShow" :label="$t('itemtitlebase_userQualificationDocument2')" class="all-height flex-column" name="fileinfo">
+			<el-tab-pane
+				title1="税票信息"
+				v-show="addbillShow"
+				:label="$t('itemtitlebase_userQualificationDocument2')"
+				class="all-height flex-column"
+				name="fileinfo"
+			>
 				<div class="flex-column" style="flex: 1; overflow: auto">
-					<zTable ref="grid_accessory" :tableList="tableListfile" @link-detailbg="downloadfiles" > </zTable>
+					<zTable ref="grid_accessory" :tableList="tableListfile" @link-detailbg="downloadfiles"> </zTable>
 				</div>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_selectFolderQuery" :title="$t('Message_OperationTipmessageselectmessage')" @close="dialogclose" width="95%">
-				<selectFolderQuery :condobj="condobj"></selectFolderQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_selectCustomerQuery" :title="$t('Message_OperationTipmessageselectmessage')" @close="dialogclose" width="95%">
-				<selectCustomerQuery :condobj="condobj"></selectCustomerQuery>
-			</ZDialog>
-		</div>
+
+		<ZDialog
+			v-model="condobj.dialogShow_selectFolderQuery"
+			:title="$t('Message_OperationTipmessageselectmessage')"
+			@close="dialogclose"
+			width="95%"
+		>
+			<selectFolderQuery :condobj="condobj"></selectFolderQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.dialogShow_selectCustomerQuery"
+			:title="$t('Message_OperationTipmessageselectmessage')"
+			@close="dialogclose"
+			width="95%"
+		>
+			<selectCustomerQuery :condobj="condobj"></selectCustomerQuery>
+		</ZDialog>
 	</div>
 </template>
 
@@ -186,7 +199,6 @@ import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
-import moment from "moment";
 //申请单选择
 import selectFolderQuery from "@/views/writeoffManage/invoice/select_folder.vue";
 //客户选择
@@ -258,7 +270,7 @@ const downloadfiles = (column, row) => {
 		"cond.crm": "crm",
 		"cond.fileid": row.fileid
 	});
-};	
+};
 //获取币种
 let getcurrencyInfo = async () => {
 	let obj = {};
@@ -274,7 +286,7 @@ let getcurrencyInfo = async () => {
 				let omap = {};
 				omap.label = currencyInfos[i].currencyname;
 				omap.value = currencyInfos[i].currencyname;
-				if (sformData.currencies == "" &&  currencyInfos[i].currencyname == "RMB") {
+				if (sformData.currencies == "" && currencyInfos[i].currencyname == "RMB") {
 					sformData.currencies = "RMB";
 					sformData.exchangerate = currencyInfos[i].exchangerate;
 				}
@@ -317,7 +329,7 @@ let saveInvoiceInfo = async () => {
 		for (let key in res.invoiceInfo[0]) {
 			//判定 invoiceInfo 的key 是否存在 sformData 的key
 			sformData[key] = res.invoiceInfo[0][key];
-		}		
+		}
 	}
 };
 
@@ -365,7 +377,7 @@ const saveFolder_handler = async () => {
 //提交税票单信息
 const submitInvoiceInfo = () => {
 	let sdata = [];
-	if(tableListFolders.tableData.length < 1){
+	if (tableListFolders.tableData.length < 1) {
 		ElMessage.warning(i18n.t("menu_chooseFolder"));
 		return;
 	}
@@ -374,19 +386,21 @@ const submitInvoiceInfo = () => {
 		return;
 	}
 	let invoicemoney = 0;
-	for(let i of tableListFolders.tableData){
-        if(!i.foinid){//没保存的税票申请单
+	for (let i of tableListFolders.tableData) {
+		if (!i.foinid) {
+			//没保存的税票申请单
 			ElMessage.warning(i18n.t("Message_UnsavedApplication"));
-		    return;
+			return;
 		}
-		if(parseInt(i.invoicevalue) == 0){//开票金额为0
+		if (parseInt(i.invoicevalue) == 0) {
+			//开票金额为0
 			ElMessage.warning(i18n.t("Message_ApplicationFormWith"));
-		    return;
+			return;
 		}
 		invoicemoney += i.invoicevalue;
 	}
-	if(invoicemoney != parseFloat(sformData.invoicemoney)){
-        ElMessage.warning(i18n.t("Message_pleaseSave"));
+	if (invoicemoney != parseFloat(sformData.invoicemoney)) {
+		ElMessage.warning(i18n.t("Message_pleaseSave"));
 		return;
 	}
 	ElMessageBox.confirm(i18n.t("alertConfirmsubmission"), i18n.t("reminder"), {
@@ -444,8 +458,8 @@ let getinvoiceInfo = async obj => {
 			sformData[key] = res.invoiceInfo[0][key];
 		}
 		if (tableListFolders.tableData.length > 0) {
-			let totalamount = 0;//申请单总金额
-			let totalfolderamount = 0;//已开票总金额
+			let totalamount = 0; //申请单总金额
+			let totalfolderamount = 0; //已开票总金额
 			for (let t of tableListFolders.tableData) {
 				if (t.currency) {
 					totalamount += parseFloat(t.currency);
@@ -582,7 +596,7 @@ const dialogclose = () => {
 					sformData.corpno = obj.corpno; //客户号
 					sformData.corpname = obj.corpdesc; //客户名称
 					sformData.corpid = obj.corpid; //客户id
-					sformData.corpnoold = obj.corpnoold; //旧客户号			
+					sformData.corpnoold = obj.corpnoold; //旧客户号
 				}
 			}
 		}
@@ -607,7 +621,7 @@ const tabChange = TabPaneName => {
 			tableListfile.httpAttribute.baseParams["cond.corpid"] = sformData.corpid;
 			grid_accessory.value.reuseTableList();
 		}
-	} 
+	}
 };
 
 onMounted(() => {
@@ -752,7 +766,7 @@ const tableListfile = reactive({
 	httpAttribute: {
 		url: "/core/upload/upload!selectfilesInfoByCond.action",
 		root: "fileInfos",
-		baseParams: {'cond.filetype':'2'}
+		baseParams: { "cond.filetype": "2" }
 	},
 	//表格表头
 	tableColumns: [
@@ -837,9 +851,10 @@ watch(
 		let totalamount = 0; //申请单总金额
 		let totalfolderamount = 0; //已开票总金额
 		let edit = false;
-		if(newValue.length > 0){//有数据币种就不可编辑
-            isCurrency.value = true;
-		}else{
+		if (newValue.length > 0) {
+			//有数据币种就不可编辑
+			isCurrency.value = true;
+		} else {
 			isCurrency.value = false;
 		}
 		for (let i of newValue) {

@@ -3,16 +3,13 @@
 		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbgQuery" @workflow-status="workflowStatus"> </zTable>
 
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="invoicehedgingdetailList.dialogShow" width="95%" @close="invoicehedgingdetailClose">
-				<invoicehedgingdetail :condobj="invoicehedgingdetailList"></invoicehedgingdetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="invoicehedgingdetailList.dialogShow" width="95%" @close="invoicehedgingdetailClose">
+			<invoicehedgingdetail :condobj="invoicehedgingdetailList"></invoicehedgingdetail>
+		</ZDialog>
+
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
 	</div>
 </template>
 

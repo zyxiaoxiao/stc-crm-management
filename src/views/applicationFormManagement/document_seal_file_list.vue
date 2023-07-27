@@ -38,11 +38,9 @@
 				<zTable ref="grid_queryPDFFileInfos" :tableList="uploadPDFFileList"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_documentsealfiledetail" @close="dialogclose" width="45%">
-				<documentsealfile :condobj="condobj"></documentsealfile>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="condobj.dialogShow_documentsealfiledetail" @close="dialogclose" width="45%">
+			<documentsealfile :condobj="condobj"></documentsealfile>
+		</ZDialog>
 	</div>
 </template>
 

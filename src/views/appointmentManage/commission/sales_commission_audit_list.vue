@@ -1,17 +1,22 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="cinfos"
 				:label="$t('panelcolumnmycommissionaudit')"
 				title1="提佣审核"
 			>
-				<zTable ref="grid_combinedInfos_query" :tableList="atableList" @link-detailbg="linkDetail" @workflow-status="workflowStatus">
+				<zTable
+					ref="grid_combinedInfos_query"
+					:tableList="atableList"
+					@link-detailbg="linkDetail"
+					@workflow-status="workflowStatus"
+				>
 					<template #tableHeaderLleft="scope">
 						<el-button size="small" type="success" icon="Check" plain @click="approveCombinedInfos('0', scope.selectList)">{{
 							$t("menu_approve")
-						}}</el-button>						
+						}}</el-button>
 						<el-button size="small" type="danger" icon="Close" plain @click="approveCombinedInfos('-2', scope.selectList)">{{
 							$t("menu_reject2Submitor")
 						}}</el-button>
@@ -49,31 +54,26 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailNew" @close="closeclosecombineddetail" width="95%">
-				<combineddetailNew :condobj="condobj"></combineddetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailBMNew" @close="closeclosecombineddetail" width="95%">
-				<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailBMReadOnly" @close="closecombineddetailReadOnly" width="95%">
-				<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
-				<combineddetailNew :condobj="condobj"></combineddetailNew>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailNew" @close="closeclosecombineddetail" width="95%">
+			<combineddetailNew :condobj="condobj"></combineddetailNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailBMNew" @close="closeclosecombineddetail" width="95%">
+			<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailBMReadOnly" @close="closecombineddetailReadOnly" width="95%">
+			<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
+			<combineddetailNew :condobj="condobj"></combineddetailNew>
+		</ZDialog>
 	</div>
 </template>
 
@@ -902,7 +902,6 @@ const htableList = reactive({
 	tableData: []
 });
 
-
 //工作流审核历史记录
 const workflowStatus = (column, row) => {
 	auditList.codeid = row[auditList.columnid];
@@ -948,7 +947,7 @@ const linkDetailquey = (column, row) => {
 					combinedid: row.combinedid,
 					readOnly: "1"
 				};
-				condobj.dialogShow_combineddetailReadOnly= true;
+				condobj.dialogShow_combineddetailReadOnly = true;
 			}
 		}
 	}

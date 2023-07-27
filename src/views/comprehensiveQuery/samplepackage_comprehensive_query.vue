@@ -9,11 +9,10 @@
 			</template>
 		</zTable>
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
-				<samplepackageworkflowdetail :condobj="newCustomerLabelList"></samplepackageworkflowdetail>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="newCustomerLabelList.dialogShow" width="95%" @close="newCustomerLabelClose">
+			<samplepackageworkflowdetail :condobj="newCustomerLabelList"></samplepackageworkflowdetail>
+		</ZDialog>
+
 		<!-- 地址 标签弹出层 -->
 		<el-dialog
 			ref="addressLabelDialog"

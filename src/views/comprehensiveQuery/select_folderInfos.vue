@@ -1,8 +1,6 @@
 <template>
-	<div class="all-height flex-column">
-		<div style="margin-top: 10px"></div>
-		<zTable ref="editGrid_codeInfos" :tableList="customertableList">
-		</zTable>
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
+		<zTable ref="editGrid_codeInfos" :tableList="customertableList"> </zTable>
 	</div>
 </template>
 
@@ -21,17 +19,16 @@ const condobj = reactive({
 	objlist: {}
 });
 
-let foldertype = [	
+let foldertype = [
 	{
 		value: "1",
 		label: i18n.t("itemtitleMainAccountOrNot1")
 	},
-    {
+	{
 		value: "0",
 		label: i18n.t("itemtitleMainAccountOrNot0")
 	}
 ];
-
 
 //页面初始化渲染完成执行
 onMounted(() => {

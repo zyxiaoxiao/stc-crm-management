@@ -8,8 +8,6 @@
 				</el-button>
 			</template>
 		</zTable>
-	</div>
-	<div v-dialogStretching>
 		<ZDialog v-model="condobj.dialogShow_billdetailNew" width="95%">
 			<billdetailNew :condobj="condobj"></billdetailNew>
 		</ZDialog>
@@ -42,9 +40,9 @@ const selectBillInfos = list => {
 		props.condobj.objlist = list[0]; //传参
 		if (props.condobj.cond.html == "dialogShow_selectBillappointmentdetailQuery") {
 			props.condobj.dialogShow_selectBillappointmentdetailQuery = false; //关闭窗口
-		}else if (props.condobj.cond.html == "dialogShow_selectBillappointmentQuery") {
+		} else if (props.condobj.cond.html == "dialogShow_selectBillappointmentQuery") {
 			props.condobj.dialogShow_selectBillappointmentQuery = false; //关闭窗口
-		}		
+		}
 	} else {
 		ElMessage({
 			type: i18n.t("Message_OperationTip"),
@@ -70,7 +68,7 @@ const linkDetailquey = (column, row) => {
 
 //页面初始化渲染完成执行
 onMounted(() => {
-    props.condobj.objlist = null;
+	props.condobj.objlist = null;
 	grid_billInfosquery.value.getTableList();
 });
 //表格表头
@@ -394,7 +392,7 @@ const billtableList = reactive({
 	httpAttribute: {
 		url: "/crm/bill/bill!selectBillInfoforwriteoffByCond.action",
 		root: "billInfos",
-		baseParams: { "cond.auditflag": "2", "cond.currencybalance": "2" }
+		baseParams: { "cond.auditflag": "2", "cond.currencybalance": "0" }
 	},
 	//表格表头
 	tableColumns: tableColumns,

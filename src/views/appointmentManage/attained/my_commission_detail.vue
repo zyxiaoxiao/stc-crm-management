@@ -67,38 +67,40 @@
 							</el-form-item>
 						</el-col>
 						<el-col :span="6">
-							<el-form-item  title1="">					
-							</el-form-item>
+							<el-form-item title1=""> </el-form-item>
 						</el-col>
 						<el-col :span="24">
 							<el-form-item :label="$t('columnappointment_desc42') + ':'" title1="remark">
 								<el-input type="textarea" v-model="cformData.remark" readonly></el-input>
 							</el-form-item>
 						</el-col>
-					</el-row>					
+					</el-row>
 				</el-form>
-                <el-divider style="margin: 1px 0;"></el-divider>
-				<div class="flex-column" style="flex: 1; overflow: auto;height: 350px;">
-					<zTable ref="zTableCommission" width="700px" :tableList="tableListCommission" > </zTable>
-				</div>                
+				<el-divider style="margin: 1px 0"></el-divider>
+				<div class="flex-column" style="flex: 1; overflow: auto; height: 350px">
+					<zTable ref="zTableCommission" width="700px" :tableList="tableListCommission"> </zTable>
+				</div>
 			</el-tab-pane>
 			<el-tab-pane title1="销售开支查询" :label="$t('titleExpenditureQuery')" class="all-height flex-column" name="query">
 				<div class="flex-column" style="flex: 1; overflow: auto">
 					<zTable ref="grid_expenditureInfos" :tableList="tableListExpenditure" @link-detailbg="linkDetailquey"> </zTable>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane title1="内分包单查询" :label="$t('menuselectInternalSubcontractingOrderQuery')" class="all-height flex-column" name="unprocessed">
+			<el-tab-pane
+				title1="内分包单查询"
+				:label="$t('menuselectInternalSubcontractingOrderQuery')"
+				class="all-height flex-column"
+				name="unprocessed"
+			>
 				<zTable ref="grid_outsourcingInfos" :tableList="tableListOutsourcing"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
-				<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
+			<expendituredetailReadonly :condobj="condobj"></expendituredetailReadonly>
+		</ZDialog>
 	</div>
 </template>
-
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
@@ -151,7 +153,7 @@ const cformData = reactive({
 	errormsg: "",
 	submittime: "",
 	workflowid: "",
-	auditflag: "",
+	auditflag: ""
 });
 
 const tableTabsValue = ref("infos");
@@ -160,15 +162,15 @@ const tableTabsValue = ref("infos");
 const linkDetailquey = (column, row) => {
 	if (column == "folderno" && row.id) {
 		condobj.cond = {
-				id: row.id
-			};
-		condobj.dialogShow_appointmentReadonly = true;		
+			id: row.id
+		};
+		condobj.dialogShow_appointmentReadonly = true;
 	}
 };
 
 let getbrokerageInfo = async obj => {
 	let params = {
-		jsonString: JSON.stringify({brokerageInfo:obj})
+		jsonString: JSON.stringify({ brokerageInfo: obj })
 	};
 	const res = await http.post("/crm/brokerage/brokerage!selectBrokerageInfoById.action", qs.stringify(params));
 	if (res) {
@@ -180,30 +182,30 @@ let getbrokerageInfo = async obj => {
 };
 //切换tab时触发
 const tabChange = TabPaneName => {
-    let brokerageid = cformData.brokerageid;
+	let brokerageid = cformData.brokerageid;
 	if (TabPaneName == "infos") {
 		//提佣申请子页面
-        if(brokerageid){
-            getbrokerageInfo({"brokerageid":brokerageid});
-            //传参后会自动调用接口刷新
+		if (brokerageid) {
+			getbrokerageInfo({ brokerageid: brokerageid });
+			//传参后会自动调用接口刷新
 			tableListCommission.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
 			zTableCommission.value.reuseTableList();
-        }
+		}
 	} else if (TabPaneName == "query") {
 		//销售开支查询子页面
-        if(brokerageid){
-            //传参后会自动调用接口刷新
+		if (brokerageid) {
+			//传参后会自动调用接口刷新
 			tableListExpenditure.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
-            tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = cformData.brokeragemonth;
+			tableListExpenditure.httpAttribute.baseParams["cond.brokeragemonth"] = cformData.brokeragemonth;
 			grid_expenditureInfos.value.reuseTableList();
-        }
+		}
 	} else if (TabPaneName == "unprocessed") {
 		//内分包单查询子页面
-		if(brokerageid){
-            //传参后会自动调用接口刷新
+		if (brokerageid) {
+			//传参后会自动调用接口刷新
 			tableListOutsourcing.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
 			grid_outsourcingInfos.value.reuseTableList();
-        }
+		}
 	}
 };
 
@@ -212,7 +214,6 @@ const dialogShow = data => {
 	if (data == "dialogShow_customerListQuery") {
 		dialogShow_customerListQuery.value = true;
 	}
-
 };
 onMounted(() => {
 	//getValue();
@@ -220,20 +221,20 @@ onMounted(() => {
 		//let auditflag = props.condobj.cond.auditflag; //审核状态
 		let brokerageid = props.condobj.cond.brokerageid; //提佣编号
 		//let readOnly = props.condobj.cond.readOnly; //只读
-        if(brokerageid){
-            getbrokerageInfo({"brokerageid":brokerageid});
-            //传参后会自动调用接口刷新
+		if (brokerageid) {
+			getbrokerageInfo({ brokerageid: brokerageid });
+			//传参后会自动调用接口刷新
 			tableListCommission.httpAttribute.baseParams["cond.brokerageid"] = brokerageid;
 			zTableCommission.value.reuseTableList();
-        }
-    }
+		}
+	}
 });
 
 //表格销售提佣申请单
 const zTableCommission = ref();
 const tableListCommission = reactive({
 	id: "/appointmentManage/attained/my_commission_detail.vue_zTableCommission",
-    tableToolbar: {
+	tableToolbar: {
 		right: false
 	},
 	//请求属性设置
@@ -422,7 +423,7 @@ const tableListExpenditure = reactive({
 	httpAttribute: {
 		url: "/crm/expenditure/expenditure!selectExpenditureInfoForBrokerage.action",
 		root: "expenditureInfos",
-		baseParams: {'cond.auditflag':'2'}
+		baseParams: { "cond.auditflag": "2" }
 	},
 	//表格表头
 	tableColumns: [
@@ -508,7 +509,7 @@ const tableListExpenditure = reactive({
 			prop: "recorderdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "创建时间",
 			label: "itemtitlewlbmdesc10",
@@ -529,14 +530,14 @@ const tableListExpenditure = reactive({
 			prop: "applicantdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "申请日期",
 			label: "i18ncrmcontractApplicationDate",
 			prop: "applicanttime",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "部门编码",
 			label: "部门编码",
@@ -759,7 +760,7 @@ const tableListOutsourcing = reactive({
 			type: "Input",
 			width: "160"
 		},
-        {
+		{
 			title: "币种",
 			label: "itemtitleinvoicecurrencies",
 			prop: "modifyerdesc",
@@ -779,7 +780,7 @@ const tableListOutsourcing = reactive({
 			prop: "applicantdesc",
 			type: "Input",
 			width: "160"
-		},        
+		},
 		{
 			title: "分包金额（HKD）",
 			label: "appointmentsubcontractingprice_hkd",
@@ -802,7 +803,7 @@ const tableListOutsourcing = reactive({
 			type: "Number",
 			precision: 2,
 			width: "160"
-		},        
+		},
 		{
 			title: "分摊佣金（HKD）",
 			label: "columnbaseApportionmentOfCommission",
@@ -815,8 +816,6 @@ const tableListOutsourcing = reactive({
 	// 表格数据
 	tableData: []
 });
-
-
 </script>
 
 <style lang="scss">
@@ -826,4 +825,3 @@ const tableListOutsourcing = reactive({
 	transition: 0.3s;
 }
 </style>
-

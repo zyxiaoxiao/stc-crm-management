@@ -21,7 +21,7 @@
 						<el-button size="small" type="success" icon="Check" plain @click="submitWriteoffInfos(scope.selectList)">{{
 							$t("SRM_submit")
 						}}</el-button>
-                        <el-button size="small" type="primary" icon="UploadFilled" plain @click="excelUploadFilled('0')">{{
+						<el-button size="small" type="primary" icon="UploadFilled" plain @click="excelUploadFilled('0')">{{
 							$t("menu_importExcel")
 						}}</el-button>
 						<el-button size="small" type="primary" icon="Download" @click="dialogShow('dialogShow_ExcelRadioNew')" plain>{{
@@ -45,50 +45,45 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
-				<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
-				<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
-			</ZDialog>
-		</div>
-        <div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.uploadnewDialogShow"
-				:title="$t('menubaseUploadAttachment')"
-				width="40%"
-				@close="closeExcelUploadnew"
-				customclass="selectAgentCss"
-			>
-				<uploadnewQuery :condobj="condobj"></uploadnewQuery>
-			</ZDialog>
-		</div>
-        <div v-dialogStretching>
-			<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
-				<el-form :model="excelform" style="margin: 25px 15px">
-					<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
-						<el-radio-group v-model="excelform.eradio" class="ml-4">
-							<el-radio label="2003">excel 2003</el-radio>
-							<el-radio label="2007">excel 2007</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogExcelRadio = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadExcelfiles(excelform)"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" width="95%">
+			<invoiceDetailReadOnly :condobj="condobj"></invoiceDetailReadOnly>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_writeoffbatchdetailReadOnly" @close="closewiteoffdetailReadOnly" width="95%">
+			<writeoffbatchdetailReadOnly :condobj="condobj"></writeoffbatchdetailReadOnly>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.uploadnewDialogShow"
+			:title="$t('menubaseUploadAttachment')"
+			width="40%"
+			@close="closeExcelUploadnew"
+			customclass="selectAgentCss"
+		>
+			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+		</ZDialog>
+
+		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+			<el-form :model="excelform" style="margin: 25px 15px">
+				<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
+					<el-radio-group v-model="excelform.eradio" class="ml-4">
+						<el-radio label="2003">excel 2003</el-radio>
+						<el-radio label="2007">excel 2007</el-radio>
+					</el-radio-group>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogExcelRadio = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadExcelfiles(excelform)"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -159,7 +154,6 @@ const downloadExcelfiles = excelform => {
 	dialogExcelRadio.value = false;
 };
 
-
 //删除销账申请
 const writeoffInfosDelete = async selectList => {
 	let jsonString = {
@@ -171,7 +165,7 @@ const writeoffInfosDelete = async selectList => {
 
 	const res = await http.post("/crm/writeoff/writeoff!deleteWriteoffInfo.action", qs.stringify(params));
 	if (res) {
-		grid_writeoffInfos.value.getTableList();//刷新销账申请
+		grid_writeoffInfos.value.getTableList(); //刷新销账申请
 	}
 };
 
@@ -205,7 +199,7 @@ const submitWriteoffInfos = selectList => {
 };
 
 //Excel导入
-const excelUploadFilled = (num) => {
+const excelUploadFilled = num => {
 	condobj.uploadnewDialogShow = true;
 	condobj.cond.auditflag = num;
 	condobj.cond.success = false;
@@ -235,8 +229,8 @@ const wtableList = reactive({
 		root: "writeoffInfos",
 		baseParams: {
 			"cond.isImp": "Y",
-            "cond.corpright_usercode": "Y",
-            'cond.auditflag':'0'
+			"cond.corpright_usercode": "Y",
+			"cond.auditflag": "0"
 		}
 	},
 	//快捷查询
@@ -475,8 +469,8 @@ const qtableList = reactive({
 		url: "/crm/writeoff/writeoff!selectWriteoffInfoByCond.action",
 		root: "writeoffInfos",
 		baseParams: {
-            "cond.isImp": "Y",
-            "cond.corpright_usercode": "Y",
+			"cond.isImp": "Y",
+			"cond.corpright_usercode": "Y",
 			"cond.auditflag": "1,2"
 		}
 	},
@@ -484,7 +478,7 @@ const qtableList = reactive({
 	tablePropSearch: {},
 	//表格表头
 	tableColumns: [
-	{
+		{
 			type: "selection",
 			width: "40"
 		},

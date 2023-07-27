@@ -1,6 +1,6 @@
 <template>
 	<div class="all-height flex-column main-card">
-		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" type="border-card" @tab-change="tabChange">
+		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tableTabsValue" @tab-change="tabChange">
 			<el-tab-pane
 				class="main-tab-pane-content all-height flex-column"
 				name="salesinfos"
@@ -13,16 +13,31 @@
 					@link-detailbg="linkDetail"
 					@workflow-status="workflowStatus"
 				>
-                <template #tableHeaderLleft="scope">
-						<el-button size="small" type="success" icon="Check" plain @click="approveSalesAgentBrokerageInfo('0', scope.selectList)">{{
-							$t("menu_approve")
-						}}</el-button>
-						<el-button size="small" type="danger" icon="Close" plain @click="approveSalesAgentBrokerageInfo('-1', scope.selectList)">{{
-							$t("menu_reject")
-						}}</el-button>
-						<el-button size="small" type="danger" icon="Close" plain @click="approveSalesAgentBrokerageInfo('-2', scope.selectList)">{{
-							$t("menu_reject2Submitor")
-						}}</el-button>
+					<template #tableHeaderLleft="scope">
+						<el-button
+							size="small"
+							type="success"
+							icon="Check"
+							plain
+							@click="approveSalesAgentBrokerageInfo('0', scope.selectList)"
+							>{{ $t("menu_approve") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveSalesAgentBrokerageInfo('-1', scope.selectList)"
+							>{{ $t("menu_reject") }}</el-button
+						>
+						<el-button
+							size="small"
+							type="danger"
+							icon="Close"
+							plain
+							@click="approveSalesAgentBrokerageInfo('-2', scope.selectList)"
+							>{{ $t("menu_reject2Submitor") }}</el-button
+						>
 					</template>
 				</zTable>
 			</el-tab-pane>
@@ -41,21 +56,18 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageNew" @close="closeSalesAgentBrokerage" width="95%">
-				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_salesagentbrokerageReadOnly" @close="closeSalesAgentBrokerageReadOnly" width="95%">
-				<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_salesagentbrokerageNew" @close="closeSalesAgentBrokerage" width="95%">
+			<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_salesagentbrokerageReadOnly" @close="closeSalesAgentBrokerageReadOnly" width="95%">
+			<salesagentbrokerageNew :condobj="condobj"></salesagentbrokerageNew>
+		</ZDialog>
 	</div>
 </template>
 
@@ -146,7 +158,6 @@ const approveSalesAgentBrokerageInfo = (code, selectList) => {
 		}
 	});
 };
-
 
 //提佣页面关闭
 const closeSalesAgentBrokerage = () => {
@@ -679,7 +690,7 @@ const linkDetail = (column, row) => {
 		if (row.salesbrokerageid) {
 			condobj.cond = {
 				salesbrokerageid: row.salesbrokerageid,
-				auditflag:"1"
+				auditflag: "1"
 			};
 			condobj.dialogShow_salesagentbrokerageNew = true;
 		}
@@ -691,7 +702,7 @@ const linkDetailquey = (column, row) => {
 		if (row.salesbrokerageid) {
 			condobj.cond = {
 				salesbrokerageid: row.salesbrokerageid,
-				readOnly:"1"
+				readOnly: "1"
 			};
 			condobj.dialogShow_salesagentbrokerageReadOnly = true;
 		}

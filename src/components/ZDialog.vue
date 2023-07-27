@@ -62,6 +62,7 @@ const open = () => {
 };
 const opened = () => {
 	const el = dialogRef.value.dialogContentRef.$el;
+	console.log("el", el);
 	// 获取弹框头部
 	dialogHeaderEl = el.querySelector(".el-dialog__header");
 	//全屏事件
@@ -69,8 +70,11 @@ const opened = () => {
 	//弹框窗体
 	const dragDom = el;
 	//拉伸
-	dragMouse = document.querySelector(".stretching");
-
+	dragMouse = el.querySelector(".stretching");
+	console.log("dialogHeaderEl", dialogHeaderEl);
+	console.log("dialogQuanpingEl", dialogQuanpingEl);
+	console.log("dragDom", dragDom);
+	console.log("dragMouse", dragMouse);
 	if (dialogHeaderEl && dialogQuanpingEl && dragDom && dragMouse) {
 		//获取宽度百分比，给left百分比
 		let elDialogWidth = "";

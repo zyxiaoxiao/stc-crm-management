@@ -78,79 +78,67 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailNew" @close="closeclosecombineddetail" width="95%">
-				<combineddetailNew :condobj="condobj"></combineddetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailBMNew" @close="closeclosecombineddetail" width="95%">
-				<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailBMReadOnly" @close="closecombineddetailReadOnly" width="95%">
-				<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
-				<combineddetailNew :condobj="condobj"></combineddetailNew>
-			</ZDialog>
-		</div>
-		<div>
-			<el-dialog v-model="dialogFormVisible" :title="$t('menubasemycommissionapplication')">
-				<el-form ref="cEform" :model="dform" style="margin: 25px 15px">
-					<el-form-item title1="提佣类型" :label="$t('basecolumncommission_type') + ':'" style="width: 90%" prop="commissiontype">
-						<el-select
-							v-model="dform.commissiontype"
-							class="full-width-input"
-							@change="select_commissiontype"
-							readonly
-							filterable
-						>
-							<el-option v-for="item in costtype" :key="item.value" :label="$t(item.label)" :value="item.value"></el-option>
-						</el-select>
-					</el-form-item>
-					<el-form-item
-						v-show="monthShow"
-						:label="$t('Consign_chooseMouthTime') + ':'"
-						style="width: 90%"
-						title1="请选择提佣月份"
-						prop="month"
-					>
-						<el-date-picker
-							type="date"
-							v-model="dform.month"
-							format="YYYY-MM"
-							value-format="YYYY-MM"
-							style="width: 100%"
-							:disabled-date="disabledDate"
-						></el-date-picker>
-					</el-form-item>
-					<el-form-item
-						v-show="monthsShow"
-						:label="$t('basecolumncombined_commission_month') + ':'"
-						style="width: 90%"
-						title1="组合提佣月份"
-						prop="months"
-					>
-						<el-input type="text" v-model="dform.months" readonly></el-input>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="newcombineddetailInfo(cEform)"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailNew" @close="closeclosecombineddetail" width="95%">
+			<combineddetailNew :condobj="condobj"></combineddetailNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailBMNew" @close="closeclosecombineddetail" width="95%">
+			<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailBMReadOnly" @close="closecombineddetailReadOnly" width="95%">
+			<combineddetailBMNew :condobj="condobj"></combineddetailBMNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_combineddetailReadOnly" @close="closecombineddetailReadOnly" width="95%">
+			<combineddetailNew :condobj="condobj"></combineddetailNew>
+		</ZDialog>
+
+		<el-dialog v-model="dialogFormVisible" :title="$t('menubasemycommissionapplication')">
+			<el-form ref="cEform" :model="dform" style="margin: 25px 15px">
+				<el-form-item title1="提佣类型" :label="$t('basecolumncommission_type') + ':'" style="width: 90%" prop="commissiontype">
+					<el-select v-model="dform.commissiontype" class="full-width-input" @change="select_commissiontype" readonly filterable>
+						<el-option v-for="item in costtype" :key="item.value" :label="$t(item.label)" :value="item.value"></el-option>
+					</el-select>
+				</el-form-item>
+				<el-form-item
+					v-show="monthShow"
+					:label="$t('Consign_chooseMouthTime') + ':'"
+					style="width: 90%"
+					title1="请选择提佣月份"
+					prop="month"
+				>
+					<el-date-picker
+						type="date"
+						v-model="dform.month"
+						format="YYYY-MM"
+						value-format="YYYY-MM"
+						style="width: 100%"
+						:disabled-date="disabledDate"
+					></el-date-picker>
+				</el-form-item>
+				<el-form-item
+					v-show="monthsShow"
+					:label="$t('basecolumncombined_commission_month') + ':'"
+					style="width: 90%"
+					title1="组合提佣月份"
+					prop="months"
+				>
+					<el-input type="text" v-model="dform.months" readonly></el-input>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="newcombineddetailInfo(cEform)"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 

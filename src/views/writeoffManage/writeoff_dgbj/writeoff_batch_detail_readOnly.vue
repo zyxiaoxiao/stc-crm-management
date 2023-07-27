@@ -178,11 +178,9 @@
 				<zTable ref="grid_accessory" :tableList="tableListfile" @link-detailbg="downloadfiles"> </zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billappointmentdetailreadonly" @close="dialogclose" width="95%">
-				<billappointmentdetailreadonly :condobj="condobj"></billappointmentdetailreadonly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="condobj.dialogShow_billappointmentdetailreadonly" @close="dialogclose" width="95%">
+			<billappointmentdetailreadonly :condobj="condobj"></billappointmentdetailreadonly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -482,7 +480,7 @@ const tableListInvoices = reactive({
 			title: "账单日期",
 			label: "columnwriteoff_invoicedate",
 			prop: "INVOICEDATE",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{

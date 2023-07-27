@@ -1051,191 +1051,176 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow" @close="dialogclose" :title="$t('columnappointment_EntrustedUnitInfo')" width="85%">
-				<customerQuery :condobj="condobj"></customerQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.contactdialogShow"
-				@close="contactDialogclose"
-				customclass="selectAdressCss"
-				:title="$t('companypanelCustomerContactInformationtitle')"
-				width="85%"
-			>
-				<customerContactQuery :condobj="condobj"></customerContactQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.addressDialogShow"
-				@close="addressDialogclose"
-				:title="$t('titlebaseAddressinformation')"
-				width="85%"
-				customclass="selectAdressCss"
-			>
-				<customerAddressQuery :condobj="condobj"></customerAddressQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.newItemApplintmentDialogShow"
-				@close="dialogclose"
-				:title="$t('panelcolumnselecttestitems')"
-				width="85%"
-			>
-				<newItemApplintmentQuery :condobj="condobj"></newItemApplintmentQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.reportDialogShow"
-				@close="reportDialogclose"
-				:title="$t('companypanelreportstitle')"
-				width="85%"
-				customclass="selectAdressCss"
-			>
-				<customerReportQuery :condobj="condobj"></customerReportQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.corpaccountApplintmentDialogShow"
-				@close="dialogclose"
-				:title="$t('itemtitleaccountaccount')"
-				width="85%"
-				customclass="selectAdressCss"
-			>
-				<corpaccountApplintmentQuery :condobj="condobj"></corpaccountApplintmentQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.selecthistoryapplicationitmeDialogShow"
-				@close="dialogclose"
-				:title="$t('itemtitleappointmenthisprice')"
-				width="85%"
-			>
-				<historyapplicationitme :condobj="condobj"></historyapplicationitme>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.deptSubpackageApplintmentDialogShow"
-				@close="dialogclose"
-				:title="$t('crmcolumndsppl')"
-				width="85%"
-				customclass="selectAdressCss"
-			>
-				<deptSubpackageApplintmentQuery :condobj="condobj"></deptSubpackageApplintmentQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.dialogShow_historyappListDialogShow"
-				@close="dialogclose"
-				:title="$t('itemtitlequotationquotationhis')"
-				width="85%"
-				customclass="selectAdressCss"
-			>
-				<historyapplication :condobj="condobj"></historyapplication>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.deptFolderApplintmentDialogShow"
-				@close="dialogclose"
-				:title="$t('menubaseapplicationorderquery')"
-				width="85%"
-			>
-				<selectapplicationOrderQuery :condobj="condobj"></selectapplicationOrderQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog
-				v-model="condobj.uploadnewDialogShow"
-				@close="uploadnewDialogclose"
-				:title="$t('companypanelreportstitle')"
-				width="40%"
-				customclass="selectAgentCss"
-			>
-				<uploadnewQuery :condobj="condobj"></uploadnewQuery>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.sendapplicationOutboxDialogShow" @close="dialogclose" width="85%">
-				<sendapplicationOutbox :condobj="condobj"></sendapplicationOutbox>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_appointmentReadonlyTo" width="95%">
-				<appointmentReadonlyTo :condobj="condobj"></appointmentReadonlyTo>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item
-						:label="$t('menubaseCertificationType') + ':'"
-						v-if="certificationshow"
-						title1="认证类型"
-						prop="attestation"
-						label-width="140px"
-					>
-						<el-select v-model="attestation" filterable placeholder="Select">
-							<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
-						</el-select>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogSendFormVisible" :title="$t('DOWNLOAD_download')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
-						<el-radio-group v-model="plain">
-							<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
-							<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
-							<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
-						</el-radio-group>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="dialogSendFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
-						<el-button type="primary" @click="downloadAppointment('send')"> {{ $t("SRM_ok") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" :title="$t('columnappointment_EntrustedUnitInfo')" width="85%">
+			<customerQuery :condobj="condobj"></customerQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.contactdialogShow"
+			@close="contactDialogclose"
+			customclass="selectAdressCss"
+			:title="$t('companypanelCustomerContactInformationtitle')"
+			width="85%"
+		>
+			<customerContactQuery :condobj="condobj"></customerContactQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.addressDialogShow"
+			@close="addressDialogclose"
+			:title="$t('titlebaseAddressinformation')"
+			width="85%"
+			customclass="selectAdressCss"
+		>
+			<customerAddressQuery :condobj="condobj"></customerAddressQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.newItemApplintmentDialogShow"
+			@close="dialogclose"
+			:title="$t('panelcolumnselecttestitems')"
+			width="85%"
+		>
+			<newItemApplintmentQuery :condobj="condobj"></newItemApplintmentQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.reportDialogShow"
+			@close="reportDialogclose"
+			:title="$t('companypanelreportstitle')"
+			width="85%"
+			customclass="selectAdressCss"
+		>
+			<customerReportQuery :condobj="condobj"></customerReportQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.corpaccountApplintmentDialogShow"
+			@close="dialogclose"
+			:title="$t('itemtitleaccountaccount')"
+			width="85%"
+			customclass="selectAdressCss"
+		>
+			<corpaccountApplintmentQuery :condobj="condobj"></corpaccountApplintmentQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.selecthistoryapplicationitmeDialogShow"
+			@close="dialogclose"
+			:title="$t('itemtitleappointmenthisprice')"
+			width="85%"
+		>
+			<historyapplicationitme :condobj="condobj"></historyapplicationitme>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.deptSubpackageApplintmentDialogShow"
+			@close="dialogclose"
+			:title="$t('crmcolumndsppl')"
+			width="85%"
+			customclass="selectAdressCss"
+		>
+			<deptSubpackageApplintmentQuery :condobj="condobj"></deptSubpackageApplintmentQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.dialogShow_historyappListDialogShow"
+			@close="dialogclose"
+			:title="$t('itemtitlequotationquotationhis')"
+			width="85%"
+			customclass="selectAdressCss"
+		>
+			<historyapplication :condobj="condobj"></historyapplication>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.deptFolderApplintmentDialogShow"
+			@close="dialogclose"
+			:title="$t('menubaseapplicationorderquery')"
+			width="85%"
+		>
+			<selectapplicationOrderQuery :condobj="condobj"></selectapplicationOrderQuery>
+		</ZDialog>
+
+		<ZDialog
+			v-model="condobj.uploadnewDialogShow"
+			@close="uploadnewDialogclose"
+			:title="$t('companypanelreportstitle')"
+			width="40%"
+			customclass="selectAgentCss"
+		>
+			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.sendapplicationOutboxDialogShow" @close="dialogclose" width="85%">
+			<sendapplicationOutbox :condobj="condobj"></sendapplicationOutbox>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_appointmentReadonlyTo" width="95%">
+			<appointmentReadonlyTo :condobj="condobj"></appointmentReadonlyTo>
+		</ZDialog>
+
+		<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item
+					:label="$t('menubaseCertificationType') + ':'"
+					v-if="certificationshow"
+					title1="认证类型"
+					prop="attestation"
+					label-width="140px"
+				>
+					<el-select v-model="attestation" filterable placeholder="Select">
+						<el-option v-for="item in attestationData" :key="item.value" :label="item.label" :value="item.value" />
+					</el-select>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadAppointment()"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
+
+		<el-dialog v-model="dialogSendFormVisible" :title="$t('DOWNLOAD_download')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item :label="$t('panelcolumncontractcustomer') + ':'" title1="协议客户" label-width="140px">
+					<el-radio-group v-model="plain">
+						<el-radio label="CONTRACT_CN">{{ $t("SRM_LANG_CN") }}</el-radio>
+						<el-radio label="CONTRACT_CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
+						<el-radio label="CONTRACT_EN">{{ $t("SRM_LANG_EN") }}</el-radio>
+					</el-radio-group>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="dialogSendFormVisible = false">{{ $t("SRM_cancel") }}</el-button>
+					<el-button type="primary" @click="downloadAppointment('send')"> {{ $t("SRM_ok") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
@@ -3095,8 +3080,8 @@ onMounted(() => {
 		v_split = props.condobj.cond.split; //报价拆分
 		v_readonly = props.condobj.cond.v_readonly; //报价只读
 		let readonly_u = props.condobj.cond.readonly; //报价只读
-		if(readonly_u == "true"){
-            v_readonly = "true";
+		if (readonly_u == "true") {
+			v_readonly = "true";
 		}
 		if (v_isdefaulttax && v_isdefaulttax.indexOf("_") > 0) {
 			//说明是PKM
@@ -3215,12 +3200,12 @@ const dialogclose = () => {
 					if (formData.enterprisecode) {
 						//获取当前客户的归属销售
 						let getUserValue = async corpno => {
-							let cond = { "corpno": corpno };
+							let cond = { corpno: corpno };
 							let jsonString = { cond: cond };
 							let params = {
 								jsonString: JSON.stringify(jsonString)
 							};
-							const res = await http.post("/mylims/order/appointment!selectEnterpriseForUserInfo.action", qs.stringify(params));							
+							const res = await http.post("/mylims/order/appointment!selectEnterpriseForUserInfo.action", qs.stringify(params));
 							if (res && res.maps != null && res.maps.length > 0) {
 								let maps = res.maps;
 								formData.desc81 = maps[0].userdesc; //SE姓名
@@ -3355,7 +3340,7 @@ const dialogclose = () => {
 				let obj = condobj.objlist;
 				let reservnumnow = formData.reservnum;
 				if (obj.folderno && reservnumnow) {
-					let corpno = formData.desc13;//委托客户号
+					let corpno = formData.desc13; //委托客户号
 					let cond = { corpno: corpno, folderno: obj.folderno, dept: obj.dept };
 					//查询申请单检测项
 					let selectF = async o => {
@@ -3574,7 +3559,7 @@ const uploadnewDialogclose = () => {
 	//选择附件后关闭回调
 	if (condobj && condobj.objlist && condobj.objlist.success) {
 		fileInfos.value.getTableList();
-	}else{
+	} else {
 		condobj.uploadnewDialogShow = false;
 	}
 };
@@ -3735,11 +3720,11 @@ const dialogShow = data => {
 	} else if (data == "dialogShow_selectFoldernoApplintment") {
 		//选择申请单
 		let desc56 = formData1.desc56; //服务类型
-		let desc13 = formData.desc13;//委托客户号		
+		let desc13 = formData.desc13; //委托客户号
 		if (desc56) {
 			condobj.cond = {
 				html: data,
-				corpno:desc13
+				corpno: desc13
 			};
 			condobj.deptFolderApplintmentDialogShow = true;
 		} else {
@@ -3800,7 +3785,7 @@ const tabChange = targetName => {
 		} else if (workflowflag == "2" || confirm == "true") {
 			approveShow.value = true; //审核按钮
 			isdisabled.value = true; //表单只读
-			ptableList.edit = false;//检测项只读
+			ptableList.edit = false; //检测项只读
 		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
 		}

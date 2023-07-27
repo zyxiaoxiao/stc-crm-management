@@ -14,8 +14,6 @@
 				</el-button>
 			</template>
 		</zTable>
-	</div>
-	<div v-dialogStretching>
 		<ZDialog v-model="condobj.dialogShow_appointmentReadonly" width="95%">
 			<appointmentTemplateReadonly :condobj="condobj"></appointmentTemplateReadonly>
 		</ZDialog>

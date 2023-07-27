@@ -60,16 +60,12 @@
 		</el-tabs>
 
 		<!-- 新增弹出 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="authenticationdetailList.dialogShow" width="95%" @close="authenticationdetailClose">
-				<authenticationdetail :condobj="authenticationdetailList"></authenticationdetail>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="authenticationdetailList.dialogShow" width="95%" @close="authenticationdetailClose">
+			<authenticationdetail :condobj="authenticationdetailList"></authenticationdetail>
+		</ZDialog>
+		<ZDialog v-model="auditList.dialogShow" :title="$t('menu_auditOpinion')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
 	</div>
 </template>
 

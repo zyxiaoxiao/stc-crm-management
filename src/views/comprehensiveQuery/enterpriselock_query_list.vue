@@ -2,11 +2,10 @@
 	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
 		<zTable ref="zTable1" :tableList="tableList1" @link-detailbg="linkDetailbgQuery"> </zTable>
 		<!-- 弹出详细界面 -->
-		<div v-dialogStretching>
-			<ZDialog v-model="enterpriselockdetailnewList.dialogShow" width="95%" @close="enterpriselockdetailnewClose">
-				<enterpriselockdetailnew :condobj="enterpriselockdetailnewList" />
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="enterpriselockdetailnewList.dialogShow" width="95%" @close="enterpriselockdetailnewClose">
+			<enterpriselockdetailnew :condobj="enterpriselockdetailnewList" />
+		</ZDialog>
 	</div>
 </template>
 

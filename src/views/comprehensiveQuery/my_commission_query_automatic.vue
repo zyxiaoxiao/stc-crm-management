@@ -1,5 +1,5 @@
 <template>
-	<div class="all-height flex-column main-card">
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
 		<zTable ref="grid_automaticOrderQuery" :tableList="automatictableList"> </zTable>
 	</div>
 </template>
@@ -197,7 +197,6 @@ const automatictableList = reactive({
 	// 表格数据
 	tableData: []
 });
-
 </script>
 
 <style scoped lang="scss">

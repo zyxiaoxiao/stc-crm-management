@@ -63,21 +63,17 @@
 				</zTable>
 			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailApprove" width="95%">
-				<invoicedetailApprove :condobj="condobj"></invoicedetailApprove>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" width="95%">
-				<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailApprove" width="95%">
+			<invoicedetailApprove :condobj="condobj"></invoicedetailApprove>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" width="95%">
+			<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -117,19 +113,19 @@ const condobj = reactive({
 let dialogExcelRadio = ref(false);
 
 //撤销审核
-const revokeInvoiceInfos = async (selectList) => {
-    if (selectList != null && selectList.length < 1) {
+const revokeInvoiceInfos = async selectList => {
+	if (selectList != null && selectList.length < 1) {
 		ElMessage.warning(i18n.t("alertChooseanappointmenttocancel"));
 		return;
 	}
-    let params = {
+	let params = {
 		jsonString: JSON.stringify({ invoiceInfos: selectList })
 	};
 	const res = await http.post("/crm/invoice/invoice!backInvoiceInfos.action", qs.stringify(params));
 	if (res) {
-        grid_invoiceInfos3.value.getTableList();
+		grid_invoiceInfos3.value.getTableList();
 	}
-};    
+};
 
 //审核税票信息
 const approveInvoiceInfos = (code, selectList) => {
@@ -973,6 +969,7 @@ const linkDetailapprove = (column, row) => {
 			condobj.cond = {
 				invoiceid: row.invoiceid,
 				rasclientid: row.corpno,
+				iauditflag: "Y",
 				workflowflag: "5"
 			};
 			condobj.dialogShow_invoicedetailApprove = true;
@@ -986,6 +983,7 @@ const linkDetailquey = (column, row) => {
 			condobj.cond = {
 				invoiceid: row.invoiceid,
 				rasclientid: row.corpno,
+				iauditflag: "Y",
 				workflowflag: "3"
 			};
 			condobj.dialogShow_invoicedetailReadOnly = true;

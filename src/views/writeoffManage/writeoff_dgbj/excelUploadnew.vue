@@ -31,31 +31,29 @@
 				</el-button>
 			</el-upload>
 		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogSendFormVisible" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item label="1、" label-width="140px">
-						<span v-html="dform.exceldata"></span>
-					</el-form-item>
-					<el-form-item label="2、" label-width="140px">
-						<span v-html="dform.excelupload"></span>
-						<el-link :href="dform.excelurl" type="primary">{{ $t("DOWNLOAD_download") + "" }}</el-link>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="closedialogSendFormVisible">{{ $t("SRM_close") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+		<el-dialog v-model="dialogSendFormVisible" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item label="1、" label-width="140px">
+					<span v-html="dform.exceldata"></span>
+				</el-form-item>
+				<el-form-item label="2、" label-width="140px">
+					<span v-html="dform.excelupload"></span>
+					<el-link :href="dform.excelurl" type="primary">{{ $t("DOWNLOAD_download") + "" }}</el-link>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="closedialogSendFormVisible">{{ $t("SRM_close") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
-import { genFileId, ElMessage } from "element-plus";
+import { genFileId, ElMessage, ElLoading } from "element-plus";
 import { GlobalStore } from "/src/store/globalStore.js";
 const globalStore = GlobalStore();
 
@@ -69,10 +67,21 @@ const props = defineProps({
 const upload_data = reactive({});
 const upload = ref();
 const excelpath = ref("");
+let loading = ref({});
 let dform = reactive({ exceldata: "导入失败；", excelupload: "模板详细提示信息：", excelurl: "https://element.eleme.io" }); //下载信息
 
 //导入Excel
 let dialogSendFormVisible = ref(false);
+
+//调用加载框、阴影遮盖
+const openFullScreen2 = () => {
+	loading = ElLoading.service({
+		lock: true,
+		text: "Loading",
+		background: "rgba(0, 0, 0, 0.7)"
+	});
+	//loading.close()
+};
 
 //关闭提示窗口
 const closedialogSendFormVisible = () => {
@@ -101,6 +110,7 @@ const handleBeforeUpload = file => {
 		"', businessobjectid:'" +
 		props.condobj.cond.businessobjectid +
 		"'}}";
+	openFullScreen2();
 	return true;
 };
 
@@ -114,6 +124,8 @@ onMounted(() => {
 
 //请求成功后执行的函数，相当于axios的then
 const handleSuccess = response => {
+	//关闭加载框
+	loading.close();
 	try {
 		let error = response.errors;
 		let str = new Array();

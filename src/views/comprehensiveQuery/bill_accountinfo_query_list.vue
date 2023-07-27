@@ -1,18 +1,15 @@
 <template>
-	<div class="all-height flex-column">
-		<div style="margin-top: 10px"></div>
+	<div class="all-height flex-column main-card" style="padding: 10px; padding-top: 0px">
 		<zTable ref="editGrid_billInfos" :tableList="billtableList" @link-detailbg="linkDetailquey" @workflow-status="workflowStatus">
 		</zTable>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_billdetailNew" width="95%">
-				<billdetailNew :condobj="condobj"></billdetailNew>
-			</ZDialog>
-		</div>
+
+		<ZDialog v-model="auditList.dialogShow_audit" title="审核记录" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_billdetailNew" width="95%">
+			<billdetailNew :condobj="condobj"></billdetailNew>
+		</ZDialog>
 	</div>
 </template>
 

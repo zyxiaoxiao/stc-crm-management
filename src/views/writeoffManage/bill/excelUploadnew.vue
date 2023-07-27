@@ -31,24 +31,23 @@
 				</el-button>
 			</el-upload>
 		</div>
-		<div v-dialogStretching>
-			<el-dialog v-model="dialogSendFormVisible" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
-				<el-form :model="dform" style="margin: 25px 15px">
-					<el-form-item label="1、" label-width="140px">
-						<span v-html="dform.exceldata"></span>
-					</el-form-item>
-					<el-form-item label="2、" label-width="140px">
-						<span v-html="dform.excelupload"></span>
-						<el-link :href="dform.excelurl" type="primary">{{ $t("DOWNLOAD_download") + "" }}</el-link>
-					</el-form-item>
-				</el-form>
-				<template #footer>
-					<span class="dialog-footer">
-						<el-button @click="closedialogSendFormVisible">{{ $t("SRM_close") }}</el-button>
-					</span>
-				</template>
-			</el-dialog>
-		</div>
+
+		<el-dialog v-model="dialogSendFormVisible" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+			<el-form :model="dform" style="margin: 25px 15px">
+				<el-form-item label="1、" label-width="140px">
+					<span v-html="dform.exceldata"></span>
+				</el-form-item>
+				<el-form-item label="2、" label-width="140px">
+					<span v-html="dform.excelupload"></span>
+					<el-link :href="dform.excelurl" type="primary">{{ $t("DOWNLOAD_download") + "" }}</el-link>
+				</el-form-item>
+			</el-form>
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button @click="closedialogSendFormVisible">{{ $t("SRM_close") }}</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 

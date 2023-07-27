@@ -46,22 +46,32 @@
 				>
 				</zTable>
 			</el-tab-pane>
+			<el-tab-pane
+				class="main-tab-pane-content all-height flex-column"
+				:label="$t('basecolumnSalesTaxInvoiceQuery')"
+				title1="销售税票查询"
+				name="saleinvoiceinfo"
+			>
+				<zTable
+					ref="grid_saleinvoiceInfosquery"
+					:tableList="saletableList"
+					@link-detailbg="linkDetailquey"
+					@workflow-status="workflowStatus"
+				>
+				</zTable>
+			</el-tab-pane>
 		</el-tabs>
-		<div v-dialogStretching>
-			<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
-				<audit :auditList="auditList"></audit>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
-				<invoicedetailNew :condobj="condobj"></invoicedetailNew>
-			</ZDialog>
-		</div>
-		<div v-dialogStretching>
-			<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
-				<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
-			</ZDialog>
-		</div>
+		<ZDialog v-model="auditList.dialogShow_audit" :title="$t('menu_base_AuditRecords')" width="95%">
+			<audit :auditList="auditList"></audit>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailNew" @close="closeinvoicedetail" width="95%">
+			<invoicedetailNew :condobj="condobj"></invoicedetailNew>
+		</ZDialog>
+
+		<ZDialog v-model="condobj.dialogShow_invoicedetailReadOnly" @close="closeinvoicedetailReadOnly" width="95%">
+			<invoicedetailReadOnly :condobj="condobj"></invoicedetailReadOnly>
+		</ZDialog>
 	</div>
 </template>
 
@@ -80,6 +90,7 @@ import invoicedetailReadOnly from "@/views/writeoffManage/invoice/invoice_detail
 const i18n = useI18n();
 const grid_invoiceInfos = ref();
 const grid_invoiceInfosquery = ref();
+const grid_saleinvoiceInfosquery = ref();
 const tableTabsValue = ref("invoiceinfos");
 
 //审核记录
@@ -117,7 +128,7 @@ const invoiceInfosDelete = async selectList => {
 
 //提交税票单信息
 const submitInvoiceInfos = selectList => {
-	if(selectList.length < 1){
+	if (selectList.length < 1) {
 		ElMessage.warning(i18n.t("menu_chooseFolder"));
 		return;
 	}
@@ -143,7 +154,6 @@ const submitInvoiceInfos = selectList => {
 		}
 	});
 };
-
 
 //税票页面关闭
 const closeinvoicedetail = () => {
@@ -663,6 +673,259 @@ const htableList = reactive({
 	tableData: []
 });
 
+//表格对象撤销发布
+const saletableList = reactive({
+	id: "/writeoffManage/invoice/invoice_query_list.vue_grid_saleinvoiceInfosquery",
+	//请求属性设置
+	httpAttribute: {
+		url: "/crm/invoice/invoice!selectInvoiceInfoByCond.action",
+		root: "invoiceInfos",
+		baseParams: {
+			"cond.auditflag": "1,2",
+			"cond.myrecordercode": "Y"
+		}
+	},
+	//快捷查询
+	tablePropSearch: {},
+	//表格表头
+	tableColumns: [
+		{
+			type: "selection",
+			width: "40"
+		},
+		{
+			title: "状态",
+			label: "itemtitlecommondesc11",
+			prop: "processflag",
+			type: "workflowStatus",
+			width: "60"
+		},
+		{
+			title: "开票编号",
+			label: "itemtitleinvoicetax",
+			prop: "taxinvoicecode",
+			type: "Link",
+			width: "160"
+		},
+		{
+			title: "币种",
+			label: "itemtitleinvoicecurrencies",
+			prop: "currencies",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "汇率",
+			label: "itemtitleinvoiceexchangerate",
+			prop: "exchangerate",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "外币金额",
+			label: "itemtitleinvoicecurrencyamount",
+			prop: "currencyamount",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "发票金额",
+			label: "itemtitleinvoiceinvoicemoney",
+			prop: "invoicemoney",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "客户号",
+			label: "itemtitleinvoicecorpno",
+			prop: "corpno",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "客户姓名",
+			label: "itemtitleinvoicecorpdesc",
+			prop: "corpname",
+			type: "Input",
+			width: "210"
+		},
+		{
+			title: "发票日期",
+			label: "itemtitleinvoiceinvoicedate",
+			prop: "invoicedate",
+			type: "Input",
+			width: "150"
+		},
+		{
+			title: "申请单号",
+			label: "columnwriteoff_application_listApplicationNo",
+			prop: "foldernos",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "创建人编码",
+			label: "columnCreatehumancoding",
+			prop: "recordercode",
+			type: "Input",
+			width: "140"
+		},
+		{
+			title: "创建人名称",
+			label: "columnCreatehumandescription",
+			prop: "recorderdesc",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "创建时间",
+			label: "itemtitlestatusrecordertime",
+			prop: "recordtime",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "备注",
+			label: "columnappointment_desc42",
+			prop: "remark",
+			type: "Input",
+			width: "160"
+		},
+		{
+			title: "主键",
+			label: "invoiceid",
+			prop: "invoiceid",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "提报单位",
+			label: "submitcorp",
+			prop: "submitcorp",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核人编码",
+			label: "auditorcode",
+			prop: "auditorcode",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核人名称",
+			label: "auditordesc",
+			prop: "auditordesc",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核时间",
+			label: "audittime",
+			prop: "audittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核级别",
+			label: "auditlevel",
+			prop: "auditlevel",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "是否已退回",
+			label: "retrieveflag",
+			prop: "retrieveflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人编码",
+			label: "retrievercode",
+			prop: "retrievercode",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回人名称",
+			label: "retrieverdesc",
+			prop: "retrieverdesc",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "退回时间",
+			label: "retrievetime",
+			prop: "retrievetime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "制单人单位",
+			label: "recordercorp",
+			prop: "recordercorp",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "审核节点名称",
+			label: "auditlevelname",
+			prop: "auditlevelname",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "错误信息",
+			label: "errormsg",
+			prop: "errormsg",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "提交时间",
+			label: "submittime",
+			prop: "submittime",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "工作流ID",
+			label: "workflowid",
+			prop: "workflowid",
+			type: "Input",
+			width: "10",
+			isHide: true
+		},
+		{
+			title: "状态",
+			label: "状态",
+			prop: "auditflag",
+			type: "Input",
+			width: "10",
+			isHide: true
+		}
+	],
+	// 表格数据
+	tableData: []
+});
+
 // 显示dialogdialogShow_FormVisibleNew
 const dialogShow = data => {
 	if (data == "dialogShow_invoicedetailNew") {
@@ -706,7 +969,6 @@ const linkDetailquey = (column, row) => {
 	}
 };
 
-
 //切换tab时触发
 const tabChange = targetName => {
 	if (targetName == "invoiceinfos") {
@@ -715,6 +977,9 @@ const tabChange = targetName => {
 	} else if (targetName == "queryinvoiceinfo") {
 		//税票信息查询页面
 		grid_invoiceInfosquery.value.getTableList();
+	} else if (targetName == "saleinvoiceinfo") {
+		//销售税票信息查询页面
+		grid_saleinvoiceInfosquery.value.getTableList();
 	}
 };
 </script>
