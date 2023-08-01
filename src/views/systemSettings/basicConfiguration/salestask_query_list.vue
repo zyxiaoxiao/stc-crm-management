@@ -2,8 +2,8 @@
 	<div class="all-height flex-column main-card">
 		<el-tabs class="flex-column flex-1 main-card-tabs" v-model="tabPaneName" @tab-change="tabChange">
 			<el-tab-pane
-				title1="达标奖设置"
-				:label="$t('panelcolumnstandardsetting')"
+				title1="销售任务管理"
+				:label="$t('menubasesalestaskmanage')"
 				class="main-tab-pane-content all-height flex-column"
 				name="0"
 			>
@@ -30,12 +30,18 @@
 							@click="Submit(scope.selectList)"
 							>{{ $t("menu_submit") }}
 						</el-button>
+						<el-button size="small" type="primary" icon="Upload" plain @click="importExcel_handler"
+							>{{ $t("menu_importExcel") }}
+						</el-button>
+						<el-button size="small" type="primary" icon="Download" plain @click="downloadexcel_handler"
+							>{{ $t("menu_downloadexcel") }}
+						</el-button>
 					</template>
 				</zTable>
 			</el-tab-pane>
 			<el-tab-pane
-				title1="达标奖查询"
-				:label="$t('panelcolumnstandardquery')"
+				title1="销售任务管理查询"
+				:label="$t('menubasesalestaskmanagequery')"
 				class="main-tab-pane-content all-height flex-column"
 				name="1"
 			>
@@ -56,14 +62,27 @@
 		</el-tabs>
 		<!-- 新增弹出 -->
 		<ZDialog
-			v-model="configdetailList.dialogShow"
-			title1="达标奖设置"
-			:title="$t('panelcolumnstandardsetting')"
+			v-model="salestaskdetailList.dialogShow"
 			width="95%"
-			@close="contractdetailClose"
+			title1="销售任务"
+			:title="$t('panelbasesalestask')"
+			@close="salestaskdetailClose"
 		>
-			<configdetail :condobj="configdetailList"></configdetail>
+			<salestaskdetail :condobj="salestaskdetailList"></salestaskdetail>
 		</ZDialog>
+
+		<!-- 导入弹出层 -->
+		<el-dialog
+			ref="importExcelDialog"
+			v-model="importExcelList.dialogShow"
+			width="500px"
+			:title="$t('menu_upload')"
+			:append-to-body="true"
+			:destroy-on-close="true"
+			@close="importExcelClose"
+		>
+			<uploadAttachment :condobj="importExcelList" style="margin-bottom: 30px" />
+		</el-dialog>
 	</div>
 </template>
 
@@ -72,12 +91,12 @@ import { ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import qs from "qs";
 import http from "@/api/index.js";
-
 import zTable from "/src/components/ZTable/index.vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import ZDialog from "/src/components/ZDialog.vue";
-
-import configdetail from "./config_detail.vue";
+import { downloadFile } from "/src/utils/fileUtil.js";
+import salestaskdetail from "./salestask_detail.vue";
+import uploadAttachment from "@/views/corp/uploadAttachment.vue";
 
 const i18n = useI18n();
 
@@ -88,89 +107,81 @@ let tableColumns1 = reactive([
 		width: "40"
 	},
 	{
-		title: "单位编码",
-		label: "itemtitlebase_corpcorpcode",
-		prop: "corpcode",
-		type: "Input",
-		width: "160"
-	},
-	{
-		title: "单位名称",
-		label: "itemtitlebase_corpcorpdesc",
-		prop: "corpdesc",
+		title: "销售任务编号",
+		label: "columnbasesalestaskcode",
+		prop: "salestasknum",
 		type: "Link",
-		width: "200"
+		width: "160"
 	},
 	{
 		title: "年份",
-		label: "itemtitlebase_corpyears",
-		prop: "years",
+		label: "columnbaseyear",
+		prop: "year",
 		type: "Input",
 		width: "160"
 	},
 	{
-		title: "制单人编码",
-		label: "itemtitlebase_i18nrecordercode",
+		title: "任务总额(HKD)",
+		label: "columnbasesalestotalsales",
+		prop: "totalsales",
+		type: "Input",
+		width: "200"
+	},
+	{
+		title: "销售编码",
+		label: "columnbasesalescode",
+		prop: "salesmancode",
+		type: "Input",
+		width: "160"
+	},
+	{
+		title: "销售名称",
+		label: "columnbasesalesdescus",
+		prop: "salesmandesc",
+		type: "Input",
+		width: "160"
+	},
+
+	{
+		title: "销售名称(中)",
+		label: "columnbasesalesdesczh",
+		prop: "salesmandesc_cn",
+		type: "Input",
+		width: "160"
+	},
+	{
+		title: "创建人编码",
+		label: "columnCreatehumancoding",
 		prop: "recordercode",
 		type: "Input",
 		width: "160"
 	},
 	{
-		title: "制单人名称",
-		label: "itemtitlebase_i18nrecorderdesc",
+		title: "创建人名称",
+		label: "panelcolumncreaterdesc",
 		prop: "recorderdesc",
 		type: "Input",
 		width: "160"
 	},
 	{
-		title: "制单时间",
-		label: "itemtitlecommomrecordtime",
+		title: "创建时间",
+		label: "itemtitlestatusrecordertime",
 		prop: "recordtime",
 		type: "DateTime",
 		width: "180"
 	},
 	{
-		title: "开始时间",
-		label: "tabtitlecalendarstarttime",
-		prop: "begintime",
-		type: "DateTime",
-		width: "180"
-	},
-	{
-		title: "结束时间",
-		label: "tabtitlecalendarendtime",
-		prop: "endtime",
-		type: "DateTime",
-		width: "180"
-	},
-	{
-		title: "备注",
-		label: "columnappointment_desc42",
-		prop: "remark",
+		title: "描述",
+		label: "itemtitlebase_codecodedesc",
+		prop: "reamrk",
 		type: "Input",
 		width: "200"
 	},
 	{
 		title: "主键",
 		label: "",
-		prop: "attainedid",
+		prop: "salestaskid",
 		type: "id",
-		width: "60",
-		isHide: true
-	},
-	{
-		title: "单位id",
-		label: "",
-		prop: "corpid",
-		type: "Input",
-		width: "60",
-		isHide: true
-	},
-	{
-		title: "用户ID",
-		label: "",
-		prop: "userid",
-		type: "Input",
 		width: "60",
 		isHide: true
 	}
@@ -179,12 +190,12 @@ let tableColumns1 = reactive([
 const zTable1 = ref();
 //表格对象
 const tableList1 = reactive({
-	id: "/systemSettings/basicConfiguration/config_query_list.vue_zTable1",
+	id: "/systemSettings/basicConfiguration/salestask_query_list.vue_zTable1",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/attained/config!selectConfigInfoByCond.action",
-		root: "configInfos",
-		baseParams: { "cond.auditflag": "0" }
+		url: "/crm/salestask/salestask!selectSalestaskInfoByCond.action",
+		root: "salestaskInfos",
+		baseParams: { "cond.freezeflag": "2" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -195,12 +206,12 @@ const tableList1 = reactive({
 const zTable2 = ref();
 //表格对象
 const tableList2 = reactive({
-	id: "/systemSettings/basicConfiguration/config_query_list.vue_zTable2",
+	id: "/systemSettings/basicConfiguration/salestask_query_list.vue_zTable2",
 	//请求属性设置
 	httpAttribute: {
-		url: "/crm/attained/config!selectConfigInfoByCond.action",
-		root: "configInfos",
-		baseParams: { "cond.auditflag": "1" }
+		url: "/crm/salestask/salestask!selectSalestaskInfoByCond.action",
+		root: "salestaskInfos",
+		baseParams: { "cond.freezeflag": "0" }
 	},
 	//表格表头
 	tableColumns: tableColumns1,
@@ -209,22 +220,22 @@ const tableList2 = reactive({
 });
 
 //新增弹出 参数
-const configdetailList = reactive({
+const salestaskdetailList = reactive({
 	success: false,
 	dialogShow: false,
-	attainedid: "",
+	salestaskid: "",
 	workflowflag: "3"
 });
 //新增
 const newDeliverysworkflowdetail = () => {
-	configdetailList.attainedid = "";
-	configdetailList.workflowflag = "1";
-	configdetailList.success = false;
-	configdetailList.dialogShow = true;
+	salestaskdetailList.salestaskid = "";
+	salestaskdetailList.workflowflag = "1";
+	salestaskdetailList.success = false;
+	salestaskdetailList.dialogShow = true;
 };
 // 新增 弹出 回调
-const contractdetailClose = () => {
-	if (configdetailList.success) {
+const salestaskdetailClose = () => {
+	if (salestaskdetailList.success) {
 		zTable1.value.getTableList();
 	}
 };
@@ -238,17 +249,17 @@ const batchDelete = ids => {
 		draggable: true
 	}).then(async () => {
 		let jsonString = {
-			configInfos: []
+			salestaskInfos: []
 		};
 		ids.forEach(item => {
-			jsonString.configInfos.push({
-				attainedid: item
+			jsonString.salestaskInfos.push({
+				salestaskid: item
 			});
 		});
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
-		const res = await http.post("/crm/attained/config!deleteConfigInfo.action", qs.stringify(params));
+		const res = await http.post("/crm/salestask/salestask!deleteSalestaskInfo.action", qs.stringify(params));
 		if (res) {
 			ElMessage.success(i18n.t("Message_deleteSuccess"));
 			zTable1.value.getTableList();
@@ -265,13 +276,39 @@ const Submit = row => {
 		draggable: true
 	}).then(async () => {
 		let params = {
-			jsonString: JSON.stringify({ configInfos: row })
+			jsonString: JSON.stringify({ salestaskInfos: row })
 		};
-		const res = await http.post("/crm/attained/config!submitConfigInfos.action", qs.stringify(params));
+		const res = await http.post("/crm/salestask/salestask!submitSalestaskInfos.action", qs.stringify(params));
 		if (res) {
 			ElMessage.success(i18n.t("Message_OperationSuccess"));
 			zTable1.value.getTableList();
 		}
+	});
+};
+
+//导入
+const importExcelList = reactive({
+	uploadUrl: "/crm/salestask/salestask!importExcel.action",
+	uploadParameter: { jsonString: `{ uploadFile: { businesscode: "salesTask", handletype: "1" } }` }, //参数
+	success: false,
+	dialogShow: false
+});
+
+const importExcel_handler = () => {
+	importExcelList.dialogShow = true;
+};
+
+const importExcelClose = () => {
+	if (importExcelList.success) {
+		zTable1.value.getTableList();
+	}
+};
+
+//下载模板
+const downloadexcel_handler = () => {
+	downloadFile("/core/uploadnew/upload!downloadByFilename.action", "salesTask.xlsx", {
+		"cond.fileName": "salesTask.xlsx",
+		"cond.path": "/filedownload/2007"
 	});
 };
 
@@ -284,13 +321,13 @@ const backHandler = row => {
 		draggable: true
 	}).then(async () => {
 		let jsonString = {
-			configInfos: row
+			salestaskInfos: row
 		};
 		let params = {
 			jsonString: JSON.stringify(jsonString)
 		};
 
-		const res = await http.post("/crm/attained/config!backConfigInfos.action", qs.stringify(params));
+		const res = await http.post("/crm/salestask/salestask!cancelSalestaskInfos.action", qs.stringify(params));
 		if (res) {
 			ElMessage.success(i18n.t("alertRevocationofsuccess"));
 			zTable2.value.getTableList();
@@ -300,17 +337,17 @@ const backHandler = row => {
 
 //链接详细信息
 const linkDetailbg = (column, row) => {
-	configdetailList.attainedid = row.attainedid;
-	configdetailList.workflowflag = "1";
-	configdetailList.success = false;
-	configdetailList.dialogShow = true;
+	salestaskdetailList.salestaskid = row.salestaskid;
+	salestaskdetailList.workflowflag = "1";
+	salestaskdetailList.success = false;
+	salestaskdetailList.dialogShow = true;
 };
 
 const linkDetailbgQuery = (column, row) => {
-	configdetailList.attainedid = row.attainedid;
-	configdetailList.workflowflag = "3";
-	configdetailList.success = false;
-	configdetailList.dialogShow = true;
+	salestaskdetailList.salestaskid = row.salestaskid;
+	salestaskdetailList.workflowflag = "3";
+	salestaskdetailList.success = false;
+	salestaskdetailList.dialogShow = true;
 };
 
 const tabPaneName = ref("0");

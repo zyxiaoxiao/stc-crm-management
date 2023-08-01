@@ -55,7 +55,13 @@
 			</el-tab-pane>
 		</el-tabs>
 		<!-- 新增弹出 -->
-		<ZDialog v-model="labmanagedetailList.dialogShow" width="95%" @close="contractdetailClose">
+		<ZDialog
+			v-model="labmanagedetailList.dialogShow"
+			width="95%"
+			title1="实验室预算"
+			:title="$t('menubaselabmanage')"
+			@close="contractdetailClose"
+		>
 			<labmanagedetail :condobj="labmanagedetailList"></labmanagedetail>
 		</ZDialog>
 	</div>

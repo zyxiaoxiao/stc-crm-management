@@ -1,8 +1,7 @@
 <template>
 	<div class="all-height flex-column">
-		<el-divider title1="达标奖设置" content-position="left">{{ $t("panelcolumnstandardsetting") }}</el-divider>
 		<el-form
-			style="margin: 0px 15px"
+			style="margin: 15px 15px 0px 15px"
 			label-position="right"
 			label-width="120px"
 			:model="formData"
