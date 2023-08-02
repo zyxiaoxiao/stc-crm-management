@@ -111,7 +111,6 @@
 			</template>
 		</zTable>
 
-		<!-- 选择客户 -->
 		<ZDialog v-model="selectCustomerList.dialogShow" :title="$t('panelSelectcustomer')" width="75%" @close="selectCustomerClose">
 			<selectCustomer :condobj="selectCustomerList"></selectCustomer>
 		</ZDialog>
@@ -183,29 +182,29 @@ if (props?.condobj?.workflowflag == "1") {
 } else if (props?.condobj?.workflowflag == "3") {
 }
 
-//选择客户信息弹出参数
+//选择单位信息弹出参数
 const selectCustomerList = reactive({
 	dialogShow: false,
 	objectParameter: {}
 });
-//选择客户信息弹出
+//选择单位信息弹出
 const selectCustomerBtn = () => {
 	selectCustomerList.dialogShow = true;
 	selectCustomerList.objectParameter = {};
 };
-//选择客户信息弹出  回调
+//选择单位信息弹出  回调
 const selectCustomerClose = () => {
 	let objectParameter = selectCustomerList.objectParameter;
 	console.log(objectParameter);
 	if (objectParameter && objectParameter?.corpcode) {
-		formData.corpdesc = objectParameter.corpdesc; //客户名称
-		formData.corpcode = objectParameter.corpcode; //客户号
+		formData.corpdesc = objectParameter.corpdesc; //单位名称
+		formData.corpcode = objectParameter.corpcode; //单位号
 	}
 };
-//清除选择的客户
+//清除选择的单位
 const delCustomer = () => {
-	formData.corpdesc = ""; //客户名称
-	formData.corpcode = ""; //客户号
+	formData.corpdesc = ""; //单位名称
+	formData.corpcode = ""; //单位号
 };
 
 const begintimeDisabledDate = DateTime => {
