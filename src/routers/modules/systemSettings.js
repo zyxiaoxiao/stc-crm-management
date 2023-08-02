@@ -84,6 +84,17 @@ const systemSettingsRouter = [
                     key: "areamanagement_query_list"
                 }
             },
+            {
+                path: "/systemSettings/basicConfiguration/sales_team_list",
+                name: "sales_team_list",
+                component: () => import("/src/views/systemSettings/basicConfiguration/sales_team_list.vue"),
+                meta: {
+                    keepAlive: false, //是否缓存页面
+                    requiresAuth: true, //true需要登录才能访问
+                    title: "panelcolumnsales_team_management", //"销售团队管理",
+                    key: "sales_team_list"
+                }
+            },
         ]
     }
 ];

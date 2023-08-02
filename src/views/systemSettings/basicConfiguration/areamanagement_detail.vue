@@ -105,7 +105,7 @@ const props = defineProps({
 				type: Boolean,
 				default: false
 			},
-			otherstaticid: {
+			areamanagementid: {
 				type: String,
 				default: ""
 			},
