@@ -5603,11 +5603,11 @@ export default {
 	menubaseBadDebtRecoveryDeductionCommissionInquiry: "呆账追回扣减佣金查询",
 	menubaseCalculateCommissionForBadDebtRecovery: "计算呆账追回佣金",
 	menu_base_AuditRecords: "审核记录",
-	menu_base_AuditRecords: "是否自动填充申请单金额?",
 	basecolumnElectronic_Invoice: "电子发票",
+	basecolumnSalesTaxInvoiceQuery: "销售税票查询",
 	mytodolist: "我的待办",
 	collapse: "折叠",
-	expanded: "展开"
-
-
+	expanded: "展开",
+	crm_qyglxx01: "区域",
+	crm_qyglxx02: "部门",
 };

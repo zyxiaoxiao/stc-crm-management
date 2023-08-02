@@ -59,10 +59,7 @@ if (props.customclass) {
 
 const open = () => {
 	emits("open");
-};
-const opened = () => {
 	const el = dialogRef.value.dialogContentRef.$el;
-	console.log("el", el);
 	// 获取弹框头部
 	dialogHeaderEl = el.querySelector(".el-dialog__header");
 	//全屏事件
@@ -71,10 +68,10 @@ const opened = () => {
 	const dragDom = el;
 	//拉伸
 	dragMouse = el.querySelector(".stretching");
-	console.log("dialogHeaderEl", dialogHeaderEl);
-	console.log("dialogQuanpingEl", dialogQuanpingEl);
-	console.log("dragDom", dragDom);
-	console.log("dragMouse", dragMouse);
+	//console.log("dialogHeaderEl", dialogHeaderEl);
+	//console.log("dialogQuanpingEl", dialogQuanpingEl);
+	//console.log("dragDom", dragDom);
+	//console.log("dragMouse", dragMouse);
 	if (dialogHeaderEl && dialogQuanpingEl && dragDom && dragMouse) {
 		//获取宽度百分比，给left百分比
 		let elDialogWidth = "";
@@ -87,7 +84,12 @@ const opened = () => {
 		}
 		let elDialogLeft = (100 - elDialogWidth) / 2;
 		dragDom.style.left = elDialogLeft + "%";
-		dragDom.style.top = "50px";
+
+		//获取高度
+		const window_height = window.innerHeight;
+		const dragDom_height = dragDom.offsetHeight;
+		//console.log((window_height - dragDom_height) / 2);
+		dragDom.style.top = (window_height - dragDom_height) / 2 + "px";
 		// 头部加上可拖动cursor
 		dialogHeaderEl.style.cursor = "move";
 		// 获取原有属性 ie dom元素.currentStyle 火狐谷歌 window.getComputedStyle(dom元素, null);
@@ -197,6 +199,7 @@ const opened = () => {
 		};
 	}
 };
+const opened = () => {};
 
 const close = () => {
 	dialogHeaderEl.onmousedown = null;

@@ -4,7 +4,7 @@
 			<el-alert type="info" :title="$t('Message_OperationTip')" show-icon description="" :closable="false">
 				<template #default>
 					<div>
-						{{ $t("Statement_filesize") }} 1 MB
+						{{ $t("Statement_filesize") }} 50 MB
 						<br />
 						{{ $t("Statement_filetype") }}
 						tif,jpg,png,gif,bmp,txt,html,xml,pdf,doc,xls,ppt,docx,xlsx,pptx,zip,rar,mp3,mov,avi,mpp
@@ -82,7 +82,21 @@ const handleSuccess = response => {
 };
 //请求失败后执行的函数，相当于axios的catch
 const handleError = error => {
-	ElMessage.warning(i18n.t("Statement_failup") + error.errors + "！");
+	if (error?.errors) {
+		ElMessage({
+			showClose: true,
+			message: i18n.t("Statement_failup") + error.errors + "！",
+			duration: 5000,
+			type: "warning"
+		});
+	} else {
+		ElMessage({
+			showClose: true,
+			message: i18n.t("Statement_failup") + error,
+			duration: 5000,
+			type: "warning"
+		});
+	}
 };
 </script>
 

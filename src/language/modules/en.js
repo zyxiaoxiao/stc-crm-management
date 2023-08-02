@@ -5820,9 +5820,11 @@ export default {
 	menubaseBadDebtRecoveryDeductionCommissionInquiry: "Bad Debt Recovery Deduction Commission Inquiry",
 	menubaseCalculateCommissionForBadDebtRecovery: "Calculate Commission For Bad Debt Recovery",
 	menu_base_AuditRecords: "Audit records",
-	menu_base_AuditRecords: "Do you want to automatically fill in the application form amount?",
 	basecolumnElectronic_Invoice: "Electronic Invoice",
+	basecolumnSalesTaxInvoiceQuery: "Sales Tax Invoice Query",
 	mytodolist: "My to-do list",
 	collapse: "collapse",
-	expanded: "expanded"
+	expanded: "expanded",
+	crm_qyglxx01: "区域",
+	crm_qyglxx02: "部门",
 };

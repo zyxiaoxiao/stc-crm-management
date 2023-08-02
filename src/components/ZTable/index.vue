@@ -219,6 +219,7 @@
 								type="date"
 								format="YYYY-MM-DD"
 								size="small"
+								style="width: 100%"
 							/>
 							<el-date-picker
 								v-else-if="item.type == 'DateTime'"
@@ -226,6 +227,16 @@
 								type="datetime"
 								format="YYYY-MM-DD hh:mm:ss"
 								size="small"
+								style="width: 100%"
+							/>
+							<el-date-picker
+								v-else-if="item.type == 'Month'"
+								v-model="tablePropSearch[item.prop]"
+								type="month"
+								format="YYYY-MM"
+								value-format="YYYY-MM"
+								size="small"
+								style="width: 100%"
 							/>
 							<template v-else-if="item.type == 'Number'">
 								<el-input-number
@@ -310,6 +321,7 @@
 								type="date"
 								format="YYYY-MM-DD"
 								size="small"
+								style="width: 100%"
 							/>
 							<el-date-picker
 								v-else-if="item.type == 'DateTime'"
@@ -317,6 +329,16 @@
 								type="datetime"
 								format="YYYY-MM-DD hh:mm:ss"
 								size="small"
+								style="width: 100%"
+							/>
+							<el-date-picker
+								v-else-if="item.type == 'Month'"
+								v-model="tablePropSearch[item.prop]"
+								type="month"
+								format="YYYY-MM"
+								value-format="YYYY-MM"
+								size="small"
+								style="width: 100%"
 							/>
 							<template v-else-if="item.type == 'Number'">
 								<el-input-number
@@ -398,6 +420,7 @@
 								type="date"
 								format="YYYY-MM-DD"
 								value-format="YYYY-MM-DD"
+								style="width: 100%"
 								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 							/>
 							<el-date-picker
@@ -406,6 +429,16 @@
 								type="datetime"
 								format="YYYY-MM-DD hh:mm:ss"
 								value-format="YYYY-MM-DD hh:mm:ss"
+								style="width: 100%"
+								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
+							/>
+							<el-date-picker
+								v-else-if="item.type == 'Month'"
+								v-model="scope.row[item.prop]"
+								type="month"
+								format="YYYY-MM"
+								value-format="YYYY-MM"
+								style="width: 100%"
 								:ref="el => setFormComponentRef(el, scope.row.rowIndex + item.prop)"
 							/>
 							<template v-else-if="item.type == 'Number'">
@@ -886,7 +919,7 @@ const dataFormatProcessing = tableData => {
 		for (let rowData of tableData) {
 			for (let key in typeFieldName) {
 				if (typeFieldName[key] == "Number") {
-					rowData[key] = isNumber(rowData[key]) ? stringToNumber(rowData[key]) : null;
+					rowData[key] = isNumber(rowData[key]) ? stringToNumber(rowData[key]) : 0;
 				}
 				if (typeFieldName[key] == "Date") {
 					rowData[key] = rowData[key] ? moment(new Date(rowData[key])).format("YYYY-MM-DD") : null;
