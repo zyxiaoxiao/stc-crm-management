@@ -23,7 +23,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.4.0",
     "echarts": "^5.4.2",
-    "element-plus": "^2.3.7",
+    "element-plus": "^2.3.9",
     "element-resize-detector": "^1.2.4",
     "file-saver": "^2.0.5",
     "js-md5": "^0.7.3",
