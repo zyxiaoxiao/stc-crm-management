@@ -3,7 +3,7 @@
 	<div style="margin-left: 20px; margin-right: 20px; margin-top: 20px">
 		<el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
 			<el-form-item prop="username">
-				<el-input v-model="props.loginForm.username" placeholder="用户名">
+				<el-input v-model="props.loginForm.username" placeholder="用户名" readonly>
 					<template #prefix>
 						<el-icon class="el-input__icon">
 							<user />

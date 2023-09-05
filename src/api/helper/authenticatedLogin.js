@@ -1,5 +1,6 @@
 import { reactive, h } from "vue";
 import http from "@/api/index.js";
+import qs from "qs";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { GlobalStore } from "@/store/globalStore";
 import i18n from "@/language/index.js";
@@ -36,14 +37,11 @@ export const authenticatedMessageBox = async () => {
           "loginInfo.userpass": loginForm.password
         }));
         if (res.loginMessage == "success") {
-          //  存储 token
+          // * 存储 token
           globalStore.setToken(res.loginInfo[0].userid);
           done();
         } else {
-          ElMessage({
-            type: "warning",
-            message: i18n.global.t('身份认证失败'),
-          });
+          ElMessage.warning(res.loginMessage);
         }
       }
     },
