@@ -1622,7 +1622,7 @@ watch(tableList7.tableData, tableData7 => {
 					row7.DESC34 = 0; // 给一个最小值
 				}, 50);
 			}
-			totalprice = totalprice + parseFloat(row7.DESC34);
+			totalprice = parseFloat(parseFloat(totalprice + parseFloat(row7.DESC34)).toFixed(2));
 		}
 		formData.splitprice = parseFloat(totalprice).toFixed(2);
 		zTable7IsSelected.value = true;

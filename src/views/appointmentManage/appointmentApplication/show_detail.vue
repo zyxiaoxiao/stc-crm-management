@@ -115,6 +115,7 @@ const downloadfiles = (column, row) => {
 };
 //表格对象
 const ftableList = reactive({
+	id: "/appointmentManage/appointmentApplication/show_detail.vue_fileList",
 	//设置 为单选
 	isRadio: true,
 	//设置 工具栏

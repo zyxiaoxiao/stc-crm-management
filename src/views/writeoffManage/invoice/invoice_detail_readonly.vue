@@ -254,19 +254,29 @@ const tableTabsValue = ref("invoiceinfo");
 
 //删除上传的电子税票
 let deleteInvoiceUpload = async () => {
+		
 	let businessobjectid = sformData.invoiceid; //主键id
 	let filepath = sformData.filepath; //税票上传地址
 	//税票主键id不为空且电子税票有上传记录
 	if (businessobjectid && filepath) {
-		//删除上传的电子税票，保留上传记录。
-		let cond = { businessobjectid: businessobjectid, invoiceid: businessobjectid };
-		let par = {
-			jsonString: JSON.stringify({ cond: cond })
-		};
-		const res = await http.post("/core/uploadnew/upload!deleteUploadFile.action", qs.stringify(par));
-		if (res) {
-			getinvoiceInfo({ invoiceid: businessobjectid });
-		}
+		//确认是否删除
+		ElMessageBox.confirm(i18n.t("Message_DeleteYesNo"), i18n.t("Message_Confirmdelete"), {
+		    confirmButtonText: i18n.t("menu_ok"),
+		    cancelButtonText: i18n.t("menu_cancel"),
+		    type: "warning",
+		    draggable: true
+	    }).then(async () => {
+            //删除上传的电子税票，保留上传记录。
+		    let cond = { invoiceid: businessobjectid };
+		    let par = {
+			    jsonString: JSON.stringify({ cond: cond })
+		    };
+		    const res = await http.post("/crm/invoice/invoice!deleteUploadInvoiceInfo.action", qs.stringify(par));
+		    if (res) {
+			    getinvoiceInfo({ invoiceid: businessobjectid });
+		    }
+	    });
+		
 	}
 };
 
@@ -397,10 +407,10 @@ let getinvoiceInfo = async obj => {
 			let totalfolderamount = 0; //已开票总金额
 			for (let t of tableListFolders.tableData) {
 				if (t.currency) {
-					totalamount += parseFloat(t.currency);
+					totalamount = parseFloat((parseFloat(totalamount) + parseFloat(t.currency)).toFixed(2));
 				}
 				if (t.totalfolderamount) {
-					totalfolderamount += parseFloat(t.totalfolderamount);
+					totalfolderamount = parseFloat((parseFloat(totalfolderamount) + parseFloat(t.totalfolderamount)).toFixed(2));
 				}
 			}
 			//申请单总金额
@@ -482,7 +492,7 @@ onMounted(() => {
 //表格发票信息
 const grid_foldersInfos = ref();
 const tableListFolders = reactive({
-	id: "/writeoffManage/invoice/invoice_detail.vue_grid_foldersInfos",
+	id: "/writeoffManage/invoice/invoice_detail_readonly.vue_grid_foldersInfos",
 	tableToolbar: {
 		right: false
 	},
@@ -591,7 +601,10 @@ const tableListFolders = reactive({
 //表格invoice信息
 const grid_accessory = ref();
 const tableListfile = reactive({
-	id: "/writeoffManage/invoice/invoice_detail.vue_grid_accessory",
+	id: "/writeoffManage/invoice/invoice_detail_readonly.vue_grid_accessory",
+	tableToolbar: {
+		right: false
+	},
 	//请求属性设置
 	httpAttribute: {
 		url: "/core/upload/upload!selectfilesInfoByCond.action",
@@ -681,10 +694,10 @@ watch(
 		let totalfolderamount = 0; //已开票总金额
 		for (let i of newValue) {
 			if (i.currency) {
-				totalamount += parseFloat(i.currency);
+				totalamount = parseFloat((parseFloat(totalamount) + parseFloat(i.currency)).toFixed(2));
 			}
 			if (i.totalfolderamount) {
-				totalfolderamount += parseFloat(i.totalfolderamount);
+				totalfolderamount = parseFloat((parseFloat(totalfolderamount) + parseFloat(i.totalfolderamount)).toFixed(2));
 			}
 		}
 		if (!sformData.totalamount || parseFloat(sformData.totalamount) == 0 || totalamount != parseFloat(sformData.totalamount)) {

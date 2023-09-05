@@ -634,7 +634,7 @@ const tableListSales = reactive({
 //表格销售认证佣金信息
 const grid_authenticationQuery = ref();
 const tableListCertification = reactive({
-	id: "/appointmentManage/attained/combined_detail.vue_grid_authenticationQuery",
+	id: "/appointmentManage/commission/combined_detail.vue_grid_authenticationQuery",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/commission/commission!selectFoldersInfoByBrokerageformouth.action",

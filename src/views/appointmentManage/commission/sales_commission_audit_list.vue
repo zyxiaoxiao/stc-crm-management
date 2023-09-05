@@ -548,7 +548,7 @@ const atableList = reactive({
 
 //表格对象审核提佣查询
 const htableList = reactive({
-	id: "/appointmentManage/attained/sales_commission_audit_list.vue_grid_combinedInfos_query_audit",
+	id: "/appointmentManage/commission/sales_commission_audit_list.vue_grid_combinedInfos_query_audit",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/commission/commission!selectCombinedCommissionInfoByCond.action",

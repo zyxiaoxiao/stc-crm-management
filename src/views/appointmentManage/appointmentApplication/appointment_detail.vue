@@ -2716,6 +2716,7 @@ const ptableList = reactive({
 
 //表格账户信息
 const accountTableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_accountInfos",
 	//设置 为单选
 	tableToolbar: {
 		right: false
@@ -2782,6 +2783,7 @@ const accountTableList = reactive({
 
 //表格其它费用
 const otherTableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_otherInfos",
 	edit: false, //当前表格是否可编辑
 	//设置 为单选
 	tableToolbar: {
@@ -2900,6 +2902,7 @@ const otherTableList = reactive({
 
 //表格分包信息
 const subpackageTableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_subpackageInfos",
 	//设置 工具栏
 	tableToolbar: {
 		right: false
@@ -2989,6 +2992,7 @@ const subpackageTableList = reactive({
 
 //表格附件信息
 const fileTableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_detail.vue_fileInfos",
 	//设置 为单选
 	tableToolbar: {
 		right: false
@@ -3788,6 +3792,17 @@ const tabChange = targetName => {
 			ptableList.edit = false; //检测项只读
 		} else if (workflowflag == "3" || v_split == "1") {
 			isdisabled.value = true;
+		}
+		let splitdesc34 = formData.splitdesc34;//拆分总价格
+		let parentid = formData.parentid;//主报价单
+		if(splitdesc34 && parentid!='0'){
+			//分包单
+			splitShow.value = true;
+			initialShow.value = false;
+		}else{
+			//非分包单
+			splitShow.value = false;
+			initialShow.value = true;
 		}
 		if (pkm_run) {
 			pkm_hind.value = 8;

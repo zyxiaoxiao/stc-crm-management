@@ -195,6 +195,7 @@ import { ElMessage, ElMessageBox, ElInput } from "element-plus";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import ZDialog from "/src/components/ZDialog.vue";
+import { getdropSownSelection } from "/src/utils/util.js";
 //到账信息
 import billappointmentdetailreadonly from "@/views/writeoffManage/writeoff_dgbj/bill_appointment_detail_readonly.vue";
 const i18n = useI18n();
@@ -211,7 +212,7 @@ let userInfo = globalStore.userInfo;
 let approveShow = ref(false); //审核显示
 let isCurrency = ref(true); //币种可编辑
 let writeoffidto = ""; //销账id
-
+let crm_skfs = getdropSownSelection("CRM_skfs"); //收款方式下拉
 let costtype = [
 	{
 		value: "1",
@@ -487,7 +488,7 @@ const tableListInvoices = reactive({
 			title: "打印日期",
 			label: "columnwriteoff_invoiceprintdate",
 			prop: "PRINTDATE",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
@@ -709,7 +710,8 @@ const tableListFolders = reactive({
 			label: "billinfoamountofmoneypanelhkd",
 			prop: "hktotalmoney",
 			type: "Input",
-			width: "160"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "外币退款金额",
@@ -829,7 +831,7 @@ const tableListBillInfos = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
@@ -873,7 +875,7 @@ const tableListBillInfos = reactive({
 			prop: "paymentmethod",
 			type: "Select",
 			width: "160",
-			typeData: costtype
+			typeData: crm_skfs
 		},
 		{
 			title: "客户名称",
@@ -1265,6 +1267,9 @@ const tableListWriteoffInfos = reactive({
 const grid_accountInfos = ref();
 const tableListaccount = reactive({
 	id: "/writeoffManage/writeoff_dgbj/writeoff_batch_detail_readOnly.vue_grid_accountInfos",
+	tableToolbar: {
+		right: false
+	},
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/account/crmaccount!selectCrmaccountInfoByCond.action",
@@ -1367,6 +1372,9 @@ const tableListaccount = reactive({
 const grid_accessory = ref();
 const tableListfile = reactive({
 	id: "/writeoffManage/writeoff_dgbj/writeoff_batch_detail_readOnly.vue_grid_accessory",
+	tableToolbar: {
+		right: false
+	},
 	//请求属性设置
 	httpAttribute: {
 		url: "/core/uploadnew/upload!selectUploadFileByCond.action",

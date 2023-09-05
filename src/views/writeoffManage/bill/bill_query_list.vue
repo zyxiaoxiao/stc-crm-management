@@ -134,7 +134,7 @@
 			<billdetailConfirm :condobj="condobj"></billdetailConfirm>
 		</ZDialog>
 
-		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('DOWNLOAD_excel')">
 			<el-form :model="excelform" style="margin: 25px 15px">
 				<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
 					<el-radio-group v-model="excelform.eradio" class="ml-4">
@@ -452,7 +452,7 @@ const billtableList = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
@@ -492,7 +492,7 @@ const billtableList = reactive({
 		},
 		{
 			title: "创建时间",
-			label: "basecolumncombined_minimum_guarantee_rate",
+			label: "testiteminforecordtimepanel",
 			prop: "recordtime",
 			type: "Input",
 			width: "160"
@@ -770,10 +770,18 @@ const htableList = reactive({
 			width: "140"
 		},
 		{
+			title: "退款金额",
+			label: "columndrawbackrefundmoney",
+			prop: "retreatmoney",
+			type: "Number",
+			precision: 2,
+			width: "140"
+		},
+		{
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
@@ -813,7 +821,7 @@ const htableList = reactive({
 		},
 		{
 			title: "创建时间",
-			label: "basecolumncombined_minimum_guarantee_rate",
+			label: "testiteminforecordtimepanel",
 			prop: "recordtime",
 			type: "Input",
 			width: "160"
@@ -1123,7 +1131,7 @@ const querytableList = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
-			type: "Input",
+			type: "Date",
 			width: "140"
 		},
 		{
@@ -1170,7 +1178,7 @@ const querytableList = reactive({
 		},
 		{
 			title: "创建时间",
-			label: "basecolumncombined_minimum_guarantee_rate",
+			label: "testiteminforecordtimepanel",
 			prop: "recordtime",
 			type: "Input",
 			width: "160"
@@ -1463,7 +1471,7 @@ const confirmtableList = reactive({
 		},
 		{
 			title: "创建时间",
-			label: "basecolumncombined_minimum_guarantee_rate",
+			label: "testiteminforecordtimepanel",
 			prop: "recordtime",
 			type: "Input",
 			width: "160"

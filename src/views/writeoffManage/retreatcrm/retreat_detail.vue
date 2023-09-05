@@ -209,10 +209,11 @@ let saveRetreatInfo = async edit => {
 			allcurrencyretreatmoney += currencyretreatmoney;
 			status = "1";
 			if (currencybalance < currencyretreatmoney) {
-				ElMessage.warning("余额不足!");
+				ElMessage.warning("余额不足！");
 				return;
 			}
 		}
+		
 		if (l.retreatmoney) {
 			retreatmoney = parseFloat(l.retreatmoney); //余额
 			status = "1";
@@ -223,7 +224,7 @@ let saveRetreatInfo = async edit => {
 		}
 	}
 	//外币退款金额
-	sformData.currencyretreatmoney = allcurrencyretreatmoney;
+	sformData.currencyretreatmoney = parseFloat(parseFloat(allcurrencyretreatmoney).toFixed(2));
 	sformData.status = status;
 	let url = "/crm/retreat/retreat!updateRetreatInfo.action";
 	if (!sformData.retreatid) {

@@ -900,7 +900,7 @@ const qtableList = reactive({
 	tableData: []
 });
 
-// 显示dialogdialogShow_FormVisibleNew
+// 显示
 const dialogShow = data => {
 	if (data == "dialogShow_invoicedetailNew") {
 		condobj.cond = {

@@ -7,17 +7,23 @@ import { GlobalStore } from "@/store/globalStore";
 import router from "@/routers";
 import { isString } from "@/utils/is/index.js";
 import i18n from "@/language/index.js";
+import { authenticatedMessageBox } from "./helper/authenticatedLogin";
 
 const axiosCanceler = new AxiosCanceler();
+const globalStore = GlobalStore();
 const config = {
 	// 默认地址请求地址
 	//baseURL: "http://192.168.3.33:8086",
+	//baseURL: globalStore.serverUrl
 	baseURL: "/apis", // 跨域代理
 
 	// 设置超时时间（60s）
 	timeout: 180000,
 	// 跨域时候允许携带凭证
-	withCredentials: true
+	withCredentials: true,
+
+	retry: 3, //设置全局重试请求次数（最多重试几次请求）
+	retryDelay: 1000, //设置全局请求间隔
 };
 
 class RequestHttp {
@@ -31,7 +37,6 @@ class RequestHttp {
 		 */
 		this.service.interceptors.request.use(
 			config => {
-				const globalStore = GlobalStore();
 				// * 将当前请求添加到 pending 中
 				axiosCanceler.addPending(config);
 				// * 如果当前请求不需要显示 loading,在 api 服务中通过指定的第三个参数: { headers: { noLoading: true } }来控制不显示loading，参见loginApi
@@ -58,6 +63,7 @@ class RequestHttp {
 			response => {
 				const { data, config } = response;
 				const globalStore = GlobalStore();
+
 				// * 在请求结束后，移除本次请求，并关闭请求 loading
 				axiosCanceler.removePending(config);
 				tryHideFullScreenLoading();
@@ -79,11 +85,10 @@ class RequestHttp {
 
 				//登录失效 sessionisnull
 				if (isString(data) && data.indexOf("sessionisnull") >= 0) {
-					ElMessage.error(i18n.global.t("httpStatus401"));
-					globalStore.setToken("");
-					router.replace({
-						path: "/login"
-					});
+					//清除所有的请求
+					axiosCanceler.removeAllPending();
+					//弹出登录窗口
+					authenticatedMessageBox();
 					return Promise.reject(data);
 				}
 
@@ -92,21 +97,34 @@ class RequestHttp {
 			},
 			async error => {
 				const { response } = error;
+
 				tryHideFullScreenLoading();
 				// 请求超时单独判断，因为请求超时没有 response
-				if (error.message.indexOf("timeout") !== -1) {
+				if (error.message && error.message.indexOf("timeout") !== -1) {
 					ElMessage.error(i18n.global.t("httpStatus408"));
-				} else if (response.data) {
+				} else if (response && response.data) {
 					//判断服务器是否有返回报错信息
-					ElMessage.error(i18n.global.t(response.data));
+					if (typeof (response.data) === "string") {
+						ElMessage.error(i18n.global.t(response.data));
+					}
 				} else if (response) {
-					// 根据响应的错误状态码，做不同的处理
-					checkStatus(response.status);
-				} else if (!window.navigator.onLine)
+					//代理时登录失效进入
+					if (response?.status == "404" && response?.request?.responseURL.indexOf("/ext2/relogin.jsp") >= 0) {
+						//清除所有的请求
+						axiosCanceler.removeAllPending();
+						//弹出登录窗口
+						authenticatedMessageBox();
+					} else {
+						// 根据响应的错误状态码，做不同的处理
+						checkStatus(response.status);
+					}
+
+				} else if (!window.navigator.onLine) {
 					// 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
 					router.replace({
 						path: "/500"
 					});
+				}
 				return Promise.reject(error);
 			}
 		);

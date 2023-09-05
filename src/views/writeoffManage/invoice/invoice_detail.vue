@@ -169,7 +169,7 @@
 
 		<ZDialog
 			v-model="condobj.dialogShow_selectFolderQuery"
-			:title="$t('Message_OperationTipmessageselectmessage')"
+			:title="$t('select_information')"
 			@close="dialogclose"
 			width="95%"
 		>
@@ -178,7 +178,7 @@
 
 		<ZDialog
 			v-model="condobj.dialogShow_selectCustomerQuery"
-			:title="$t('Message_OperationTipmessageselectmessage')"
+			:title="$t('panelSelectcustomer')"
 			@close="dialogclose"
 			width="95%"
 		>
@@ -462,10 +462,10 @@ let getinvoiceInfo = async obj => {
 			let totalfolderamount = 0; //已开票总金额
 			for (let t of tableListFolders.tableData) {
 				if (t.currency) {
-					totalamount += parseFloat(t.currency);
+					totalamount = parseFloat((parseFloat(totalamount) + parseFloat(t.currency)).toFixed(2));
 				}
 				if (t.totalfolderamount) {
-					totalfolderamount += parseFloat(t.totalfolderamount);
+					totalfolderamount = parseFloat((parseFloat(totalfolderamount) + parseFloat(t.totalfolderamount)).toFixed(2));
 				}
 			}
 			//申请单总金额
@@ -762,6 +762,9 @@ const tableListFolders = reactive({
 const grid_accessory = ref();
 const tableListfile = reactive({
 	id: "/writeoffManage/invoice/invoice_detail.vue_grid_accessory",
+	tableToolbar: {
+		right: false
+	},
 	//请求属性设置
 	httpAttribute: {
 		url: "/core/upload/upload!selectfilesInfoByCond.action",
@@ -863,10 +866,10 @@ watch(
 			}
 			invoicemoney += i.invoicevalue;
 			if (i.currency) {
-				totalamount += parseFloat(i.currency);
+				totalamount = parseFloat((parseFloat(totalamount) + parseFloat(i.currency)).toFixed(2));
 			}
 			if (i.totalfolderamount) {
-				totalfolderamount += parseFloat(i.totalfolderamount);
+				totalfolderamount = parseFloat((parseFloat(totalfolderamount) + parseFloat(i.totalfolderamount)).toFixed(2));
 			}
 		}
 		if (edit) {

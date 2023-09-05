@@ -167,7 +167,7 @@ const saveBillAppointment_handler = async () => {
 			ElMessage.warning(i18n.t("Message_EnterMoney"));
 			return;
 		}
-		currencybilltotalmoney = currencybilltotalmoney + parseFloat(b.currencybilletoappoint);
+		currencybilltotalmoney = parseFloat((parseFloat(currencybilltotalmoney) + parseFloat(b.currencybilletoappoint)).toFixed(2));
 	}
 	let jsonString = {
 		billappointmentInfos: tableListbills.tableData

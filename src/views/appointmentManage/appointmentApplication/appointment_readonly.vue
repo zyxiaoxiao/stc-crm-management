@@ -314,6 +314,7 @@ let tableColumns = [
 
 //表格对象
 const historyapptableList = reactive({
+	id: "/appointmentManage/appointmentApplication/appointment_readonly.vue_selecthistoryApplintmentInfos",
 	//设置 为单选
 	isRadio: true,
 	//请求属性设置

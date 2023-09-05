@@ -19,6 +19,7 @@ import { ref, reactive, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import zTable from "/src/components/ZTable/index.vue";
 import { ElMessage } from "element-plus";
+import { getdropSownSelection } from "/src/utils/util.js";
 import ZDialog from "/src/components/ZDialog.vue";
 //到账信息
 import billdetailNew from "@/views/writeoffManage/bill/bill_detail.vue";
@@ -33,7 +34,7 @@ const condobj = reactive({
 	cond: {},
 	objlist: {}
 });
-
+let crm_skfs = getdropSownSelection("CRM_skfs"); //收款方式下拉
 //选择完数据后给父页面传值
 const selectBillInfos = list => {
 	if (list != null && list.length > 0) {
@@ -69,7 +70,7 @@ let tableColumns = [
 		title: "到账日期",
 		label: "billinfoaccountdatepanel",
 		prop: "billdate",
-		type: "Input",
+		type: "Date",
 		width: "180"
 	},
 	{
@@ -123,7 +124,7 @@ let tableColumns = [
 	},
 	{
 		title: "已冲销金额",
-		label: "column.bill.havawriteoffs",
+		label: "columnbillhavawriteoffs",
 		prop: "writesum",
 		type: "Input",
 		width: "140"
@@ -139,8 +140,9 @@ let tableColumns = [
 		title: "收款方式",
 		label: "columnbillpaymentmethod",
 		prop: "paymentmethod",
-		type: "Input",
-		width: "140"
+		type: "Select",
+		width: "140",
+		typeData: crm_skfs
 	},
 	{
 		title: "付款人账号",
@@ -151,7 +153,7 @@ let tableColumns = [
 	},
 	{
 		title: "备注",
-		label: "columnbillremeark",
+		label: "panelcolumnRemark",
 		prop: "remark",
 		type: "Input",
 		width: "140"

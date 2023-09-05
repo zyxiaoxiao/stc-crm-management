@@ -787,7 +787,7 @@ const atableList = reactive({
 
 //表格对象审核提佣查询
 const htableList = reactive({
-	id: "/appointmentManage/attained/sales_commission_query_list.vue_grid_combinedInfos_submit",
+	id: "/appointmentManage/commission/sales_commission_query_list.vue_grid_combinedInfos_submit",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/commission/commission!selectCombinedCommissionInfoByCond.action",
@@ -1143,7 +1143,7 @@ const htableList = reactive({
 
 //表格对象自动提佣查询
 const automatictableList = reactive({
-	id: "/appointmentManage/attained/my_commission_query_list.vue_grid_automaticOrderQuery",
+	id: "/appointmentManage/commission/my_commission_query_list.vue_grid_automaticOrderQuery",
 	//请求属性设置
 	httpAttribute: {
 		url: "/crm/folders/folders!selectFoldersInfoByBrokerage.action",

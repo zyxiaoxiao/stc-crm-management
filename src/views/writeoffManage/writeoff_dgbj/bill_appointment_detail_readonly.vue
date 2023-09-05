@@ -157,7 +157,7 @@ onMounted(() => {
 //表格invoice信息
 const grid_billappointmentInfos = ref();
 const tableListbills = reactive({
-	id: "/writeoffManage/writeoff_dgbj/bill_appointment_detail.vue_grid_billappointmentInfos",
+	id: "/writeoffManage/writeoff_dgbj/bill_appointment_detail_readonly.vue_grid_billappointmentInfos",
 	tableToolbar: {
 		right: false
 	},

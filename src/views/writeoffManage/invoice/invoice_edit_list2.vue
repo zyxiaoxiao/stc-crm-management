@@ -300,6 +300,13 @@ const invoicetableList2 = reactive({
 			width: "160"
 		},
 		{
+			title: "提交时间",
+			label: "i18ncrmcontractSubmitTime",
+			prop: "submittime",
+			type: "Input",
+			width: "160"
+		},
+		{
 			title: "备注",
 			label: "columnappointment_desc42",
 			prop: "remark",
@@ -406,14 +413,6 @@ const invoicetableList2 = reactive({
 			title: "错误信息",
 			label: "errormsg",
 			prop: "errormsg",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提交时间",
-			label: "submittime",
-			prop: "submittime",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -552,6 +551,13 @@ const revoketableList = reactive({
 			width: "160"
 		},
 		{
+			title: "提交时间",
+			label: "i18ncrmcontractSubmitTime",
+			prop: "submittime",
+			type: "Input",
+			width: "160"
+		},
+		{
 			title: "备注",
 			label: "columnappointment_desc42",
 			prop: "remark",
@@ -658,14 +664,6 @@ const revoketableList = reactive({
 			title: "错误信息",
 			label: "errormsg",
 			prop: "errormsg",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提交时间",
-			label: "submittime",
-			prop: "submittime",
 			type: "Input",
 			width: "10",
 			isHide: true
@@ -804,6 +802,13 @@ const htableList = reactive({
 			width: "160"
 		},
 		{
+			title: "提交时间",
+			label: "i18ncrmcontractSubmitTime",
+			prop: "submittime",
+			type: "Input",
+			width: "160"
+		},
+		{
 			title: "备注",
 			label: "columnappointment_desc42",
 			prop: "remark",
@@ -910,14 +915,6 @@ const htableList = reactive({
 			title: "错误信息",
 			label: "errormsg",
 			prop: "errormsg",
-			type: "Input",
-			width: "10",
-			isHide: true
-		},
-		{
-			title: "提交时间",
-			label: "submittime",
-			prop: "submittime",
 			type: "Input",
 			width: "10",
 			isHide: true

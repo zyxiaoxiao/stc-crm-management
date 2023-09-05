@@ -172,7 +172,7 @@
 			</el-tab-pane>
 		</el-tabs>
 
-		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" width="95%">
+		<ZDialog v-model="condobj.dialogShow" @close="dialogclose" :title="$t('columnappointment_EntrustedUnitInfo')" width="95%">
 			<customerQuery :condobj="condobj"></customerQuery>
 		</ZDialog>
 		<ZDialog
@@ -520,6 +520,13 @@ const tableListInvoice = reactive({
 			width: "140"
 		},
 		{
+			title: "汇率",
+			label: "itemtitleinvoiceexchangerate",
+			prop: "exchangerate",
+			type: "Input",
+			width: "140"
+		},
+		{
 			title: "本次开票金额(外币)",
 			label: "messageitemtitleinputmoney_fn",
 			prop: "currencyamount",
@@ -580,7 +587,7 @@ const tableListInvoice = reactive({
 		},
 		{
 			title: "备注",
-			label: "panelcolumntaskwell_hkd",
+			label: "columnappointment_desc42",
 			prop: "remark",
 			type: "Input",
 			width: "200"
@@ -617,7 +624,7 @@ const tableListInvoice = reactive({
 		},
 		{
 			title: "创建时间",
-			label: "basecolumncombined_minimum_guarantee_rate",
+			label: "testiteminforecordtimepanel",
 			prop: "recordtime",
 			type: "Input",
 			width: "160"

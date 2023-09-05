@@ -59,7 +59,7 @@
 									:label="$t('columncurrencywriteoff_application_listTotalAmountdetail') + ':'"
 									title1="本次外币冲销总金额"
 								>
-									<el-input type="text" v-model="sformData.currencytotalmoney" :readonly="isdisabled"> </el-input>
+									<el-input type="text" v-model="sformData.currencytotalmoney" readonly> </el-input>
 								</el-form-item>
 							</el-col>
 							<el-col :span="8">
@@ -98,7 +98,7 @@
 							</el-col>
 							<el-col :span="8">
 								<el-form-item :label="$t('itemtitlestatusrecordertime') + ':'" title1="创建时间">
-									<el-input type="text" v-model="sformData.recordtime" :readonly="isdisabled"></el-input>
+									<el-input type="text" v-model="sformData.recordtime" readonly></el-input>
 								</el-form-item>
 							</el-col>
 						</el-row>
@@ -376,6 +376,7 @@ const uploadnewDialogclose = () => {
 	}
 };
 
+//表单编辑事件
 const itemViewCellClick = (row, column, cell, event) => {
 	if (column.property == "currencywriteoffmoney") {
 		if (sformData.isbad == "1" || sformData.isbad == "是") {
@@ -452,6 +453,7 @@ const turnBillAppointment = row => {
 const tableTabsValue = ref("writeoffInfo");
 
 //保存销账信息
+//Tony 2020/02/24 在销账保存时如果申请单总金额为0那么说明申请单同步金额存在问题提醒用户让IT查询
 let saveWriteoffAppointment = async id => {
 	let list = tableListFolders.tableData; //销账申请单信息
 	let writeoffappointmentInfos = [];
@@ -591,6 +593,10 @@ const billdialogclose = async () => {
 	if (condobj && condobj.cond) {
 		//选择批量销账数据的关闭窗口后的事件
 		if (condobj.cond.html && condobj.objlist) {
+			//Tony 2020/02/24 在批量销账时如果申请单总金额为0那么说明申请单同步金额存在问题提醒用户让IT查询
+			//Tony 2021/09/27 批量销账时可冲销金额会变成负数
+			//Tony 2022/06/27 批量冲销时会有同时关联两笔销账会导致本次冲销金额异常
+			//批量销账
 			if (condobj.cond.html == "dialogShow_selectBillappointmentQuery") {
 				//选择到账信息
 				let obj = condobj.objlist;
@@ -650,8 +656,8 @@ const billdialogclose = async () => {
 							if (currencycanwriteoffsnum == "") {
 								currencycanwriteoffsnum = "0";
 							}
-							totalCanwriteoffsnum += parseFloat(canwriteoffsnum); //汇总成港币可冲销金额
-							currencytotalCanwriteoffsnum += parseFloat(currencycanwriteoffsnum); //汇总本次可冲销金额
+							totalCanwriteoffsnum = parseFloat((parseFloat(totalCanwriteoffsnum) + parseFloat(canwriteoffsnum)).toFixed(2)); //汇总成港币可冲销金额
+							currencytotalCanwriteoffsnum = parseFloat((parseFloat(currencytotalCanwriteoffsnum) + parseFloat(currencycanwriteoffsnum)).toFixed(2)); //汇总本次可冲销金额
 							let money = obj.money; //港币金额
 							let writesum = obj.writesum; //已冲销金额
 							let retreatmoney = obj.retreatmoney; //退款金额
@@ -898,7 +904,7 @@ const billdialogclose = async () => {
 											}
 										} else {
 											if (v.isedit == "0") {
-												billcurrencybillbalance = billcurrencybillbalance - parseFloat(billinsertList[j].currencybilletoappoint);
+												billcurrencybillbalance = parseFloat(parseFloat(billcurrencybillbalance - parseFloat(billinsertList[j].currencybilletoappoint)).toFixed(2));
 											}
 										}
 									}
@@ -1135,7 +1141,7 @@ const tableListInvoices = reactive({
 			title: "打印日期",
 			label: "columnwriteoff_invoiceprintdate",
 			prop: "PRINTDATE",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{
@@ -1206,8 +1212,8 @@ const tableListInvoices = reactive({
 			label: "columnbillhavawriteoffsdetail",
 			prop: "TOTALMONEY",
 			type: "Input",
-			width: "160",
-			edit: true
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "本次冲销总金额",
@@ -1362,7 +1368,8 @@ const tableListFolders = reactive({
 			label: "billinfoamountofmoneypanelhkd",
 			prop: "hktotalmoney",
 			type: "Input",
-			width: "120"
+			width: "10",
+			isHide: true
 		},
 		{
 			title: "外币退款金额",
@@ -1482,7 +1489,7 @@ const tableListBillInfos = reactive({
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",
-			type: "Input",
+			type: "Date",
 			width: "160"
 		},
 		{

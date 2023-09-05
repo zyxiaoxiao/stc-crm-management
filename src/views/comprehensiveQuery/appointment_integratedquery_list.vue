@@ -53,7 +53,7 @@
 
 		<el-dialog v-model="dialogFormVisible" :title="$t('DOWNLOAD_download')">
 			<el-form :model="dform" style="margin: 25px 15px">
-				<el-form-item :label="$t('columntitleOrdinarycustomers') + ':'" title1="普通客户" label-width="140px">
+				<el-form-item :label="$t('Choose_Version') + ':'" title1="选择版本" label-width="140px">
 					<el-radio-group v-model="plain">
 						<el-radio label="CN">{{ $t("SRM_LANG_CN") }}</el-radio>
 						<el-radio label="CN2">{{ $t("SRM_LANG_CN2") }}</el-radio>
@@ -114,6 +114,17 @@ const auditList = reactive({
 	tablename: "MLS_APPOINTMENT",
 	columnid: "reservnum"
 });
+
+let isYes = [
+	{
+		value: "0",
+		label: i18n.t("billinfoisbaddebtpanel0")
+	},
+	{
+		value: "1",
+		label: i18n.t("billinfoisbaddebtpanel1")
+	}
+];
 
 //认证类型下拉值
 const attestationData = [
@@ -331,6 +342,14 @@ const atableList = reactive({
 			prop: "desc18",
 			type: "Input",
 			width: "160"
+		},
+		{
+			title: "废弃",
+			label: "itemtitlebase_userState2",
+			prop: "discardflag",
+			type: "Select",
+			width: "120",
+			typeData: isYes
 		},
 		{
 			title: "SE姓名",
@@ -712,6 +731,14 @@ const htableList = reactive({
 			width: "160"
 		},
 		{
+			title: "废弃",
+			label: "itemtitlebase_userState2",
+			prop: "discardflag",
+			type: "Select",
+			width: "120",
+			typeData: isYes
+		},
+		{
 			title: "SE姓名",
 			label: "crmcolumndesc81",
 			prop: "desc81",
@@ -989,8 +1016,8 @@ let getappointmentNow = async (workflowflag, reservnums) => {
 		returnValue = res;
 		//报价信息
 		condobj.cond = {
-			//workflowflag: workflowflag,
-			v_readonly: "true",
+			workflowflag: workflowflag,
+			//v_readonly: "true",
 			reservnum: reservnums,
 			defaulttax: returnValue.defaulttax,
 			isdefaulttax: returnValue.isdefaulttax

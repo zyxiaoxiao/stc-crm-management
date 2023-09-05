@@ -68,7 +68,7 @@
 			<uploadnewQuery :condobj="condobj"></uploadnewQuery>
 		</ZDialog>
 
-		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('UPLOAD_Tip')">
+		<el-dialog v-model="dialogExcelRadio" @close="closedialogSendFormVisible" :title="$t('DOWNLOAD_excel')">
 			<el-form :model="excelform" style="margin: 25px 15px">
 				<el-form-item :label="$t('Choose_Version') + '：'" label-width="140px">
 					<el-radio-group v-model="excelform.eradio" class="ml-4">

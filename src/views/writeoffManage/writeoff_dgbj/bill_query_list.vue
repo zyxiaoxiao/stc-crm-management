@@ -233,7 +233,7 @@ let tableColumns = [
 	},
 	{
 		title: "创建时间",
-		label: "basecolumncombined_minimum_guarantee_rate",
+		label: "testiteminforecordtimepanel",
 		prop: "recordtime",
 		type: "Input",
 		width: "160"

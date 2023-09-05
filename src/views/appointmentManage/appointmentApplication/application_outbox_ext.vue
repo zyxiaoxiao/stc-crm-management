@@ -7,7 +7,7 @@
 			type="border-card"
 			@tab-change="tabChange"
 		>
-			<el-tab-pane :label="$t('tabtitlecoremailoutboxnotsendmaillist')" name="outbox">
+			<el-tab-pane :label="$t('tabtitlecoremailoutboxnotsendmaillist')" name="outbox" class="all-height flex-column">
 				<div style="margin-top: 10px"></div>
 				<zTable ref="selectoutboxInfosQuery" :tableList="outboxtableList" @link-detailbg="outboxlinkDetail">
 					<template #tableHeaderLleft="scope">
@@ -117,7 +117,7 @@
 					</zTable>
 				</div>
 			</el-tab-pane>
-			<el-tab-pane :label="$t('tabtitlecoremailoutboxhistorymail')" name="history">
+			<el-tab-pane :label="$t('tabtitlecoremailoutboxhistorymail')" name="history" class="all-height flex-column">
 				<div style="margin-top: 10px"></div>
 				<zTable ref="selectHistoryOutboxInfosQuery" :tableList="outboxHistoryTableList" @link-detailbg="historylinkDetail">
 					<template #tableHeaderLleft="scope">
@@ -147,7 +147,7 @@
 	</ZDialog>
 	<ZDialog
 		v-model="condobj.showdetailDialogShow"
-		:title="$t('companypanelreportstitle')"
+		:title="$t('tabtitlecommonmessagemanager')"
 		width="80%"
 		customclass="selectAgentCss"
 	>
@@ -169,6 +169,8 @@ import uploadnewQuery from "@/views/appointmentManage/appointmentApplication/sel
 //邮件查看页面
 import showdetailQuery from "@/views/appointmentManage/appointmentApplication/show_detail.vue";
 
+
+let crm_skfs = getdropSownSelection("elementitemvalueinfo_ouboxsendtype"); //收款方式下拉
 const formData1 = reactive({
 	addressee: "",
 	copyto: "",
@@ -585,7 +587,103 @@ const outboxHistoryTableList = reactive({
 		baseParams: params
 	},
 	//表格表头
-	tableColumns: tableColumns,
+	tableColumns: [
+	{
+		type: "selection",
+		width: "40"
+	},
+	{
+		title: "标题",
+		label: "itemtitleinfo_newstitle",
+		prop: "title",
+		type: "Link",
+		width: "350"
+	},
+	{
+		title: "收件人",
+		label: "tabtitlecalendarreceiver",
+		prop: "addressee",
+		type: "Input",
+		width: "150"
+	},	
+	{
+		title: "ID",
+		label: "ID",
+		prop: "outboxid",
+		type: "Input",
+		width: "10",
+		isHide: true
+	},
+	{
+		title: "消息类型",
+		label: "itemnewmessagetype",
+		prop: "sendtype",
+		type: "Input",
+		width: "140",
+		typeData: messagetype
+	},
+	{
+		title: "制单人编码",
+		label: "itemtitlecommonrecordercode",
+		prop: "recordercode",
+		type: "Input",
+		width: "150"
+	},
+	{
+		title: "制单人名称",
+		label: "itemtitlecommonrecorderdesc",
+		prop: "recorderdesc",
+		type: "Input",
+		width: "160"
+	},
+	{
+		title: "制单时间",
+		label: "itemtitlecommonrecordtime",
+		prop: "recordertime",
+		type: "DateTime",
+		width: "160"
+	},
+	{
+		title: "内容",
+		label: "content",
+		prop: "content",
+		type: "Input",
+		width: "10",
+		isHide: true
+	},
+	{
+		title: "发送标志",
+		label: "sendflag",
+		prop: "sendflag",
+		type: "Input",
+		width: "20",
+		isHide: true
+	},
+	{
+		title: "发送时间",
+		label: "sendtime",
+		prop: "sendtime",
+		type: "Input",
+		width: "10",
+		isHide: true
+	},
+	{
+		title: "信息类别",
+		label: "sendtype",
+		prop: "sendtype",
+		type: "Input",
+		width: "10",
+		isHide: true
+	},
+	{
+		title: "recorderid",
+		label: "recorderid",
+		prop: "recorderid",
+		type: "Input",
+		width: "10",
+		isHide: true
+	}
+],
 	// 表格数据
 	tableData: []
 });
