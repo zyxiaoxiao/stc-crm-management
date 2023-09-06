@@ -977,7 +977,9 @@ const reuseTableList = async () => {
 
 //对数据源进行处理
 const handleTableData = res => {
+	//网络请求的原始数据
 	let tableData = [];
+
 	if (props.tableList.httpAttribute.root) {
 		if (res[props.tableList.httpAttribute.root]) {
 			tableData = res[props.tableList.httpAttribute.root];
@@ -1014,7 +1016,24 @@ const handleTableData = res => {
 		//对数据源进行格式处理，数字，日期
 		dataFormatProcessing(tableData);
 	}
+
 	props.tableList.tableData = tableData;
+
+	// //根据表格的字段封装的原始数据
+	// let propsTableListTableData = [];
+	// //只对有的字段进行赋值
+	// tableData.forEach(item => {
+	// 	let obj = {};
+	// 	tableHanderArr.forEach(key => {
+	// 		obj[key] = item[key];
+	// 	});
+
+	// 	if (Object.keys(obj).length > 0) {
+	// 		propsTableListTableData.push(obj);
+	// 	}
+	// });
+	// props.tableList.tableData = propsTableListTableData;
+
 	if (tableData.length > 0) {
 		//默认单选选中第一行
 		tableRef.value.setCurrentRow(props.tableList.tableData[0]);
