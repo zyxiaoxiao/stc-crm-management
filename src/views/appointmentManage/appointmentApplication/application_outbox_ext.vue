@@ -170,7 +170,6 @@ import uploadnewQuery from "@/views/appointmentManage/appointmentApplication/sel
 import showdetailQuery from "@/views/appointmentManage/appointmentApplication/show_detail.vue";
 
 
-let crm_skfs = getdropSownSelection("elementitemvalueinfo_ouboxsendtype"); //收款方式下拉
 const formData1 = reactive({
 	addressee: "",
 	copyto: "",
@@ -459,6 +458,14 @@ let tableColumns = [
 		width: "40"
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "outboxid",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "标题",
 		label: "itemtitleinfo_newstitle",
 		prop: "title",
@@ -591,6 +598,14 @@ const outboxHistoryTableList = reactive({
 	{
 		type: "selection",
 		width: "40"
+	},
+	{
+		title: "id",
+		label: "id",
+		prop: "outboxid",
+		type: "id",
+		width: "60",
+		isHide: true
 	},
 	{
 		title: "标题",

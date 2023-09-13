@@ -2438,6 +2438,14 @@ const ptableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "SERIALNO",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
 			title: "流水码",
 			label: "columnappointmenttesthistoryserialno",
 			prop: "SERIALNO",
@@ -2737,6 +2745,14 @@ const accountTableList = reactive({
 			title: "id",
 			label: "id",
 			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
+			title: "id",
+			label: "id",
+			prop: "id",
 			type: "Input",
 			width: "100",
 			isHide: true
@@ -2801,6 +2817,14 @@ const otherTableList = reactive({
 			type: "selection",
 			width: "40"
 		},
+		{
+			title: "id",
+			label: "id",
+			prop: "SERIALNO",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
 		{
 			title: "SERIALNO",
 			label: "SERIALNO",
@@ -2920,6 +2944,14 @@ const subpackageTableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "reservnum",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
 			title: "报价单编号",
 			label: "crmcolumnreservnum",
 			prop: "reservnum",
@@ -3009,6 +3041,14 @@ const fileTableList = reactive({
 			type: "selection",
 			width: "40"
 		},
+		{
+			title: "id",
+			label: "id",
+			prop: "fileid",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
 		{
 			title: "fileid",
 			label: "fileid",

@@ -408,6 +408,14 @@ const tableListRetreat = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "retreatbillid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "到账日期",
 			label: "billinfoaccountdatepanel",
 			prop: "billdate",

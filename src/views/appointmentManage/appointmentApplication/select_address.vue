@@ -121,6 +121,14 @@ const ctableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "地址类型",
 			label: "titlebaseAddresstype",
 			prop: "addrtype",

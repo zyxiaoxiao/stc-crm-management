@@ -322,6 +322,14 @@ const tableListSales = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "sfid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "申请单号",
 			label: "columntolockapplynum",
 			prop: "folderno",
@@ -453,6 +461,14 @@ const tableListBaddebts = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "baddebtsid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "部门名称",
@@ -592,6 +608,14 @@ const tableListExpenditure = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "主键",
@@ -863,7 +887,7 @@ const tableListOutsourcing = reactive({
 		{
 			type: "selection",
 			width: "40"
-		},
+		},		
 		{
 			title: "申请单号",
 			label: "columnwriteoff_application_listApplicationNo",

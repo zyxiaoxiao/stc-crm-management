@@ -69,6 +69,14 @@ let tableColumns = [
 		width: "40"
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "folderno",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "申请单号",
 		label: "columntolockapplynum",
 		prop: "folderno",

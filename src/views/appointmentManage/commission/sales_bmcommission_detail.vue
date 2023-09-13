@@ -463,6 +463,14 @@ const tableListSales = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "bmsoncid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "团队类别",
 			label: "basecolumnteam_category",
 			prop: "teamcategory",
@@ -582,6 +590,14 @@ const tableListCertification = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "folderno",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "申请单号",

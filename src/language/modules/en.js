@@ -5827,4 +5827,5 @@ export default {
 	expanded: "expanded",
 	crm_qyglxx01: "区域",
 	crm_qyglxx02: "部门",
+	dept: "Dept"
 };

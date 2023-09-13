@@ -499,6 +499,14 @@ const tableListInvoice = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "biid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "发票编号",
 			label: "itemtitleinvoiceinvoicecode",
 			prop: "invoicecode",
@@ -707,6 +715,14 @@ const tableListbillInfo2 = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "申请单号",
 			label: "columnwriteoff_application_listApplicationNo",
 			prop: "reservnum",
@@ -804,6 +820,14 @@ const tableListbillInfo3 = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "申请单号",

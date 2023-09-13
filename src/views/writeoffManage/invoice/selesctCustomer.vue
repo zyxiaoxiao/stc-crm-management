@@ -51,6 +51,14 @@ let tableColumns = [
 		width: "40"
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "corpid",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "客户ID",
 		label: "corpid",
 		prop: "corpid",

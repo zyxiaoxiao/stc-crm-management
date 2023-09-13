@@ -32,12 +32,16 @@ import "./styles/reset.scss";
 import "./styles/common.scss";
 
 const app = createApp(App);
-
-app.config.globalProperties.$echarts = echarts;
 app.use(ElementPlus, {});
 app.use(router);
 app.use(store);
 app.use(I18n);
+
+//因为setup中没有this, 而且这时候还没有渲染, 所以在setup中, 也可以使用provide 把echarts引入进来.
+//在根组件里引入echarts.
+//在子组件通过inject来使用echarts
+app.provide("echarts", echarts);
+
 
 //自定义命令
 // app.directive("dialogStretching", {

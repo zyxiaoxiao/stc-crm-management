@@ -250,6 +250,14 @@ const tableListCommission = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "bfid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "申请单号",
 			label: "columntolockapplynum",
 			prop: "folderno",
@@ -430,6 +438,14 @@ const tableListExpenditure = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "主键",

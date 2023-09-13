@@ -175,6 +175,14 @@ const tableListbills = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "billappointid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "到账信息编号",
 			label: "billinfoaccountcodepanel",
 			prop: "billcode",

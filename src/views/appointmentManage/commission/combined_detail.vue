@@ -442,6 +442,14 @@ const tableListSales = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "cid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "提佣月份",
 			label: "basecolumncommission_month",
 			prop: "brokeragemonth",
@@ -646,6 +654,14 @@ const tableListCertification = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "folderno",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "申请单号",

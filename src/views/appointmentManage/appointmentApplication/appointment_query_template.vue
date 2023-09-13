@@ -202,6 +202,14 @@ const atableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "reservnum",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "状态",
 			label: "itemtitlecommondesc11",
 			prop: "processflag",

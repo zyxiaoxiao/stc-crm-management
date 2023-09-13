@@ -387,6 +387,14 @@ const tableListVmaps = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "TESTID",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
 			title: "流水码",
 			label: "columnappointmenttesthistoryserialno",
 			prop: "SERIALNO",
@@ -675,6 +683,14 @@ const tableList2 = reactive({
 			title: "id",
 			label: "id",
 			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
+			title: "id",
+			label: "id",
+			prop: "id",
 			type: "Input",
 			width: "100",
 			isHide: true
@@ -740,6 +756,14 @@ const tableList3 = reactive({
 			type: "selection",
 			width: "40"
 		},
+		{
+			title: "id",
+			label: "id",
+			prop: "SERIALNO",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
 		{
 			title: "SERIALNO",
 			label: "SERIALNO",
@@ -858,6 +882,14 @@ const tableList4 = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "SERIALNO",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
+		{
 			title: "报价单编号",
 			label: "crmcolumnreservnum",
 			prop: "reservnum",
@@ -961,6 +993,14 @@ const tableList5 = reactive({
 			type: "selection",
 			width: "40"
 		},
+		{
+			title: "id",
+			label: "id",
+			prop: "fileid",
+			type: "id",
+			width: "60",
+			isHide: true
+	    },
 		{
 			title: "fileid",
 			label: "fileid",

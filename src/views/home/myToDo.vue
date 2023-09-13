@@ -57,7 +57,6 @@ const router = useRouter();
 
 const headerRightText = ref("collapse");
 const headerRightIcon = ref("collapse");
-
 const smallPanelShow = ref(true);
 
 const pendingInfos = reactive([]);
@@ -83,6 +82,15 @@ const getMyToDo = async () => {
 		}
 	} finally {
 		loading.value = false;
+		if (pendingInfos.length <= 0) {
+			headerRightText.value = "expanded";
+			headerRightIcon.value = "expand";
+			smallPanelShow.value = false;
+		} else {
+			headerRightText.value = "collapse";
+			headerRightIcon.value = "collapse";
+			smallPanelShow.value = true;
+		}
 	}
 };
 

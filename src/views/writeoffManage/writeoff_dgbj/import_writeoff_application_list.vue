@@ -242,6 +242,14 @@ const wtableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "writeoffid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "状态",
 			label: "itemtitlecommondesc11",
 			prop: "processflag",
@@ -481,6 +489,14 @@ const qtableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "writeoffid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",

@@ -359,6 +359,14 @@ const billtableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "状态",
 			label: "itemtitlecommondesc11",
 			prop: "processflag",
@@ -678,6 +686,14 @@ const htableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",
@@ -1007,6 +1023,14 @@ const querytableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",
@@ -1356,6 +1380,14 @@ const confirmtableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "confirmid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "到账信息编号",

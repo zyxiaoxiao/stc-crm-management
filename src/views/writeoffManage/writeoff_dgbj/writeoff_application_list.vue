@@ -240,6 +240,14 @@ const invoicetableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "INVOICENO",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "发票编号",
 			label: "columnwriteoff_invoiceno",
 			prop: "INVOICENO",
@@ -440,6 +448,14 @@ const wtableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "writeoffid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",
@@ -679,6 +695,14 @@ const qtableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "writeoffid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",

@@ -471,6 +471,14 @@ const tableListInvoices = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "INVOICENO",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "发票编号",
 			label: "columnwriteoff_invoiceno",
 			prop: "INVOICENO",
@@ -626,6 +634,14 @@ const tableListFolders = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "wbid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "申请单号",
@@ -819,6 +835,14 @@ const tableListBillInfos = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "billid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "到账信息编号",

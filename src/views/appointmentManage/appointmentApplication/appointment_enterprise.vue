@@ -108,6 +108,14 @@ let tableColumns = [
 		isHide: true
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "corpid",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "客户编号",
 		label: "columnappointment_desc13",
 		prop: "corpno",

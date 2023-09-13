@@ -71,6 +71,14 @@ const ctableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "contactid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "contactid",
 			label: "contactid",
 			prop: "contactid",

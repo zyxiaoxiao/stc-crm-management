@@ -76,6 +76,14 @@ const ctableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "reportid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "报告中文抬头",
 			label: "itemtitlereportzh",
 			prop: "report_zh",

@@ -378,6 +378,14 @@ const tableListSales = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "salesbrid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "部门",
 			label: "personaluserpanel2bmbmtitle",
 			prop: "dept",
@@ -488,6 +496,14 @@ const tableListExpenditure = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "id",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "主键",

@@ -348,6 +348,14 @@ const atableList = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "salesbrokerageid",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "状态",
 			label: "itemtitlecommondesc11",
 			prop: "processflag",
@@ -595,6 +603,14 @@ const htableList = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "salesbrokerageid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "状态",

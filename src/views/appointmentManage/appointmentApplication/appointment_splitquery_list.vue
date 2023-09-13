@@ -220,7 +220,7 @@ const tableList1 = reactive({
 		{
 			title: "id",
 			label: "id",
-			prop: "corpid",
+			prop: "reservnum",
 			type: "id",
 			width: "60",
 			isHide: true
@@ -423,7 +423,7 @@ const tableList2 = reactive({
 		{
 			title: "id",
 			label: "id",
-			prop: "corpid",
+			prop: "reservnum",
 			type: "id",
 			width: "60",
 			isHide: true

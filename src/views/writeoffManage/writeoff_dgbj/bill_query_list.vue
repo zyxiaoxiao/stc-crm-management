@@ -78,6 +78,14 @@ let tableColumns = [
 		width: "40"
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "billid",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "到账信息编号",
 		label: "billinfoaccountcodepanel",
 		prop: "billcode",

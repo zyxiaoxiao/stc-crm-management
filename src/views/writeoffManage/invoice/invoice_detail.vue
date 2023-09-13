@@ -668,6 +668,22 @@ const tableListFolders = reactive({
 			width: "40"
 		},
 		{
+			title: "id",
+			label: "id",
+			prop: "folderno",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "folderno",
+			type: "id",
+			width: "60",
+			isHide: true
+		},
+		{
 			title: "申请单编号",
 			label: "columntolockapplynum",
 			prop: "folderno",
@@ -776,6 +792,14 @@ const tableListfile = reactive({
 		{
 			type: "selection",
 			width: "40"
+		},
+		{
+			title: "id",
+			label: "id",
+			prop: "fileid",
+			type: "id",
+			width: "60",
+			isHide: true
 		},
 		{
 			title: "文档主题",

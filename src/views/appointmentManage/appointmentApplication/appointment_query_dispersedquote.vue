@@ -80,6 +80,14 @@ let tableColumns = [
 		width: "40"
 	},
 	{
+		title: "id",
+		label: "id",
+		prop: "reservnum",
+		type: "id",
+		width: "60",
+		isHide: true
+	},
+	{
 		title: "报价单编号",
 		label: "crmcolumnreservnum",
 		prop: "reservnum",
